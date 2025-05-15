@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Login from '../pages/Login'
 import NotFoundPage from "../pages/NotFoundPage";
-// import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 
 // Non Chargeable
 import NonChargeableHome from '../pages/non-chargeable/NonChargeableHome'
@@ -55,7 +55,7 @@ const HeaderWrapper = () => {
     const hideHeaderRoutes = ['/'];
 
     if(hideHeaderRoutes.includes(path.pathname) && token){
-        // return <Header />
+        return <Sidebar />
     }
 }
 

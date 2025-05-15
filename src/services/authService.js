@@ -5,14 +5,12 @@ const token = localStorage.getItem("token");
 
 const baseURL = `${config.defaults.baseURL}/api/auth`;
 
-interface Data {
-    id_number: string;
-    password: string;
-}
-
-export const UserLogin = async(data: Data) => {
+export const UserLogin = async(data) => {
+    
     try {
         const response = await axios.post(`${baseURL}/login`, data);
+        console.log(response);
+        
         return response.data;
     } catch (error) {
         return error;
@@ -27,7 +25,7 @@ export const Me = async() => {
             },
         });
         return response.data;
-    } catch (error: any) {
+    } catch (error) {
         if(error.status === 403){
             localStorage.removeItem("token");
             window.location.href = "/login";
@@ -37,7 +35,7 @@ export const Me = async() => {
     }
 }
 
-export const ChangePassword = async(id: number, data: { password: string; password_confirmation: string }) => {
+export const ChangePassword = async(id, data) => {
     try {
         const response = await axios.post(`${baseURL}/change-password/${id}`, data, {
             headers: {

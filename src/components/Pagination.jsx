@@ -11,17 +11,6 @@ function Pagination({
     handleLastPage,
     pageArray,
     handlePageClick,
-}: {
-    page: number;
-    pageCount: number;
-    perPage: number;
-    handlePerPage: (pPage: number) => void;
-    handleFirstPage: () => void;
-    handlePrevious: () => void;
-    handleNext: () => void;
-    handleLastPage: () => void;
-    pageArray: number[];
-    handlePageClick: (pageClicked: number) => void;
 }) {
 
     return (

@@ -42,16 +42,9 @@ const icons = {
     logout: IconLogout,
     downArrow: IconDownArrow,
     key: IconKey
-} as const;
+};
 
-type IconName = keyof typeof icons;
-
-interface IconRendererProps {
-    name: IconName;
-    className?: string;
-}
-
-const IconRenderer = ({name, className}: IconRendererProps) => {
+const IconRenderer = ({name, className}) => {
     const Icon = icons[name];
     return <Icon className={className} />;
 }

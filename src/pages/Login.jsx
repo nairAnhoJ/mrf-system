@@ -45,7 +45,7 @@ function Login() {
         <>
             <div className='w-screen h-screen flex items-center justify-center bg-gray-200'>
                 <form onSubmit={handleSubmit} className='bg-white rounded w-[400px] p-6 text-gray-600 shadow-xl'>
-                    <h1 className='text-center text-3xl font-semibold pb-6'>Accountability System</h1>
+                    <h1 className='text-center text-3xl font-semibold pb-6'>eMRF</h1>
                     {
                         errors.find((err) => err.path == "all") ? (
                             <div className='bg-red-500/20 w-full h-10 mb-4 rounded border border-red-500 flex items-center justify-center text-red-500'>

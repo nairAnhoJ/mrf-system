@@ -4,15 +4,7 @@ import { Me } from '../services/authService';
 import { Link } from 'react-router-dom';
 
 function Header() {
-
-    type Me = {
-        id: number;
-        id_number: string;
-        name: string;
-        email: string;
-        role: string;
-    }
-    const [me, setMe] = useState<Me >({
+    const [me, setMe] = useState({
         'id': 0,
         'id_number': '',
         'name': '',

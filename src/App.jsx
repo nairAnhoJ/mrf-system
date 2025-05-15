@@ -9,7 +9,9 @@ function App() {
 
   return (
     <>
-      <AppRouter />
+      <div className='bg-neutral-800 w-screen h-screen py-4 pr-4 overflow-hidden'>
+        <AppRouter />
+      </div>
     </>
   )
 }

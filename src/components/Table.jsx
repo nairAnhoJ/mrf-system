@@ -1,14 +1,5 @@
-interface Columns {
-    key: keyof Collection;
-    label: string;
-    className: string;
-}
 
-interface Collection<T = any> {
-    [key: string]: T;
-}
-
-const Table = <T extends Record<string, any>>(
+const Table = (
     { 
         columns, 
         collection, 
@@ -18,15 +9,6 @@ const Table = <T extends Record<string, any>>(
         editClick,
         withDelete = false,
         deleteClick,
-    }:{ 
-        columns: Columns[], 
-        collection: T[], 
-        withRowClick?: boolean,
-        onRowClick?: (id: number) => void, 
-        withEdit?: boolean, 
-        editClick?: (id: number) => void,
-        withDelete?: boolean, 
-        deleteClick?: (id: number) => void
     }
 ) => {
     return (
