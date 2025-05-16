@@ -11,11 +11,11 @@ const Sidebar = () => {
 
             <div className=''>
                 <button className='w-72 h-12 pl-6 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center cursor-pointer'>
-                    <IconRenderer name="settings" className='w-7 h-7' />
+                    <IconRenderer name="nonChargeable" className='w-7 h-7' />
                     <span className='ms-7 font-semibold'>Non-Chargeable</span>
                 </button>
                 <button className='w-72 h-12 pl-6 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center cursor-pointer'>
-                    <IconRenderer name="settings" className='w-7 h-7' />
+                    <IconRenderer name="chargeable" className='w-7 h-7' />
                     <span className='ms-7 font-semibold'>Chargeable</span>
                 </button>
                 <button className='w-72 h-12 pl-6 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center cursor-pointer'>
@@ -29,7 +29,13 @@ const Sidebar = () => {
             </div>
 
             <div className='mb-20'>
-                <h1>John Arian Malondras</h1>
+                <div className='w-72 h-12 pl-4 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center'>
+                    <img src="/public/default_profile_pic.png" alt="default_profile_pic" className='w-10 h-10 rounded-full' />
+                    <div>
+                        <h1 className='ms-7 font-semibold leading-4'>John Arian Malondras</h1>
+                        <p className='ms-7 leading-4 text-xs'>Team Leader</p>
+                    </div>
+                </div>
                 {/* <button className='w-72 h-12 pl-6 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center cursor-pointer'>
                     <IconRenderer name="logout" className='w-7 h-7' />
                     <span className='ms-7 font-semibold'>Log out</span>

@@ -19,6 +19,8 @@ import IconWarning from './icons/IconWarning';
 import IconLogout from './icons/IconLogout';
 import IconDownArrow from './icons/IconDownArrow';
 import IconKey from './icons/IconKey';
+import IconNonChargeable from './icons/IconNonChargeable';
+import IconChargeable from './icons/IconChargeable';
 
 const icons = {
     add: IconAdd,
@@ -41,7 +43,9 @@ const icons = {
     warning: IconWarning,
     logout: IconLogout,
     downArrow: IconDownArrow,
-    key: IconKey
+    key: IconKey,
+    nonChargeable: IconNonChargeable,
+    chargeable: IconChargeable
 };
 
 const IconRenderer = ({name, className}) => {
