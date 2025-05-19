@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Me } from '../services/authService';
 
 const RequireAuth = () => {
     const token = localStorage.getItem("token");
     const [firstTimeLogin, setFirstTimeLogin] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
         const getMe = async() => {
@@ -21,7 +22,19 @@ const RequireAuth = () => {
         getMe();
     }, [])
 
-    return token ? (firstTimeLogin ? <Navigate to="/change-password" replace /> : <Outlet />) : <Navigate to="/login" replace />;
+    if(token){
+        if(firstTimeLogin){
+            return <Navigate to="/change-password" replace /> 
+        }else{
+            if(location.pathname == "/"){
+                return <Navigate to="/non-chargeable" replace /> 
+            }else{
+                return <Outlet />
+            }
+        }
+    }else{
+        return <Navigate to="/login" replace />;
+    }
 }
 
 export default RequireAuth

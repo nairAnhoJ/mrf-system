@@ -31,6 +31,7 @@ const Table = (
                         }
                     </tr>
                 </thead>
+                
                 <tbody>
                     {
                         collection.length > 0 ?

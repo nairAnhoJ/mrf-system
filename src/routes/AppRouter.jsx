@@ -29,6 +29,7 @@ function AppRouter() {
                 <Route element={<RequireAuth />}>
                     {/* HOME AND ISSUED ITEMS */}
                     <Route path="/" element={<NonChargeableHome />} />
+                    <Route path="/non-chargeable" element={<NonChargeableHome />} />
                     {/* <Route path="/issued-items/add" element={<IssuedItemsAdd />} />
                     <Route path="/issued-items/edit" element={<IssuedItemsEdit />} /> */}
 
@@ -52,7 +53,7 @@ const HeaderWrapper = () => {
     const token = localStorage.getItem("token");
     
     const path = useLocation();
-    const hideHeaderRoutes = ['/'];
+    const hideHeaderRoutes = ['/', '/non-chargeable'];
 
     if(hideHeaderRoutes.includes(path.pathname) && token){
         return <Sidebar />
