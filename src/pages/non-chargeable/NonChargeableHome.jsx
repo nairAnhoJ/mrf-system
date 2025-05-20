@@ -2,56 +2,96 @@ import React, { useEffect, useState } from 'react'
 import Button from '../../components/Button'
 import IconRenderer from '../../components/icons'
 import Table from '../../components/Table'
+import { getAll } from '../../services/nonChargeableService'
 
 const NonChargeableHome = () => {
-  const [search, setSearch] = useState('');
-  const [collection, setCollection] = useState([]);
+    const [search, setSearch] = useState('');
+    const [collection, setCollection] = useState([]);
+    const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
 
-  const handleSearch = () => {
-      let url = `?sort=${sort}&search=${search}`;
-      if(perPage != 25){
-          url += `&perPage=${perPage}`;
-      }
-      navigate(url, { replace: true });
-      getCollection();
-  };
+    const handleSearch = () => {
+        let url = `?sort=${sort}&search=${search}`;
+        if(perPage != 25){
+            url += `&perPage=${perPage}`;
+        }
+        navigate(url, { replace: true });
+        getCollection();
+    };
 
-  const handleClearSearch = () => {
-      setSearch('');
+    const handleClearSearch = () => {
+        setSearch('');
 
-      let url = `?sort=${sort}`;
-      if(perPage != 25){
-          url += `&perPage=${perPage}`;
-      }
-      navigate(url, { replace: true });
-      getCollection();
-  };
+        let url = `?sort=${sort}`;
+        if(perPage != 25){
+            url += `&perPage=${perPage}`;
+        }
+        navigate(url, { replace: true });
+        getCollection();
+    };
 
-  const columns = [
-    {'key': 'name', 'label': 'Name', 'className': 'py-1 px-2'},
-    {'key': 'department', 'label': 'Department', 'className': 'text-center'},
-  ]
+    const columns = [
+        {'key': 'mrf_number', 'label': 'Request Number', 'className': 'py-1 px-2 text-center'},
+        {'key': 'customer_name', 'label': 'Customer Name', 'className': 'py-1 px-2 text-center'},
+        {'key': 'area', 'label': 'Area', 'className': 'py-1 px-2 text-center'},
+        {'key': 'date_requested', 'label': 'Date Requested', 'className': 'py-1 px-2 text-center'},
+        {'key': 'date_needed', 'label': 'Date Needed', 'className': 'py-1 px-2 text-center'},
+        {'key': 'brand', 'label': 'Brand', 'className': 'py-1 px-2 text-center'},
+        {'key': 'fleet_number', 'label': 'Fleet Number', 'className': 'py-1 px-2 text-center'},
 
-  useEffect(()=>{
-    setCollection([
-      {'id': '1', 'name': 'Name', 'department': 'D1'},
-      {'id': '2', 'name': 'Name 1', 'department': 'D1'},
-      {'id': '3', 'name': 'Name 2', 'department': 'D2'},
-    ])
-  }, [])
+        // {'key': 'fleet_number', 'label': 'Supervisor', 'className': 'py-1 px-2 text-center'},
+        // {'key': 'fleet_number', 'label': 'Parts', 'className': 'py-1 px-2 text-center'},
+        // {'key': 'fleet_number', 'label': 'Service', 'className': 'py-1 px-2 text-center'},
+        // {'key': 'fleet_number', 'label': 'Rental', 'className': 'py-1 px-2 text-center'},
+        // {'key': 'fleet_number', 'label': 'MRI', 'className': 'py-1 px-2 text-center'},
+        // {'key': 'fleet_number', 'label': 'eDoc Number', 'className': 'py-1 px-2 text-center'},
+        // {'key': 'fleet_number', 'label': 'DR Number', 'className': 'py-1 px-2 text-center'},
 
-  const handleRowClick = (item) => {
-    console.log(item);
-  }
+        {'key': 'requested_by', 'label': 'Requested By', 'className': 'py-1 px-2 text-center'},
+    ]
 
-  const handleEdit = (item) => {
-    console.log(item);
-  }
+    const getCollection = async() => {
+        try {
+            const response = await getAll();
+            setCollection(response);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-  const handleDelete = (item) => {
-    console.log(item);
-  }
+    const updateDateFormat = () => {
+        setCollection((prevItem) => 
+            prevItem.map((item) => (
+                {
+                    ...item,
+                    date_requested: dateTimeFormatter.format(new Date(item.date_requested)),
+                    date_needed: item.returned_date && dateTimeFormatter.format(new Date(item.date_needed)),
+                }
+            ))
+        );
+    };
 
+    useEffect(()=>{
+        getCollection();
+        updateDateFormat();
+        // setCollection([
+        //     {'id': '1', 'mrf_number': '89634893', 'customer_name': 'ABC'},
+        //     {'id': '2', 'mrf_number': '56785263', 'customer_name': 'DEF'},
+        //     {'id': '3', 'mrf_number': '56785265', 'customer_name': 'GHI'},
+        // ])
+    }, [])
+
+    const handleRowClick = (item) => {
+        console.log(item);
+    }
+
+    const handleEdit = (item) => {
+        console.log(item);
+    }
+
+    const handleDelete = (item) => {
+        console.log(item);
+    }
 
     return (
         <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4'>
@@ -76,14 +116,13 @@ const NonChargeableHome = () => {
                     columns={columns} 
                     collection={collection}
                     onRowClick={(item) => handleRowClick(item)}
-                    actionRender={(item) => (
-                        <div className='flex items-center justify-center'>
-                            <button onClick={() => handleEdit(item)} className='pr-1 hover:underline cursor-pointer'>EDIT</button> | <button onClick={() => handleDelete(item)} className='pl-1 hover:underline cursor-pointer'>DELETE</button>
-                        </div>
-                    )}
+                    // actionRender={(item) => (
+                    //     <div className='flex items-center justify-center'>
+                    //         <button onClick={() => handleEdit(item)} className='pr-1 hover:underline cursor-pointer'>EDIT</button> | <button onClick={() => handleDelete(item)} className='pl-1 hover:underline cursor-pointer'>DELETE</button>
+                    //     </div>
+                    // )}
                 />
             </div>
-
 
         </div>
     )

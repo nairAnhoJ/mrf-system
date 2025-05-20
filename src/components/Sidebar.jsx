@@ -78,7 +78,7 @@ const Sidebar = () => {
                     <IconRenderer name="moon" className='w-7 h-7' />
                     <div className='flex items-center justify-between w-full'>
                         <h1 className='ms-[26px] font-semibold'>Dark Mode</h1>
-                        <div className={`w-10 h-6 border-0 border-gray-400 rounded-full relative p-1 shadow-inner bg-linear-to-b ${theme == 'dark' ? 'from-black to-[#1A1187]' : 'from-[#F52900] to-[#F48831]'}`}>
+                        <div className={`w-10 h-6 border-0 border-gray-400 rounded-full relative p-1 shadow-inner bg-linear-to-b ${theme == 'dark' ? 'from-[#0c073d] to-[#1A1187]' : 'from-[#F52900] to-[#F48831]'}`}>
                             <div className={`h-4 w-4 bg-white rounded-full transition-transform duration-500 shadow-lg ${theme == 'dark' ? 'translate-x-4' : 'translate-x-0'}`}></div>
                         </div>
                     </div>
