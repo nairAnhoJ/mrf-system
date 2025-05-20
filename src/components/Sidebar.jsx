@@ -50,8 +50,6 @@ const Sidebar = () => {
         }
     };
 
-
-
     const handleLogout = () => {
         localStorage.removeItem("token");
         window.location.href = "/login";
@@ -61,7 +59,7 @@ const Sidebar = () => {
 
     return (
         <div className='h-[calc(100%-32px)] flex flex-col justify-between fixed w-24 hover:w-72 bg-neutral-800 text-neutral-300 overflow-hidden transition-all duration-300'>
-            <div className='bg-white w-8 h-full absolute right-0 translate-x-1/2 rounded-l-2xl'></div>
+            <div className='bg-white dark:bg-neutral-700 w-8 h-full absolute right-0 translate-x-1/2 rounded-l-2xl'></div>
             <div>
                 <div className='w-[calc(100%-16px)] h-10 flex justify-center'><img src="/logo.ico" alt="logo" className='w-10 h-10'/></div>
 
@@ -72,19 +70,6 @@ const Sidebar = () => {
                             <span className='ms-6 font-semibold'>{item.label}</span>
                         </NavLink>
                     ))}
-
-                    {/* <button className='w-72 h-12 pl-6 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center cursor-pointer'>
-                        <IconRenderer name="nonChargeable" className='w-7 h-7' />
-                        <span className='ms-6 font-semibold'>Non-Chargeable</span>
-                    </button>
-                    <button className='w-72 h-12 pl-6 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center cursor-pointer'>
-                        <IconRenderer name="chargeable" className='w-7 h-7' />
-                        <span className='ms-6 font-semibold'>Chargeable</span>
-                    </button>
-                    <button className='w-72 h-12 pl-6 border-s-4 border-neutral-800 hover:border-white hover:text-white flex whitespace-nowrap items-center cursor-pointer'>
-                        <IconRenderer name="settings" className='w-7 h-7' />
-                        <span className='ms-6 font-semibold'>Settings</span>
-                    </button> */}
                 </div>
             </div>
 
@@ -93,7 +78,7 @@ const Sidebar = () => {
                     <IconRenderer name="moon" className='w-7 h-7' />
                     <div className='flex items-center justify-between w-full'>
                         <h1 className='ms-[26px] font-semibold'>Dark Mode</h1>
-                        <div className={`w-10 h-6 border-0 border-gray-400 rounded-full relative p-1 shadow-inner ${theme == 'dark' ? 'bg-blue-500' : 'bg-gray-400'}`}>
+                        <div className={`w-10 h-6 border-0 border-gray-400 rounded-full relative p-1 shadow-inner bg-linear-to-b ${theme == 'dark' ? 'from-black to-[#1A1187]' : 'from-[#F52900] to-[#F48831]'}`}>
                             <div className={`h-4 w-4 bg-white rounded-full transition-transform duration-500 shadow-lg ${theme == 'dark' ? 'translate-x-4' : 'translate-x-0'}`}></div>
                         </div>
                     </div>
