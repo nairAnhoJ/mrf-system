@@ -3,11 +3,15 @@ import Button from '../../components/Button'
 import IconRenderer from '../../components/icons'
 import Table from '../../components/Table'
 import { getAll } from '../../services/nonChargeableService'
+import NonChargeableShow from './NonChargeableShow'
 
 const NonChargeableHome = () => {
+    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [collection, setCollection] = useState([]);
+    const [selectedItem, setSelectedItem] = useState({});
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
+    const [showRow, setShowRow] = useState(false);
 
     const handleSearch = () => {
         let url = `?sort=${sort}&search=${search}`;
@@ -30,7 +34,7 @@ const NonChargeableHome = () => {
     };
 
     const columns = [
-        {'key': 'mrf_number', 'label': 'Request Number', 'className': 'py-1 px-2 text-center'},
+        {'key': 'mrf_number', 'label': 'Request Number', 'className': 'py-1 px-2 text-center font-semibold'},
         {'key': 'customer_name', 'label': 'Customer Name', 'className': 'py-1 px-2 text-center'},
         {'key': 'area', 'label': 'Area', 'className': 'py-1 px-2 text-center'},
         {'key': 'date_requested', 'label': 'Date Requested', 'className': 'py-1 px-2 text-center'},
@@ -53,7 +57,8 @@ const NonChargeableHome = () => {
         try {
             const response = await getAll();
             setCollection(response);
-            console.log(response);
+            updateDateFormat();
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -65,7 +70,7 @@ const NonChargeableHome = () => {
                 {
                     ...item,
                     date_requested: dateTimeFormatter.format(new Date(item.date_requested)),
-                    date_needed: item.returned_date && dateTimeFormatter.format(new Date(item.date_needed)),
+                    date_needed: dateTimeFormatter.format(new Date(item.date_needed)),
                 }
             ))
         );
@@ -73,7 +78,6 @@ const NonChargeableHome = () => {
 
     useEffect(()=>{
         getCollection();
-        updateDateFormat();
         // setCollection([
         //     {'id': '1', 'mrf_number': '89634893', 'customer_name': 'ABC'},
         //     {'id': '2', 'mrf_number': '56785263', 'customer_name': 'DEF'},
@@ -82,7 +86,8 @@ const NonChargeableHome = () => {
     }, [])
 
     const handleRowClick = (item) => {
-        console.log(item);
+        setSelectedItem(item)
+        setShowRow(true);
     }
 
     const handleEdit = (item) => {
@@ -93,38 +98,47 @@ const NonChargeableHome = () => {
         console.log(item);
     }
 
-    return (
-        <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4'>
-            <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
+    const handleShowCloseButton = () => {
+        setShowRow(false)
+    }
 
-            <div className='mt-3 flex justify-between items-center h-10'>
-                <Button className='w-40 h-full'>ADD</Button>
-                <div className='flex h-full'>
-                    <div className='h-full flex items-center gap-x-1 relative text-neutral-700'>
-                        <IconRenderer name={'search'} className='h-5 w-5 ml-2 absolute'></IconRenderer>
-                        <input onChange={(e) => {setSearch(e.target.value)}} value={search} type="text" className='h-full rounded w-80 border border-gray-300 pl-8 dark:bg-neutral-400 dark:border-neutral-400 shadow-inner' />
-                        <div className='absolute right-2 flex items-center gap-x-1'>
-                            <button onClick={handleClearSearch} className='font-bold text-red-500'><IconRenderer name={'close'} className='h-5 w-5'></IconRenderer></button>
-                            <button onClick={handleSearch} className='font-medium border border-gray-300 dark:border-gray-500 dark:bg-neutral-500 dark:text-neutral-100 rounded px-1 tracking-tight shadow-lg'>Search</button>
+    return (
+        <>
+            {showRow && <NonChargeableShow closeButton={handleShowCloseButton} item={selectedItem} />}
+
+            <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4'>
+                <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
+
+                <div className='mt-3 flex justify-between items-center h-10'>
+                    <Button className='w-40 h-full'>ADD</Button>
+                    <div className='flex h-full'>
+                        <div className='h-full flex items-center gap-x-1 relative text-neutral-700'>
+                            <IconRenderer name={'search'} className='h-5 w-5 ml-2 absolute'></IconRenderer>
+                            <input onChange={(e) => {setSearch(e.target.value)}} value={search} type="text" className='h-full rounded w-80 border border-gray-300 pl-8 dark:bg-neutral-400 dark:border-neutral-400 shadow-inner' />
+                            <div className='absolute right-2 flex items-center gap-x-1'>
+                                <button onClick={handleClearSearch} className='font-bold text-red-500'><IconRenderer name={'close'} className='h-5 w-5'></IconRenderer></button>
+                                <button onClick={handleSearch} className='font-medium border border-gray-300 dark:border-gray-500 dark:bg-neutral-500 dark:text-neutral-100 rounded px-1 tracking-tight shadow-lg'>Search</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className='mt-3'>
-                <Table
-                    columns={columns} 
-                    collection={collection}
-                    onRowClick={(item) => handleRowClick(item)}
-                    // actionRender={(item) => (
-                    //     <div className='flex items-center justify-center'>
-                    //         <button onClick={() => handleEdit(item)} className='pr-1 hover:underline cursor-pointer'>EDIT</button> | <button onClick={() => handleDelete(item)} className='pl-1 hover:underline cursor-pointer'>DELETE</button>
-                    //     </div>
-                    // )}
-                />
-            </div>
+                <div className='mt-3'>
+                    <Table
+                        columns={columns} 
+                        collection={collection}
+                        onRowClick={(item) => handleRowClick(item)}
+                        loading={loading}
+                        // actionRender={(item) => (
+                        //     <div className='flex items-center justify-center'>
+                        //         <button onClick={() => handleEdit(item)} className='pr-1 hover:underline cursor-pointer'>EDIT</button> | <button onClick={() => handleDelete(item)} className='pl-1 hover:underline cursor-pointer'>DELETE</button>
+                        //     </div>
+                        // )}
+                    />
+                </div>
 
-        </div>
+            </div>
+        </>
     )
 }
 

@@ -1,4 +1,4 @@
-const Table = ({ columns, collection, onRowClick, actionRender } ) => {
+const Table = ({ loading, columns, collection, onRowClick, actionRender } ) => {
     return (
         <div className="w-full">
             <table className='w-full'>
@@ -15,25 +15,29 @@ const Table = ({ columns, collection, onRowClick, actionRender } ) => {
                 </thead>
 
                 <tbody>
-                    {
-                        collection.length > 0 ?
-                            collection.map((item, index) => (
-                                <tr key={index} onClick={() => onRowClick(item)}  className={`font-normal cursor-pointer border-b border-neutral-300  hover:bg-neutral-300 dark:hover:bg-neutral-400 dark:border-neutral-500 ${index%2 === 1 ? 'bg-neutral-200 dark:bg-neutral-500' : 'dark:bg-neutral-600'}`}>
-                                    {   columns.map((row, index) => (
-                                            <td key={index} className={row.className}>{item[row.key]}</td>
-                                        ))
-                                    }
-                                    {   actionRender && (
-                                            <td className="px-4 py-2" onClick={(e) => e.stopPropagation()}>
-                                                { actionRender(item) }
-                                            </td>
-                                        )
-                                    }
+                    {   loading == false ?
+                            collection.length > 0 ?
+                                collection.map((item, index) => (
+                                    <tr key={index} onClick={() => onRowClick(item)}  className={`font-normal cursor-pointer border-b border-neutral-300 dark:text-neutral-100 dark:hover:text-neutral-800  hover:bg-neutral-300 dark:hover:bg-neutral-400 dark:border-neutral-500 ${index%2 === 1 ? 'bg-neutral-200 dark:bg-neutral-500' : 'dark:bg-neutral-600'}`}>
+                                        {   columns.map((row, index) => (
+                                                <td key={index} className={row.className}>{item[row.key]}</td>
+                                            ))
+                                        }
+                                        {   actionRender && (
+                                                <td className="px-4 py-2" onClick={(e) => e.stopPropagation()}>
+                                                    { actionRender(item) }
+                                                </td>
+                                            )
+                                        }
+                                    </tr>
+                                ))
+                            : 
+                                <tr>
+                                    <th colSpan={columns.length + (actionRender ? 1 : 0)} className='py-2 px-4'>No data.</th>
                                 </tr>
-                            ))
-                        : 
+                        :
                             <tr>
-                                <th colSpan={columns.length + (actionRender ? 1 : 0)} className='py-2 px-4'>No data.</th>
+                                <th colSpan={columns.length + (actionRender ? 1 : 0)} className='py-2 px-4'>Loading...</th>
                             </tr>
                     }
                 </tbody>
