@@ -10,7 +10,8 @@ const NonChargeableHome = () => {
     const [search, setSearch] = useState('');
     const [collection, setCollection] = useState([]);
     const [selectedItem, setSelectedItem] = useState({});
-    const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
+    const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
+    // const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
     const [showRow, setShowRow] = useState(false);
 
     const handleSearch = () => {

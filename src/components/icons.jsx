@@ -19,6 +19,9 @@ import IconWarning from './icons/IconWarning';
 import IconLogout from './icons/IconLogout';
 import IconDownArrow from './icons/IconDownArrow';
 import IconKey from './icons/IconKey';
+import IconVisibility from './icons/IconVisibility';
+import IconVisibilityOff from './icons/IconVisibilityOff';
+import IconHistory from './icons/IconHistory';
 import IconNonChargeable from './icons/IconNonChargeable';
 import IconChargeable from './icons/IconChargeable';
 
@@ -44,6 +47,9 @@ const icons = {
     logout: IconLogout,
     downArrow: IconDownArrow,
     key: IconKey,
+    visibility: IconVisibility,
+    visibilityOff: IconVisibilityOff,
+    history: IconHistory,
     nonChargeable: IconNonChargeable,
     chargeable: IconChargeable
 };
