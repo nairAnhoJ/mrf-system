@@ -9,7 +9,7 @@ const NonChargeableHome = () => {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [collection, setCollection] = useState([]);
-    const [selectedItem, setSelectedItem] = useState({});
+    const [selectedItem, setSelectedItem] = useState();
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     // const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
     const [showRow, setShowRow] = useState(false);
@@ -86,8 +86,8 @@ const NonChargeableHome = () => {
         // ])
     }, [])
 
-    const handleRowClick = (item) => {
-        setSelectedItem(item)
+    const handleRowClick = (id) => {
+        setSelectedItem(id)
         setShowRow(true);
     }
 
@@ -105,7 +105,7 @@ const NonChargeableHome = () => {
 
     return (
         <>
-            {showRow && <NonChargeableShow closeButton={handleShowCloseButton} item={selectedItem} />}
+            {showRow && <NonChargeableShow closeButton={handleShowCloseButton} id={selectedItem} />}
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4'>
                 <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
@@ -128,7 +128,7 @@ const NonChargeableHome = () => {
                     <Table
                         columns={columns} 
                         collection={collection}
-                        onRowClick={(item) => handleRowClick(item)}
+                        onRowClick={(item) => handleRowClick(item.id)}
                         loading={loading}
                         // actionRender={(item) => (
                         //     <div className='flex items-center justify-center'>

@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import IconRenderer from '../../components/icons';
 import Button from '../../components/Button';
 import Table from '../../components/Table';
+import { getById } from '../../services/nonChargeableService'
 
-const NonChargeableShow = ({item, closeButton}) => {
+const NonChargeableShow = ({id, closeButton}) => {
+    const [item, setItem] = useState({});
+    const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
+
     const parts_columns = [
-        {'key': 'item_number', 'label': 'Item Number', 'className': 'py-1 px-2 text-center font-semibold'},
+        {'key': 'item_number', 'label': 'Item Number', 'className': 'py-1 px-2 text-center'},
         {'key': 'number', 'label': 'Part Number', 'className': 'py-1 px-2 text-center'},
         {'key': 'name', 'label': 'Description', 'className': 'py-1 px-2 text-center'},
         {'key': 'brand', 'label': 'Brand', 'className': 'py-1 px-2 text-center'},
@@ -14,7 +18,42 @@ const NonChargeableShow = ({item, closeButton}) => {
         {'key': 'total_price', 'label': 'Total Price', 'className': 'py-1 px-2 text-center'},
     ]
 
+    const updateDateFormat = () => {
+        setItem((prevItem) => ({
+            ...prevItem,
+            date_requested: dateTimeFormatter.format(new Date(item.date_requested)),
+            date_needed: dateTimeFormatter.format(new Date(item.date_needed)),
+        }));
+    };
     
+    const getItem = async() => {
+        try {
+            const response = await getById(id);
+            console.log(response[0]);
+            setItem(response[0]);
+            // updateDateFormat();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getParts = async() => {
+        try {
+            // const response = await getById(id);
+            // console.log(response[0]);
+            
+            // setItem(response[0]);
+            // updateDateFormat();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(()=>{
+        getItem();
+        console.log(item);
+        
+    }, [])
 
     return (
         <div className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>

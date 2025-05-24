@@ -17,3 +17,16 @@ export const getAll = async() => {
         console.log(error);
     }
 };
+
+export const getById = async(id) => {
+    try {
+        const response = await config.get(`${baseURL}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
