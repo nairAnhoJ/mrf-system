@@ -4,6 +4,7 @@ import IconRenderer from '../../components/icons'
 import Table from '../../components/Table'
 import { getAll } from '../../services/nonChargeableService'
 import NonChargeableShow from './NonChargeableShow'
+import { Link, useNavigate } from 'react-router-dom'
 
 const NonChargeableHome = () => {
     const [loading, setLoading] = useState(true);
@@ -13,6 +14,8 @@ const NonChargeableHome = () => {
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     // const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
     const [showRow, setShowRow] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleSearch = () => {
         let url = `?sort=${sort}&search=${search}`;
@@ -42,15 +45,6 @@ const NonChargeableHome = () => {
         {'key': 'date_needed', 'label': 'Date Needed', 'className': 'py-1 px-2 text-center'},
         {'key': 'brand', 'label': 'Brand', 'className': 'py-1 px-2 text-center'},
         {'key': 'fleet_number', 'label': 'Fleet Number', 'className': 'py-1 px-2 text-center'},
-
-        // {'key': 'fleet_number', 'label': 'Supervisor', 'className': 'py-1 px-2 text-center'},
-        // {'key': 'fleet_number', 'label': 'Parts', 'className': 'py-1 px-2 text-center'},
-        // {'key': 'fleet_number', 'label': 'Service', 'className': 'py-1 px-2 text-center'},
-        // {'key': 'fleet_number', 'label': 'Rental', 'className': 'py-1 px-2 text-center'},
-        // {'key': 'fleet_number', 'label': 'MRI', 'className': 'py-1 px-2 text-center'},
-        // {'key': 'fleet_number', 'label': 'eDoc Number', 'className': 'py-1 px-2 text-center'},
-        // {'key': 'fleet_number', 'label': 'DR Number', 'className': 'py-1 px-2 text-center'},
-
         {'key': 'requested_by', 'label': 'Requested By', 'className': 'py-1 px-2 text-center'},
     ]
 
@@ -111,7 +105,7 @@ const NonChargeableHome = () => {
                 <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
 
                 <div className='mt-3 flex justify-between items-center h-10'>
-                    <Button className='w-40 h-full'>ADD</Button>
+                    <Button onClick={() => navigate('/non-chargeable/add')} className='w-40 h-full'>ADD</Button>
                     <div className='flex h-full'>
                         <div className='h-full flex items-center gap-x-1 relative text-neutral-700'>
                             <IconRenderer name={'search'} className='h-5 w-5 ml-2 absolute'></IconRenderer>

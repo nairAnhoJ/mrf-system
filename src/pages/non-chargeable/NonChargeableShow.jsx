@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import IconRenderer from '../../components/icons';
 import Button from '../../components/Button';
 import Table from '../../components/Table';
-import { getById } from '../../services/nonChargeableService'
+import { getById, getByRequestId } from '../../services/nonChargeableService'
 
 const NonChargeableShow = ({id, closeButton}) => {
     const [item, setItem] = useState({});
+    const [parts, setParts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
 
     const parts_columns = [
@@ -21,8 +23,8 @@ const NonChargeableShow = ({id, closeButton}) => {
     const updateDateFormat = () => {
         setItem((prevItem) => ({
             ...prevItem,
-            date_requested: dateTimeFormatter.format(new Date(item.date_requested)),
-            date_needed: dateTimeFormatter.format(new Date(item.date_needed)),
+            date_requested: dateTimeFormatter.format(new Date(prevItem.date_requested)),
+            date_needed: dateTimeFormatter.format(new Date(prevItem.date_needed)),
         }));
     };
     
@@ -31,7 +33,7 @@ const NonChargeableShow = ({id, closeButton}) => {
             const response = await getById(id);
             console.log(response[0]);
             setItem(response[0]);
-            // updateDateFormat();
+            updateDateFormat();
         } catch (error) {
             console.log(error);
         }
@@ -39,11 +41,9 @@ const NonChargeableShow = ({id, closeButton}) => {
 
     const getParts = async() => {
         try {
-            // const response = await getById(id);
-            // console.log(response[0]);
-            
-            // setItem(response[0]);
-            // updateDateFormat();
+            const response = await getByRequestId(id);
+            setParts(response);
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -51,22 +51,27 @@ const NonChargeableShow = ({id, closeButton}) => {
 
     useEffect(()=>{
         getItem();
-        console.log(item);
-        
+        getParts();
     }, [])
 
     return (
         <div className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
-            <div className='w-8/12 h-11/12 bg-neutral-50 dark:bg-neutral-700 rounded flex flex-col'>
-
-                <div className='w-full bg-neutral-50 dark:bg-neutral-700 rounded-t border-b border-neutral-200 text-neutral-600 dark:text-neutral-200 shadow flex items-center justify-between p-6'>
+            <div className='w-8/12 h-11/12 bg-neutral-50 dark:bg-neutral-700 rounded flex flex-col relative'>
+                { loading && 
+                    <div className='w-full h-full absolute bg-neutral-700/60 dark:bg-neutral-700/90 z-99 flex items-center justify-center text-white dark:text-neutral-100'>
+                        <div className='animate-spin border-[3px] border-t-transparent w-6 h-6 rounded-full'></div>
+                        <span className='ms-2 font-semibold'>Loading...</span>
+                    </div>
+                }
+                
+                <div className='w-full bg-neutral-50 dark:bg-neutral-700 rounded-t border-b-2 border-neutral-200 text-neutral-600 dark:text-neutral-200 shadow flex items-center justify-between p-6'>
                     <h1 className='text-xl font-semibold leading-5'>{item.mrf_number}</h1>
                     <button type='button' onClick={closeButton} className="cursor-pointer">
                         <IconRenderer name="close" className="w-5 h-5"/>
                     </button>
                 </div>
 
-                <div className='w-full h-full bg-neutral-50 dark:bg-neutral-700  border-b border-neutral-200 text-neutral-600 dark:text-neutral-200 shadow p-6 overflow-auto'>
+                <div className='w-full h-full bg-neutral-50 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-200 shadow p-6 overflow-auto'>
                     <div className='w-full'>
                         <h1 className='text-xl font-bold tracking-wide leading-5'>Request Details</h1>
                         <div className='w-full flex flex-col gap-y-2 mt-2'>
@@ -152,13 +157,13 @@ const NonChargeableShow = ({id, closeButton}) => {
 
                         <h1 className='text-xl font-bold tracking-wide mt-6 leading-5'>Part/s Requested</h1>
                         <div className='w-full'>
-                            <Table columns={parts_columns}></Table>
+                            <Table columns={parts_columns} collection={parts} loading={loading}></Table>
                         </div>
                     </div>
 
                 </div>
 
-                <div className='w-full bg-neutral-50 dark:bg-neutral-700 rounded-b p-6 flex items-center'>
+                <div className='w-full bg-neutral-50 dark:bg-neutral-700 border-t border-neutral-200 rounded-b p-6 flex items-center'>
                     <Button color="white" onClick={closeButton}>CLOSE</Button>
                 </div>
 

@@ -30,16 +30,3 @@ export const getById = async(id) => {
         console.log(error);
     }
 };
-
-export const getByRequestId = async(id) => {
-    try {
-        const response = await config.get(`${baseURL}/parts/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.log(error);
-    }
-};

@@ -13,6 +13,7 @@ import NonChargeableHome from '../pages/non-chargeable/NonChargeableHome'
 // import Settings from '../pages/settings/Index'
 
 import RequireAuth from "./RequireAuth";
+import NonChargeableAdd from "../pages/non-chargeable/NonChargeableAdd";
 // import AdminAuth from "./AdminAuth";
 // import ChangePassword from "../pages/ChangePassword";
 // import RequireAuthOnly from "./RequireAuthOnly";
@@ -30,8 +31,8 @@ function AppRouter() {
                     {/* HOME AND ISSUED ITEMS */}
                     <Route path="/" element={<NonChargeableHome />} />
                     <Route path="/non-chargeable" element={<NonChargeableHome />} />
-                    {/* <Route path="/issued-items/add" element={<IssuedItemsAdd />} />
-                    <Route path="/issued-items/edit" element={<IssuedItemsEdit />} /> */}
+                    <Route path="/non-chargeable/add" element={<NonChargeableAdd />} />
+                    {/* <Route path="/issued-items/edit" element={<IssuedItemsEdit />} /> */}
 
                     {/* <Route element={<AdminAuth />}> */}
                         {/* SETTING */}
@@ -53,7 +54,7 @@ const HeaderWrapper = () => {
     const token = localStorage.getItem("token");
     
     const path = useLocation();
-    const hideHeaderRoutes = ['/', '/non-chargeable'];
+    const hideHeaderRoutes = ['/', '/non-chargeable', '/non-chargeable/add'];
 
     if(hideHeaderRoutes.includes(path.pathname) && token){
         return <Sidebar />
