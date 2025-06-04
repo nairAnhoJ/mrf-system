@@ -58,7 +58,7 @@ const Sidebar = () => {
 
 
     return (
-        <div className='h-[calc(100%-32px)] flex flex-col justify-between fixed w-24 hover:w-72 bg-neutral-800 text-neutral-300 overflow-hidden transition-all duration-300'>
+        <div className='h-[calc(100%-32px)] flex flex-col justify-between fixed w-24 hover:w-72 bg-neutral-800 text-neutral-300 overflow-hidden transition-all duration-300 z-99'>
             <div className='bg-white dark:bg-neutral-700 w-8 h-full absolute right-0 translate-x-1/2 rounded-l-2xl'></div>
             <div>
                 <div className='w-[calc(100%-16px)] h-10 flex justify-center'><img src="/logo.ico" alt="logo" className='w-10 h-10'/></div>
