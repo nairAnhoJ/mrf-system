@@ -3,6 +3,7 @@ import Button from '../../components/Button'
 import IconRenderer from '../../components/icons'
 import Table from '../../components/Table'
 import { Link } from 'react-router-dom'
+import { getAll as areaGetAll } from '../../services/areaService'
 
 const NonChargeableAdd = () => {
     const [loading, setLoading] = useState(true);
@@ -11,7 +12,7 @@ const NonChargeableAdd = () => {
     const [addCustomerModal, setAddCustomerModal] = useState(false);
     const [newCustomer, setNewCustomer] = useState({
         name: '',
-        addess: '',
+        address: '',
         area: ''
     });
     const today = new Date().toISOString().split('T')[0];
@@ -25,24 +26,60 @@ const NonChargeableAdd = () => {
         'area' : '',
     });
 
+    const [areas, setAreas] = useState([]);
+
+    const getAreas = async() => {
+        try {
+            const response = await areaGetAll();
+            console.log(response);
+            setAreas(response);
+            // updateDateFormat();
+            // setLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleAddCustomerModal = () => {
+        getAreas();
+        setAddCustomerModal(true)
+    }
+
+    const handleAddCustomer = () => {
+        getAreas();
+        setAddCustomerModal(true)
+    }
+
     return (
         <>
-            <div className='w-screen h-screen fixed top-0 left-0 bg-neutral-900/50 z-100 flex items-center justify-center text-neutral-600'>
-                <div className='bg-white w-[800px] p-6 rounded'>
+            <div className={`w-screen h-screen fixed top-0 left-0 bg-neutral-900/50 z-100 flex items-center justify-center text-neutral-600 ${!addCustomerModal ? 'hidden' : ''}`}>
+                <form onSubmit={handleAddCustomer} className='bg-white w-[800px] p-6 rounded'>
                     <h1 className='font-bold text-lg'>Add New Customer</h1>
-                    <div className='mt-2'>
+                    <div className='mt-3'>
                         <label className='text-sm'>Name</label>
-                        <input type="text" className='w-full border border-neutral-400 px-2 py-1 rounded font-semibold'/>
+                        <input type="text" onChange={(e) => setNewCustomer({...newCustomer, name: e.target.value})} className='w-full h-10 border border-neutral-400 px-2 rounded text-sm leading-4'/>
                     </div>
                     <div className='mt-2'>
                         <label className='text-sm'>Address</label>
-                        <input type="text" className='w-full border border-neutral-400 px-2 py-1 rounded font-semibold'/>
+                        <input type="text" onChange={(e) => setNewCustomer({...newCustomer, address: e.target.value})} className='w-full h-10 border border-neutral-400 px-2 rounded text-sm leading-4'/>
                     </div>
                     <div className='mt-2'>
-                        <label className='text-sm'>Area</label>
-                        <input type="text" className='w-full border border-neutral-400 px-2 py-1 rounded font-semibold'/>
+                        <label className='text-sm block'>Area</label>
+                        <select onChange={(e) => setNewCustomer({...newCustomer, area: e.target.value})} className='w-64 h-10 px-2 border rounded border-neutral-400 text-sm leading-4'>
+                            <option hidden value="">Please select an area.</option>
+                            {
+                                areas.map((area, index) => (
+                                    <option key={index} value={area.id} className='text-sm leading-4'>{area.name}</option>
+                                ))
+                            }
+                        </select>
+                        {/* <input type="text" className='w-full border border-neutral-400 px-2 py-1 rounded font-semibold'/> */}
                     </div>
-                </div>
+                    <div className='mt-6 flex gap-x-3'>
+                        <Button color='blue'>Save</Button>
+                        <Button type="button" onClick={() => setAddCustomerModal(false)} color='gray'>Close</Button>
+                    </div>
+                </form>
             </div>
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4 text-neutral-700 dark:text-neutral-100'>
@@ -110,7 +147,7 @@ const NonChargeableAdd = () => {
                                     <input type="text" className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' readOnly/>
                                     <div className='w-[calc(100%-12px)] absolute left-0 bottom-0 translate-y-full h-[300px] bg-neutral-100 z-49 border border-neutral-400 dark:bg-neutral-500'>
                                         <div className='w-full h-full overflow-auto pt-[88px]'>
-                                            <button type='button' onClick={() => setAddCustomerModal(true)} className='w-[calc(100%-15px)] p-2 border-b flex items-center fixed top-0 bg-neutral-100 border-neutral-400 hover:bg-gray-200 dark:bg-neutral-500 dark:hover:bg-neutral-600 cursor-pointer'>
+                                            <button type='button' onClick={handleAddCustomerModal} className='w-[calc(100%-15px)] p-2 border-b flex items-center fixed top-0 bg-neutral-100 border-neutral-400 hover:bg-gray-200 dark:bg-neutral-500 dark:hover:bg-neutral-600 cursor-pointer'>
                                                 <IconRenderer name='add' className='w-5 h-5' />
                                                 <span className='pl-1'>Add new customer</span>
                                             </button>
