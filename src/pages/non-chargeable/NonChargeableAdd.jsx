@@ -4,6 +4,8 @@ import IconRenderer from '../../components/icons'
 import Table from '../../components/Table'
 import { Link } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
+import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
+import { Notification } from '../../components/Notification'
 
 const NonChargeableAdd = () => {
     const [loading, setLoading] = useState(true);
@@ -13,7 +15,7 @@ const NonChargeableAdd = () => {
     const [newCustomer, setNewCustomer] = useState({
         name: '',
         address: '',
-        area: ''
+        area_id: ''
     });
     const today = new Date().toISOString().split('T')[0];
     const [item, setItem] = useState({
@@ -25,47 +27,95 @@ const NonChargeableAdd = () => {
         'customer_address' : '',
         'area' : '',
     });
-
     const [areas, setAreas] = useState([]);
+    const [customers, setCustomers] = useState([]);
+    const [errors, setErrors] = useState([]);
+    const [notif, setNotif] = useState([]);
 
     const getAreas = async() => {
         try {
             const response = await areaGetAll();
-            console.log(response);
             setAreas(response);
-            // updateDateFormat();
-            // setLoading(false);
         } catch (error) {
             console.log(error);
         }
     }
+
+    const getCustomers = async() => {
+        try {
+            const response = await customerGetAll();
+            setCustomers(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getCustomers();
+    }, [])
 
     const handleAddCustomerModal = () => {
         getAreas();
         setAddCustomerModal(true)
     }
 
-    const handleAddCustomer = () => {
-        getAreas();
-        setAddCustomerModal(true)
+    const handleAddCustomer = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await customerCreate(newCustomer);
+            if(response.status === 400){
+                console.log(response.data.errors);
+                setErrors(response.data.errors);
+            }else if(response.status === 201){
+                setNotif('New Customer has been Added');
+                setAddCustomerModal(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleCustomerSelect = (customer) => {
+        console.log(customer);
+        
     }
 
     return (
         <>
+            {
+                notif != '' &&
+                <Notification message={notif} closeButton={() => setNotif('')}/>
+            }
+
             <div className={`w-screen h-screen fixed top-0 left-0 bg-neutral-900/50 z-100 flex items-center justify-center text-neutral-600 ${!addCustomerModal ? 'hidden' : ''}`}>
                 <form onSubmit={handleAddCustomer} className='bg-white w-[800px] p-6 rounded'>
                     <h1 className='font-bold text-lg'>Add New Customer</h1>
                     <div className='mt-3'>
                         <label className='text-sm'>Name</label>
                         <input type="text" onChange={(e) => setNewCustomer({...newCustomer, name: e.target.value})} className='w-full h-10 border border-neutral-400 px-2 rounded text-sm leading-4'/>
+                        {
+                            errors.find((err) => err.path == "name") ? (
+                                <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "name")?.msg }</p>
+                            ) : null
+                        }
                     </div>
                     <div className='mt-2'>
                         <label className='text-sm'>Address</label>
                         <input type="text" onChange={(e) => setNewCustomer({...newCustomer, address: e.target.value})} className='w-full h-10 border border-neutral-400 px-2 rounded text-sm leading-4'/>
+                        {
+                            errors.find((err) => err.path == "address") ? (
+                                <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "address")?.msg }</p>
+                            ) : null
+                        }
                     </div>
                     <div className='mt-2'>
-                        <label className='text-sm block'>Area</label>
-                        <select onChange={(e) => setNewCustomer({...newCustomer, area: e.target.value})} className='w-64 h-10 px-2 border rounded border-neutral-400 text-sm leading-4'>
+                        <label className='text-sm block'>
+                            Area 
+                            <span className='ms-1 text-xs text-orange-500 italic font-medium'>
+                                *New area not listed? Please contact IT.
+                            </span>
+                        </label>
+                        <select onChange={(e) => setNewCustomer({...newCustomer, area_id: e.target.value})} className='w-64 h-10 px-2 border rounded border-neutral-400 text-sm leading-4'>
                             <option hidden value="">Please select an area.</option>
                             {
                                 areas.map((area, index) => (
@@ -73,6 +123,11 @@ const NonChargeableAdd = () => {
                                 ))
                             }
                         </select>
+                        {
+                            errors.find((err) => err.path == "area_id") ? (
+                                <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "area_id")?.msg }</p>
+                            ) : null
+                        }
                         {/* <input type="text" className='w-full border border-neutral-400 px-2 py-1 rounded font-semibold'/> */}
                     </div>
                     <div className='mt-6 flex gap-x-3'>
@@ -145,24 +200,21 @@ const NonChargeableAdd = () => {
                                 <div className='flex flex-col w-2/3 pr-3 relative'>
                                     <h1 className='text-xs 2xl:text-sm'>Customer Name</h1>
                                     <input type="text" className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' readOnly/>
-                                    <div className='w-[calc(100%-12px)] absolute left-0 bottom-0 translate-y-full h-[300px] bg-neutral-100 z-49 border border-neutral-400 dark:bg-neutral-500'>
+                                    <div className='w-[calc(100%-12px)] absolute left-0 bottom-0 translate-y-full h-[288px] bg-neutral-100 z-49 border border-neutral-400 dark:bg-neutral-500'>
                                         <div className='w-full h-full overflow-auto pt-[88px]'>
-                                            <button type='button' onClick={handleAddCustomerModal} className='w-[calc(100%-15px)] p-2 border-b flex items-center fixed top-0 bg-neutral-100 border-neutral-400 hover:bg-gray-200 dark:bg-neutral-500 dark:hover:bg-neutral-600 cursor-pointer'>
+                                            <button type='button' onClick={handleAddCustomerModal} className='w-full p-2 border-b flex items-center fixed top-0 bg-neutral-100 border-neutral-400 hover:bg-gray-200 dark:bg-neutral-500 dark:hover:bg-neutral-600 cursor-pointer'>
                                                 <IconRenderer name='add' className='w-5 h-5' />
                                                 <span className='pl-1'>Add new customer</span>
                                             </button>
-                                            <div className='w-[calc(100%-15px)] p-2 border-b fixed top-[41px] bg-neutral-100 border-neutral-400 dark:bg-neutral-500 dark:hover:bg-neutral-600'>
+                                            <div className='w-full p-2 border-b fixed top-[41px] bg-neutral-100 border-neutral-400 dark:bg-neutral-500 dark:hover:bg-neutral-600'>
                                                 <input type="text" className='w-full border rounded pl-6 p-1 text-sm' />
                                                 <IconRenderer name='search' className='w-5 h-5 absolute top-1/2 -translate-y-1/2 left-3' />
                                             </div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
-                                            <div className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>asdfasd</div>
+                                            {
+                                                customers.map((customer) => (
+                                                    <div key={customer.id} onClick={() => handleCustomerSelect(customer)} className='w-full border-b border-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 p-2 leading-4 cursor-pointer'>{customer.name}</div>
+                                                ))
+                                            }
                                         </div>
                                     </div>
                                     {/* <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.customer_name}</div> */}
