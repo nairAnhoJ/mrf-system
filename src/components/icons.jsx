@@ -24,6 +24,7 @@ import IconVisibilityOff from './icons/IconVisibilityOff';
 import IconHistory from './icons/IconHistory';
 import IconNonChargeable from './icons/IconNonChargeable';
 import IconChargeable from './icons/IconChargeable';
+import IconUpload from './icons/IconUpload';
 
 const icons = {
     add: IconAdd,
@@ -51,7 +52,8 @@ const icons = {
     visibilityOff: IconVisibilityOff,
     history: IconHistory,
     nonChargeable: IconNonChargeable,
-    chargeable: IconChargeable
+    chargeable: IconChargeable,
+    upload: IconUpload,
 };
 
 const IconRenderer = ({name, className}) => {
