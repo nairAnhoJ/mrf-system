@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+// import Table from '../../components/Table'
 import Button from '../../components/Button'
 import IconRenderer from '../../components/icons'
 import ImageViewer from '../../components/ImageViewer'
@@ -26,6 +27,13 @@ const NonChargeableAdd = () => {
         'customer_name' : '',
         'customer_address' : '',
         'area' : '',
+        'fsrr_number' : '',
+        'fsrr_attachment' : null,
+        'fleet_number' : '',
+        'brand' : '',
+        'model' : '',
+        'serial_number' : '',
+        'request_remarks' : '',
     });
     const [areas, setAreas] = useState([]);
     const [customers, setCustomers] = useState([]);
@@ -113,7 +121,16 @@ const NonChargeableAdd = () => {
         const previewUrl = URL.createObjectURL(file);
         setFsrrPreview(previewUrl);
       }
+      setItem((prev) => ({
+        ...prev,
+        fsrr_attachment: file,
+      }));
     };
+
+    const handleCloseImageViewer = (e) => {
+        if (e.target.closest('img')) return;
+        setShowFsrr(false);
+    }
 
     return (
         <>
@@ -179,13 +196,13 @@ const NonChargeableAdd = () => {
             {/* IMAGE VIEWER */}
             {
                 showFsrr &&
-                <ImageViewer path={fsrrPreview}  closeButton={() => setShowFsrr(false)} />
+                <ImageViewer path={fsrrPreview}  closeButton={(e) => handleCloseImageViewer(e)} />
             }
 
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4 text-neutral-700 dark:text-neutral-100'>
 
-                <form className='w-full h-full'>
+                <form className='w-full h-full overflow-y-auto overflow-x-hidden'>
                     <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
                     
                     {/* CONTROLS */}
@@ -202,14 +219,20 @@ const NonChargeableAdd = () => {
                     </div>
 
                     <div className='w-full'>
-                        <div className='w-full flex flex-col gap-y-2 mt-2'>
+                        <div className='w-full flex flex-col gap-y-4 mt-2'>
+
+                            <h1 className='font-bold text-2xl text-neutral-600'>Request Details</h1>
+
+                            {/* Date Needed */}
                             <div className='flex w-full'>
                                 <div className='flex flex-col w-1/5 pr-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Date Needed</h1>
                                     <input type='date' onChange={(e) => setItem({...item, date_needed: e.target.value})} value={item.date_needed} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'/>
                                 </div>
                             </div>
+
                             <div className='flex w-full'>
+                                {/* For */}
                                 <div className='flex flex-col w-1/3 pr-3'>
                                     <h1 className='text-xs 2xl:text-sm'>For</h1>
                                     <select onChange={(e) => setItem({...item, for: e.target.value})} value={item.for} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
@@ -218,6 +241,7 @@ const NonChargeableAdd = () => {
                                         <option value="REPAIR">REPAIR</option>
                                     </select>
                                 </div>
+                                {/* Order Type */}
                                 <div className='flex flex-col w-1/3 px-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Order Type</h1>
                                     <select onChange={(e) => setItem({...item, order_type: e.target.value})} value={item.order_type} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
@@ -230,6 +254,7 @@ const NonChargeableAdd = () => {
                                         <option value="OTHERS">OTHERS</option>
                                     </select>
                                 </div>
+                                {/* Delivery Type */}
                                 <div className='flex flex-col w-1/3 pl-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Delivery Type</h1>
                                     <select onChange={(e) => setItem({...item, delivery_type: e.target.value})} value={item.delivery_type} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
@@ -243,6 +268,8 @@ const NonChargeableAdd = () => {
                                     </select>
                                 </div>
                             </div>
+
+                            {/* Customer Name */}
                             <div className='flex w-full'>
                                 <div ref={customerDiv} className='flex flex-col w-2/3 pr-3 relative'>
                                     <h1 className='text-xs 2xl:text-sm'>Customer Name</h1>
@@ -280,55 +307,155 @@ const NonChargeableAdd = () => {
                                     <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.area}</div>
                                 </div>
                             </div>
+
+                            {/* Customer Address */}
                             <div className='flex w-full'>
                                 <div className='flex flex-col w-full'>
                                     <h1 className='text-xs 2xl:text-sm'>Customer Address</h1>
                                     <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.customer_address}</div>
                                 </div>
                             </div>
+
                             <div className='flex w-full'>
+                                {/* FSRR */}
                                 <div className='flex flex-col w-1/5 pr-3'>
                                     <h1 className='text-xs 2xl:text-sm'>FSSR Number</h1>
                                     <div className='flex relative'>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fsrr_number}</div>
+                                        <input onChange={(e) => setItem({...item, fsrr_number: e.target.value})} value={item.fsrr_number} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'></input>
                                         <div className='flex absolute right-1 top-1 gap-x-1'>
                                             <input ref={fsrrRef} onChange={handleFsrrUpload} type="file" style={{ display: 'none' }} accept="image/*"/>
                                             <button onClick={() => fsrrRef.current.click()} type='button' className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1'>
                                                 <IconRenderer name="upload" className="w-5 h-5"/>
                                             </button>
-                                            <button disabled type='button' onClick={() => setShowFsrr(true)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
+                                            <button disabled={(fsrrPreview == '')} type='button' onClick={() => setShowFsrr(true)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
                                                 <IconRenderer name="visibility" className="w-5 h-5"/>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
+                                {/* Fleet Number */}
                                 <div className='flex flex-col w-1/5 px-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Fleet Number</h1>
                                     <div className='flex relative'>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fleet_number}</div>
-                                        <button type='button' className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
+                                        <input onChange={(e) => setItem({...item, fleet_number: e.target.value})} value={item.fleet_number} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' />
+                                        <button disabled={item.fleet_number == ''} type='button' className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
                                             <IconRenderer name="history" className="w-5 h-5"/>
                                         </button>
                                     </div>
                                 </div>
+                                {/* Brand */}
                                 <div className='flex flex-col w-1/5 px-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Brand</h1>
-                                    <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.brand}</div>
+                                    <select onChange={(e) => setItem({...item, brand: e.target.value})} value={item.brand} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
+                                        <option hidden value="">-</option>
+                                        <option value="TOYOTA">TOYOTA</option>
+                                        <option value="BT">BT</option>
+                                        <option value="RAYMOND">RAYMOND</option>
+                                    </select>
                                 </div>
-                                <div className='flex flex-col w-1/5 pl-3'>
+                                {/* Model */}
+                                <div className='flex flex-col w-1/5 px-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Model</h1>
-                                    <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.model}</div>
+                                    <input onChange={(e) => setItem({...item, model: e.target.value})} value={item.model} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' />
                                 </div>
+                                {/* Serial Number */}
                                 <div className='flex flex-col w-1/5 pl-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Serial Number</h1>
-                                    <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.serial_number}</div>
+                                    <input onChange={(e) => setItem({...item, serial_number: e.target.value})} value={item.serial_number} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' />
                                 </div>
                             </div>
+ 
+                            {/* Remarks */}
                             <div className='flex w-full'>
                                 <div className='flex flex-col w-full'>
                                     <h1 className='text-xs 2xl:text-sm'>Request Remarks</h1>
-                                    <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto'>{item.request_remarks}</div>
+                                    <textarea onChange={(e) => setItem({...item, request_remarks: e.target.value})} value={item.request_remarks} className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto' />
                                 </div>
+                            </div>
+
+                        </div>
+
+                        <div className='w-full'>
+                            <h1 className='font-bold text-2xl text-neutral-600 mt-6'>Parts Request</h1>
+                            <div className='w-full'>
+                                <table className='w-full border-separate border-spacing-y-2'>
+                                    <thead>
+                                        <tr>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Part Number</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Description</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Brand</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Quantity</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Unit Price</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Total Amount</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
+                                            <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
+                                            <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
+                                            <td className='text-center bg-neutral-200'>ATOYOT</td>
+                                            <td className='text-center bg-neutral-200'>2</td>
+                                            <td className='text-center bg-neutral-200'>999</td>
+                                            <td className='text-center bg-neutral-200'>1,998</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                        </tr>
+                                        <tr>
+                                            <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
+                                            <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
+                                            <td className='text-center bg-neutral-200'>ATOYOT</td>
+                                            <td className='text-center bg-neutral-200'>2</td>
+                                            <td className='text-center bg-neutral-200'>999</td>
+                                            <td className='text-center bg-neutral-200'>1,998</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                        </tr>
+                                        <tr>
+                                            <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
+                                            <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
+                                            <td className='text-center bg-neutral-200'>ATOYOT</td>
+                                            <td className='text-center bg-neutral-200'>2</td>
+                                            <td className='text-center bg-neutral-200'>999</td>
+                                            <td className='text-center bg-neutral-200'>1,998</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                        </tr>
+                                        <tr>
+                                            <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
+                                            <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
+                                            <td className='text-center bg-neutral-200'>ATOYOT</td>
+                                            <td className='text-center bg-neutral-200'>2</td>
+                                            <td className='text-center bg-neutral-200'>999</td>
+                                            <td className='text-center bg-neutral-200'>1,998</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                        </tr>
+                                        <tr>
+                                            <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
+                                            <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
+                                            <td className='text-center bg-neutral-200'>ATOYOT</td>
+                                            <td className='text-center bg-neutral-200'>2</td>
+                                            <td className='text-center bg-neutral-200'>999</td>
+                                            <td className='text-center bg-neutral-200'>1,998</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                        </tr>
+                                        <tr>
+                                            <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
+                                            <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
+                                            <td className='text-center bg-neutral-200'>ATOYOT</td>
+                                            <td className='text-center bg-neutral-200'>2</td>
+                                            <td className='text-center bg-neutral-200'>999</td>
+                                            <td className='text-center bg-neutral-200'>1,998</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                        </tr>
+                                        <tr>
+                                            <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
+                                            <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
+                                            <td className='text-center bg-neutral-200'>ATOYOT</td>
+                                            <td className='text-center bg-neutral-200'>2</td>
+                                            <td className='text-center bg-neutral-200'>999</td>
+                                            <td className='text-center bg-neutral-200'>1,998</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
