@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
 import { Notification } from '../../components/Notification'
+import SelectParts from '../../components/SelectParts'
 
 const NonChargeableAdd = () => {
     const [loading, setLoading] = useState(true);
@@ -39,6 +40,7 @@ const NonChargeableAdd = () => {
     const [customers, setCustomers] = useState([]);
     const [viewCustomers, setViewCustomers] = useState(false);
     const [showFsrr, setShowFsrr] = useState(false);
+    const [showPartsList, setShowPartsList] = useState(true);
     const [fsrrPreview, setFsrrPreview] = useState('');
     const [errors, setErrors] = useState([]);
     const [notif, setNotif] = useState([]);
@@ -132,6 +134,11 @@ const NonChargeableAdd = () => {
         setShowFsrr(false);
     }
 
+    const handleClosePartsList = (e) => {
+        if (e.target.closest('img')) return;
+        setShowPartsList(false);
+    }
+
     return (
         <>
             {/* NOTIFICATION */}
@@ -199,14 +206,21 @@ const NonChargeableAdd = () => {
                 <ImageViewer path={fsrrPreview}  closeButton={(e) => handleCloseImageViewer(e)} />
             }
 
+            
+            {/* IMAGE VIEWER */}
+            {
+                showPartsList &&
+                <SelectParts closeButton={(e) => handleClosePartsList(e)} />
+            }
+
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4 text-neutral-700 dark:text-neutral-100'>
 
-                <form className='w-full h-full overflow-y-auto overflow-x-hidden'>
+                <form className='w-full h-full'>
                     <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
                     
                     {/* CONTROLS */}
-                    <div className='flex justify-between mt-2'>
+                    <div className='flex justify-between mt-2 pb-2'>
                         <div className='flex items-center gap-x-2'>
                             <Link to="/non-chargeable" className='rounded-full hover:bg-neutral-500 hover:text-white p-2'>
                                 <IconRenderer name={'back'} className={'w-6 h-6'}/>
@@ -214,11 +228,11 @@ const NonChargeableAdd = () => {
                             <div className='text-xl font-semibold'>Add a New Request</div>
                         </div>
                         <Button type='submit' color='blue'>
-                            Save
+                            Submit
                         </Button>
                     </div>
 
-                    <div className='w-full'>
+                    <div className='h-[calc(100%-100px)] w-full overflow-y-auto overflow-x-hidden'>
                         <div className='w-full flex flex-col gap-y-4 mt-2'>
 
                             <h1 className='font-bold text-2xl text-neutral-600'>Request Details</h1>
@@ -375,18 +389,26 @@ const NonChargeableAdd = () => {
 
                         </div>
 
-                        <div className='w-full'>
-                            <h1 className='font-bold text-2xl text-neutral-600 mt-6'>Parts Request</h1>
+                        <div className='w-full mt-7'>
+                            <div className='flex items-end justify-between'>
+                                <h1 className='font-bold text-2xl text-neutral-600 h-9'>Parts Request</h1>
+                                <div className='flex items-center'>
+                                    <Button color='blue' className={'flex items-center gap-x-1'}>
+                                        <IconRenderer name={'add'} className={'w-5 h-5'}/>
+                                        Add
+                                    </Button>
+                                </div>
+                            </div>
                             <div className='w-full'>
                                 <table className='w-full border-separate border-spacing-y-2'>
-                                    <thead>
+                                    <thead> 
                                         <tr>
                                             <th className='py-2 border-b-1 border-neutral-300'>Part Number</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Description</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Brand</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Quantity</th>
-                                            <th className='py-2 border-b-1 border-neutral-300'>Unit Price</th>
-                                            <th className='py-2 border-b-1 border-neutral-300'>Total Amount</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Unit Price (₱)</th>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Total Amount (₱)</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Action</th>
                                         </tr>
                                     </thead>
@@ -396,63 +418,91 @@ const NonChargeableAdd = () => {
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
                                             <td className='text-center bg-neutral-200'>ATOYOT</td>
                                             <td className='text-center bg-neutral-200'>2</td>
-                                            <td className='text-center bg-neutral-200'>999</td>
-                                            <td className='text-center bg-neutral-200'>1,998</td>
-                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                            <td className='text-center bg-neutral-200'>999.00</td>
+                                            <td className='text-center bg-neutral-200'>1,998.00</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>
+                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                </button>
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
                                             <td className='text-center bg-neutral-200'>ATOYOT</td>
                                             <td className='text-center bg-neutral-200'>2</td>
-                                            <td className='text-center bg-neutral-200'>999</td>
-                                            <td className='text-center bg-neutral-200'>1,998</td>
-                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                            <td className='text-center bg-neutral-200'>999.00</td>
+                                            <td className='text-center bg-neutral-200'>1,998.00</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>
+                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                </button>
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
                                             <td className='text-center bg-neutral-200'>ATOYOT</td>
                                             <td className='text-center bg-neutral-200'>2</td>
-                                            <td className='text-center bg-neutral-200'>999</td>
-                                            <td className='text-center bg-neutral-200'>1,998</td>
-                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                            <td className='text-center bg-neutral-200'>999.00</td>
+                                            <td className='text-center bg-neutral-200'>1,998.00</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>
+                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                </button>
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
                                             <td className='text-center bg-neutral-200'>ATOYOT</td>
                                             <td className='text-center bg-neutral-200'>2</td>
-                                            <td className='text-center bg-neutral-200'>999</td>
-                                            <td className='text-center bg-neutral-200'>1,998</td>
-                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                            <td className='text-center bg-neutral-200'>999.00</td>
+                                            <td className='text-center bg-neutral-200'>1,998.00</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>
+                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                </button>
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
                                             <td className='text-center bg-neutral-200'>ATOYOT</td>
                                             <td className='text-center bg-neutral-200'>2</td>
-                                            <td className='text-center bg-neutral-200'>999</td>
-                                            <td className='text-center bg-neutral-200'>1,998</td>
-                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                            <td className='text-center bg-neutral-200'>999.00</td>
+                                            <td className='text-center bg-neutral-200'>1,998.00</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>
+                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                </button>
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
                                             <td className='text-center bg-neutral-200'>ATOYOT</td>
                                             <td className='text-center bg-neutral-200'>2</td>
-                                            <td className='text-center bg-neutral-200'>999</td>
-                                            <td className='text-center bg-neutral-200'>1,998</td>
-                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                            <td className='text-center bg-neutral-200'>999.00</td>
+                                            <td className='text-center bg-neutral-200'>1,998.00</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>
+                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                </button>
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
                                             <td className='text-center bg-neutral-200'>ATOYOT</td>
                                             <td className='text-center bg-neutral-200'>2</td>
-                                            <td className='text-center bg-neutral-200'>999</td>
-                                            <td className='text-center bg-neutral-200'>1,998</td>
-                                            <td className='text-center bg-neutral-200 rounded-e-md'>X</td>
+                                            <td className='text-center bg-neutral-200'>999.00</td>
+                                            <td className='text-center bg-neutral-200'>1,998.00</td>
+                                            <td className='text-center bg-neutral-200 rounded-e-md'>
+                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
