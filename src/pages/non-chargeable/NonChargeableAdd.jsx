@@ -135,7 +135,7 @@ const NonChargeableAdd = () => {
     }
 
     const handleClosePartsList = (e) => {
-        if (e.target.closest('img')) return;
+        if (e.target.closest('aside')) return;
         setShowPartsList(false);
     }
 
@@ -207,14 +207,14 @@ const NonChargeableAdd = () => {
             }
 
             
-            {/* IMAGE VIEWER */}
+            {/* Select Parts / Parts List */}
             {
                 showPartsList &&
                 <SelectParts closeButton={(e) => handleClosePartsList(e)} />
             }
 
 
-            <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4 text-neutral-700 dark:text-neutral-100'>
+            <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 py-2 pr-4 text-neutral-700 dark:text-neutral-100'>
 
                 <form className='w-full h-full'>
                     <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
@@ -393,7 +393,7 @@ const NonChargeableAdd = () => {
                             <div className='flex items-end justify-between'>
                                 <h1 className='font-bold text-2xl text-neutral-600 h-9'>Parts Request</h1>
                                 <div className='flex items-center'>
-                                    <Button color='blue' className={'flex items-center gap-x-1'}>
+                                    <Button onClick={() => setShowPartsList(true)} color='blue' className={'flex items-center gap-x-1'}>
                                         <IconRenderer name={'add'} className={'w-5 h-5'}/>
                                         Add
                                     </Button>
@@ -413,6 +413,7 @@ const NonChargeableAdd = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
@@ -426,6 +427,7 @@ const NonChargeableAdd = () => {
                                                 </button>
                                             </td>
                                         </tr>
+
                                         <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
@@ -439,6 +441,7 @@ const NonChargeableAdd = () => {
                                                 </button>
                                             </td>
                                         </tr>
+
                                         <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
@@ -452,6 +455,7 @@ const NonChargeableAdd = () => {
                                                 </button>
                                             </td>
                                         </tr>
+
                                         <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
@@ -465,6 +469,7 @@ const NonChargeableAdd = () => {
                                                 </button>
                                             </td>
                                         </tr>
+
                                         <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
@@ -478,6 +483,7 @@ const NonChargeableAdd = () => {
                                                 </button>
                                             </td>
                                         </tr>
+
                                         <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
@@ -491,6 +497,7 @@ const NonChargeableAdd = () => {
                                                 </button>
                                             </td>
                                         </tr>
+
                                         <tr className='hover:border-4 border-blue-500 cursor-pointer'>
                                             <th className='py-3 bg-neutral-200 rounded-s-md'>56sd748hr</th>
                                             <td className='bg-neutral-200'>s56d74fgsdf sdf456h</td>
@@ -504,6 +511,7 @@ const NonChargeableAdd = () => {
                                                 </button>
                                             </td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
