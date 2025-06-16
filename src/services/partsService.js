@@ -3,7 +3,7 @@ import config from "../config/config"
 
 const token = localStorage.getItem("token");
 
-const baseURL = `${config.defaults.baseURL}/api/mrf/nonchargeable/requests`;
+const baseURL = `${config.defaults.baseURL}/api/parts`;
 
 export const getAll = async() => {
     try {
