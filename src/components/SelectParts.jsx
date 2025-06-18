@@ -1,8 +1,39 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 import IconRenderer from './icons'
 
-const SelectParts = ({closeButton, collection}) => {
+const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
+    const [partSearch, setPartSearch] = useState('');
+    const [selectedParts, setSelectedParts] = useState([]);
+
+    useEffect(() => {
+        setSelectedParts(sParts);
+    }, []);
+
+    const handlePartSearchInput = (e) => {
+        setPartSearch(e.target.value);
+    }
+    
+    const filteredCollection = collection.filter(item =>
+        item.item_number.toLowerCase().includes(partSearch.toLowerCase()) || 
+        item.number.toLowerCase().includes(partSearch.toLowerCase()) || 
+        item.name.toLowerCase().includes(partSearch.toLowerCase()) || 
+        item.brand.toLowerCase().includes(partSearch.toLowerCase())
+    );
+
+    const toggleRow = (id) => {
+        console.log(selectedParts);
+        
+        setSelectedParts((prev) =>
+          prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+        );
+    }
+
+    const isChecked = (id) => selectedParts.includes(id);
+
+    const handleAdd = () => {
+        addSelectedParts(selectedParts);
+    }
 
     return (
         <>
@@ -10,36 +41,36 @@ const SelectParts = ({closeButton, collection}) => {
                 <aside className='bg-white dark:bg-neutral-600 w-3/4 h-3/4 rounded text-neutral-600 dark:text-neutral-100'>
                     <div className='w-full p-6 border-b border-neutral-300 text-xl leading-5 font-bold flex justify-between'>
                         <h1>Parts List</h1>
-                        {/* <button onClick={() => closeButton()} className='hover:text-neutral-500 cursor-pointer bg-neutral-100 rounded'>
-                            <IconRenderer name={'close'} className={"w-5 h-5"} />
-                            +
-                        </button> */}
                     </div>
                     <div className='w-full h-[calc(100%-158px)] p-6'>
-                        <div className='w-full'>
-                            <table className='w-full'>
-                                <thead className=''>
-                                    <tr>
-                                        <th className='px-2'></th>
-                                        <th className='py-1'>Item Number</th>
-                                        <th>Part Number</th>
-                                        <th>Description</th>
-                                        <th>Brand</th>
-                                        <th>Unit Price (₱)</th>
+                        <div className='flex items-center gap-x-1 relative text-neutral-700 mb-1'>
+                            <IconRenderer name={'search'} className='h-5 w-5 ml-2 absolute'></IconRenderer>
+                            <input onChange={(e) => handlePartSearchInput(e)} value={partSearch} type="text" className='px-2 py-1 rounded w-80 border border-gray-300 pl-8 dark:bg-neutral-400 dark:border-neutral-400 shadow-inner' />
+                        </div>
+                        <div className='w-full h-[calc(100%-34px)] border-b border-neutral-300'>
+                            <table className='w-full h-full'>
+                                <thead className='w-full block pr-[15px]'>
+                                    <tr className='border-b border-neutral-500 w-full table table-fixed'>
+                                        <th className='px-4 w-[3.47%]'></th>
+                                        <th className='py-1 w-[11.94%] whitespace-nowrap'>Item Number</th>
+                                        <th className='w-[17.26%] whitespace-nowrap'>Part Number</th>
+                                        <th className='pl-1 text-left w-[43.84%]'>Description</th>
+                                        <th className='w-[12.62%]'>Brand</th>
+                                        <th className='w-[10.86%] whitespace-nowrap'>Unit Price (₱)</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className='block w-full h-[calc(100%-34px)] overflow-auto'>
                                     {
-                                        collection.map((item) => (
-                                            <tr key={item.id} className='cursor-pointer'>
-                                                <th className='text-center'>
-                                                    <input type="checkbox" name="" id="" />
+                                        filteredCollection.map((item) => (
+                                            <tr key={item.id} onClick={() => toggleRow(item.id)} className='w-full cursor-pointer not-last:border-b border-neutral-300 hover:bg-neutral-100 table table-fixed'>
+                                                <th className='text-center py-1 w-[3.47%]'>
+                                                    <input checked={isChecked(item.id)} onChange={() => toggleRow(item.id)} onClick={(e) => e.stopPropagation()} type="checkbox" name="" id="" />
                                                 </th>
-                                                <td className='text-center'>{item.item_number}</td>
-                                                <td className='text-center'>{item.number}</td>
-                                                <td className='text-center'>{item.name}</td>
-                                                <td className='text-center'>{item.brand}</td>
-                                                <td className='text-center'>{Number(item.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                                <td className='text-center w-[11.94%]'>{item.item_number}</td>
+                                                <td className='text-center w-[17.26%]'>{item.number}</td>
+                                                <td className='text-left pl-1 w-[43.84%]'>{item.name}</td>
+                                                <td className='text-center w-[12.62%]'>{item.brand}</td>
+                                                <td className='text-center w-[10.86%]'>{Number(item.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                             </tr>
                                         ))
                                     }
@@ -48,7 +79,7 @@ const SelectParts = ({closeButton, collection}) => {
                         </div>
                     </div>
                     <div className='w-full p-6 border-t border-neutral-300 flex gap-x-6'>
-                        <Button className={"w-20"}>Add</Button>
+                        <Button onClick={handleAdd} className={"w-20"}>Add</Button>
                         <Button color='gray' onClick={() => closeButton()} className={"w-20"}>Close</Button>
                     </div>
                 </aside>

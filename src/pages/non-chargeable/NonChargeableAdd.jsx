@@ -42,6 +42,7 @@ const NonChargeableAdd = () => {
     const [viewCustomers, setViewCustomers] = useState(false);
     const [showFsrr, setShowFsrr] = useState(false);
     const [parts, setParts] = useState([]);
+    const [selectedParts, setSelectedParts] = useState([]);
     const [showPartsList, setShowPartsList] = useState(false);
     const [fsrrPreview, setFsrrPreview] = useState('');
     const [errors, setErrors] = useState([]);
@@ -150,6 +151,11 @@ const NonChargeableAdd = () => {
         setShowPartsList(true);
     }
 
+    const handleSelectedParts = (selected) => {
+        setSelectedParts(selected);
+        setShowPartsList(false);
+    }
+
     const handleClosePartsList = (e) => {
         if (e && e.target.closest('aside')) return;
         setShowPartsList(false);
@@ -226,7 +232,7 @@ const NonChargeableAdd = () => {
             {/* Select Parts / Parts List */}
             {
                 showPartsList &&
-                <SelectParts closeButton={(e) => handleClosePartsList(e)} collection={parts} />
+                <SelectParts closeButton={(e) => handleClosePartsList(e)} addSelectedParts={handleSelectedParts} collection={parts} sParts={selectedParts} />
             }
 
 
