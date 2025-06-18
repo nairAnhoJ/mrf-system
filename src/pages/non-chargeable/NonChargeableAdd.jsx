@@ -161,6 +161,10 @@ const NonChargeableAdd = () => {
         setShowPartsList(false);
     }
 
+    const handleDeleteSelectedPart = (id) => {
+        setSelectedParts((prev) => prev.filter((i) => i.id !== id))
+    }
+
     return (
         <>
             {/* NOTIFICATION */}
@@ -438,16 +442,18 @@ const NonChargeableAdd = () => {
                                     <tbody>
                                         {
                                             selectedParts.map((selectedPart) => (
-                                                <tr key={selectedPart.id} className='hover:border-4 border-blue-500 cursor-pointer'>
+                                                <tr key={selectedPart.id} className='hover:border-4 border-blue-500'>
                                                     <th className='py-3 text-center bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>{selectedPart.item_number}</th>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{selectedPart.number}</td>
                                                     <td className='bg-neutral-200 dark:bg-neutral-600'>{selectedPart.name}</td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{selectedPart.brand}</td>
-                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>
+                                                        <input type="text" className='border-b w-14 text-center' value={selectedPart.quantity} onChange={(e) => setSelectedParts((prev) => prev.map((item) => (item.id === selectedPart.id) ? {...item, quantity: e.target.value} : item))}/>
+                                                    </td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price * 2).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
-                                                        <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                        <button onClick={() => handleDeleteSelectedPart(selectedPart.id)} type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2 cursor-pointer'>
                                                             <IconRenderer name={'close'} className={'w-5 h-5'}/>
                                                         </button>
                                                     </td>

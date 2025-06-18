@@ -23,7 +23,7 @@ const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
 
     const toggleRow = (item) => {
         setSelectedParts((prev) =>
-          prev.some((i) => i.id === item.id) ? prev.filter((i) => i.id !== item.id) : [...prev, item]
+          prev.some((i) => i.id === item.id) ? prev.filter((i) => i.id !== item.id) : [...prev, {...item, quantity: 1}]
         );
     }
 
