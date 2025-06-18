@@ -425,8 +425,9 @@ const NonChargeableAdd = () => {
                                 <table className='w-full border-separate border-spacing-y-2'>
                                     <thead> 
                                         <tr>
+                                            <th className='py-2 border-b-1 border-neutral-300'>Item Number</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Part Number</th>
-                                            <th className='py-2 border-b-1 border-neutral-300'>Description</th>
+                                            <th className='text-left py-2 border-b-1 border-neutral-300'>Description</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Brand</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Quantity</th>
                                             <th className='py-2 border-b-1 border-neutral-300'>Unit Price (₱)</th>
@@ -435,86 +436,24 @@ const NonChargeableAdd = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
-                                            <th className='py-3 bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>56sd748hr</th>
-                                            <td className='bg-neutral-200 dark:bg-neutral-600'>s56d74fgsdf sdf456h</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>ATOYOT</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>999.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>1,998.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
-                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
-                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
-                                            <th className='py-3 bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>56sd748hr</th>
-                                            <td className='bg-neutral-200 dark:bg-neutral-600'>s56d74fgsdf sdf456h</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>ATOYOT</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>999.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>1,998.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
-                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
-                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
-                                            <th className='py-3 bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>56sd748hr</th>
-                                            <td className='bg-neutral-200 dark:bg-neutral-600'>s56d74fgsdf sdf456h</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>ATOYOT</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>999.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>1,998.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
-                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
-                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
-                                            <th className='py-3 bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>56sd748hr</th>
-                                            <td className='bg-neutral-200 dark:bg-neutral-600'>s56d74fgsdf sdf456h</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>ATOYOT</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>999.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>1,998.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
-                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
-                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr className='hover:border-4 border-blue-500  cursor-pointer'>
-                                            <th className='py-3 bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>56sd748hr</th>
-                                            <td className='bg-neutral-200 dark:bg-neutral-600'>s56d74fgsdf sdf456h</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>ATOYOT</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>999.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>1,998.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
-                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
-                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr className='hover:border-4 border-blue-500 cursor-pointer'>
-                                            <th className='py-3 bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>56sd748hr</th>
-                                            <td className='bg-neutral-200 dark:bg-neutral-600'>s56d74fgsdf sdf456h</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>ATOYOT</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>999.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600'>1,998.00</td>
-                                            <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
-                                                <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
-                                                    <IconRenderer name={'close'} className={'w-5 h-5'}/>
-                                                </button>
-                                            </td>
-                                        </tr>
-
+                                        {
+                                            selectedParts.map((selectedPart) => (
+                                                <tr key={selectedPart.id} className='hover:border-4 border-blue-500 cursor-pointer'>
+                                                    <th className='py-3 text-center bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>{selectedPart.item_number}</th>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{selectedPart.number}</td>
+                                                    <td className='bg-neutral-200 dark:bg-neutral-600'>{selectedPart.name}</td>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{selectedPart.brand}</td>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>2</td>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price * 2).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
+                                                        <button type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2'>
+                                                            <IconRenderer name={'close'} className={'w-5 h-5'}/>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        }
                                     </tbody>
                                 </table>
                             </div>

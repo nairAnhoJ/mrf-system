@@ -21,15 +21,13 @@ const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
         item.brand.toLowerCase().includes(partSearch.toLowerCase())
     );
 
-    const toggleRow = (id) => {
-        console.log(selectedParts);
-        
+    const toggleRow = (item) => {
         setSelectedParts((prev) =>
-          prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+          prev.some((i) => i.id === item.id) ? prev.filter((i) => i.id !== item.id) : [...prev, item]
         );
     }
 
-    const isChecked = (id) => selectedParts.includes(id);
+    const isChecked = (item) => selectedParts.some((i) => i.id === item.id);
 
     const handleAdd = () => {
         addSelectedParts(selectedParts);
@@ -62,9 +60,9 @@ const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
                                 <tbody className='block w-full h-[calc(100%-34px)] overflow-auto'>
                                     {
                                         filteredCollection.map((item) => (
-                                            <tr key={item.id} onClick={() => toggleRow(item.id)} className='w-full cursor-pointer not-last:border-b border-neutral-300 hover:bg-neutral-100 table table-fixed'>
+                                            <tr key={item.id} onClick={() => toggleRow(item)} className='w-full cursor-pointer not-last:border-b border-neutral-300 hover:bg-neutral-100 table table-fixed'>
                                                 <th className='text-center py-1 w-[3.47%]'>
-                                                    <input checked={isChecked(item.id)} onChange={() => toggleRow(item.id)} onClick={(e) => e.stopPropagation()} type="checkbox" name="" id="" />
+                                                    <input checked={isChecked(item)} onChange={() => toggleRow(item)} onClick={(e) => e.stopPropagation()} type="checkbox" />
                                                 </th>
                                                 <td className='text-center w-[11.94%]'>{item.item_number}</td>
                                                 <td className='text-center w-[17.26%]'>{item.number}</td>
