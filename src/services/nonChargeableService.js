@@ -43,3 +43,16 @@ export const getByRequestId = async(id) => {
         console.log(error);
     }
 };
+
+export const create = async(data) => {
+    try {
+        const response = await config.post(`${baseURL}/create`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.request;
+    } catch (error) {
+        return error.response;
+    }
+};

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as partsGetAll } from '../../services/partsService'
 import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
+import { create as requestCreate } from '../../services/nonChargeableService'
 import { Notification } from '../../components/Notification'
 import SelectParts from '../../components/SelectParts'
 
@@ -36,6 +37,7 @@ const NonChargeableAdd = () => {
         'model' : '',
         'serial_number' : '',
         'request_remarks' : '',
+        'parts' : [],
     });
     const [areas, setAreas] = useState([]);
     const [customers, setCustomers] = useState([]);
@@ -152,7 +154,7 @@ const NonChargeableAdd = () => {
     }
 
     const handleSelectedParts = (selected) => {
-        setSelectedParts(selected);
+        setItem((prev) => ({...prev, parts: selected}));
         setShowPartsList(false);
     }
 
@@ -163,6 +165,40 @@ const NonChargeableAdd = () => {
 
     const handleDeleteSelectedPart = (id) => {
         setSelectedParts((prev) => prev.filter((i) => i.id !== id))
+    }
+
+    const handleQuantityChange = (e, id) => {
+        setItem((prev) => ({
+            ...prev,
+            parts: prev.parts.map((part) => (
+                part.id === id ?
+                { ...part, quantity: e.target.value < 1 ? 1 : e.target.value }
+                : part
+            ))
+        }))
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // setItem((prev) => ({...prev, parts: selectedParts}));
+        
+        try {
+            const response = await requestCreate(item);
+            // console.log(response);
+            
+            if(response.status === 400){
+                // console.log(response.data.errors);
+                setErrors(response.data.errors);
+            }else if(response.status === 201){
+                console.log(response);
+                
+                // setNotif('New Customer has been Added');
+                // getCustomers();
+                // setAddCustomerModal(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -242,7 +278,7 @@ const NonChargeableAdd = () => {
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 py-2 pr-4 text-neutral-700 dark:text-neutral-100'>
 
-                <form className='w-full h-full'>
+                <form onSubmit={handleSubmit} className='w-full h-full'>
                     <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
                     
                     {/* CONTROLS */}
@@ -253,7 +289,7 @@ const NonChargeableAdd = () => {
                             </Link>
                             <div className='text-xl font-semibold'>Add a New Request</div>
                         </div>
-                        <Button type='submit' color='blue'>
+                        <Button type='submit' onClick={(e) => e.stopPropagation()} color='blue'>
                             Submit
                         </Button>
                     </div>
@@ -268,6 +304,11 @@ const NonChargeableAdd = () => {
                                 <div className='flex flex-col w-1/5 pr-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Date Needed</h1>
                                     <input type='date' onChange={(e) => setItem({...item, date_needed: e.target.value})} value={item.date_needed} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'/>
+                                    {
+                                        errors.find((err) => err.path == "date_needed") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "date_needed")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                             </div>
 
@@ -280,6 +321,11 @@ const NonChargeableAdd = () => {
                                         <option value="PM">PM</option>
                                         <option value="REPAIR">REPAIR</option>
                                     </select>
+                                    {
+                                        errors.find((err) => err.path == "for") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "for")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                                 {/* Order Type */}
                                 <div className='flex flex-col w-1/3 px-3'>
@@ -293,6 +339,11 @@ const NonChargeableAdd = () => {
                                         <option value="WARRANTY">WARRANTY</option>
                                         <option value="OTHERS">OTHERS</option>
                                     </select>
+                                    {
+                                        errors.find((err) => err.path == "order_type") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "order_type")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                                 {/* Delivery Type */}
                                 <div className='flex flex-col w-1/3 pl-3'>
@@ -306,6 +357,11 @@ const NonChargeableAdd = () => {
                                         <option value="SEA">SEA</option>
                                         <option value="OTHERS">OTHERS</option>
                                     </select>
+                                    {
+                                        errors.find((err) => err.path == "delivery_type") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "delivery_type")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                             </div>
 
@@ -314,6 +370,11 @@ const NonChargeableAdd = () => {
                                 <div ref={customerDiv} className='flex flex-col w-2/3 pr-3 relative'>
                                     <h1 className='text-xs 2xl:text-sm'>Customer Name</h1>
                                     <input type="text" onFocus={() => setViewCustomers(true)} value={item.customer_name} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' readOnly />
+                                    {
+                                        errors.find((err) => err.path == "customer_name") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "customer_name")?.msg }</p>
+                                        ) : null
+                                    }
                                     <div className={`w-[calc(100%-12px)] absolute left-0 -bottom-[2px] translate-y-full bg-neutral-100 z-49 border border-neutral-400 dark:bg-neutral-600 ${!viewCustomers && 'hidden'}`}>
                                         <div className='w-full overflow-hidden'>
                                             <button type='button' onClick={handleAddCustomerModal} className='w-full p-2 border-b flex items-center bg-neutral-100 border-neutral-400 hover:bg-gray-200 dark:bg-neutral-600 dark:hover:bg-neutral-700 cursor-pointer'>
@@ -364,7 +425,7 @@ const NonChargeableAdd = () => {
                                         <input onChange={(e) => setItem({...item, fsrr_number: e.target.value})} value={item.fsrr_number} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'></input>
                                         <div className='flex absolute right-1 top-1 gap-x-1'>
                                             <input ref={fsrrRef} onChange={handleFsrrUpload} type="file" style={{ display: 'none' }} accept="image/*"/>
-                                            <button onClick={() => fsrrRef.current.click()} type='button' className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1'>
+                                            <button onClick={() => fsrrRef.current.click()} type='button' className={`h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1 border-red-500 ${errors.find((err) => err.path == "fsrr_attachment") ? 'border' : ''}`}>
                                                 <IconRenderer name="upload" className="w-5 h-5"/>
                                             </button>
                                             <button disabled={(fsrrPreview == '')} type='button' onClick={() => setShowFsrr(true)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
@@ -372,6 +433,11 @@ const NonChargeableAdd = () => {
                                             </button>
                                         </div>
                                     </div>
+                                    {
+                                        errors.find((err) => err.path == "fsrr_number") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "fsrr_number")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                                 {/* Fleet Number */}
                                 <div className='flex flex-col w-1/5 px-3'>
@@ -382,6 +448,11 @@ const NonChargeableAdd = () => {
                                             <IconRenderer name="history" className="w-5 h-5"/>
                                         </button>
                                     </div>
+                                    {
+                                        errors.find((err) => err.path == "fleet_number") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "fleet_number")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                                 {/* Brand */}
                                 <div className='flex flex-col w-1/5 px-3'>
@@ -392,16 +463,31 @@ const NonChargeableAdd = () => {
                                         <option value="BT">BT</option>
                                         <option value="RAYMOND">RAYMOND</option>
                                     </select>
+                                    {
+                                        errors.find((err) => err.path == "brand") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "brand")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                                 {/* Model */}
                                 <div className='flex flex-col w-1/5 px-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Model</h1>
                                     <input onChange={(e) => setItem({...item, model: e.target.value})} value={item.model} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' />
+                                    {
+                                        errors.find((err) => err.path == "model") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "model")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                                 {/* Serial Number */}
                                 <div className='flex flex-col w-1/5 pl-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Serial Number</h1>
                                     <input onChange={(e) => setItem({...item, serial_number: e.target.value})} value={item.serial_number} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' />
+                                    {
+                                        errors.find((err) => err.path == "serial_number") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "serial_number")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                             </div>
  
@@ -441,17 +527,23 @@ const NonChargeableAdd = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                            selectedParts.map((selectedPart) => (
+                                            item.parts.map((selectedPart) => (
                                                 <tr key={selectedPart.id} className='hover:border-4 border-blue-500'>
                                                     <th className='py-3 text-center bg-neutral-200 dark:bg-neutral-600 rounded-s-md'>{selectedPart.item_number}</th>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{selectedPart.number}</td>
                                                     <td className='bg-neutral-200 dark:bg-neutral-600'>{selectedPart.name}</td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{selectedPart.brand}</td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>
-                                                        <input type="text" className='border-b w-14 text-center' value={selectedPart.quantity} onChange={(e) => setSelectedParts((prev) => prev.map((item) => (item.id === selectedPart.id) ? {...item, quantity: e.target.value} : item))}/>
+                                                        <input type="text" 
+                                                            inputMode="numeric" 
+                                                            pattern="[0-9]*" 
+                                                            className='border-b w-14 text-center' 
+                                                            value={selectedPart.quantity} 
+                                                            onChange={(e) => handleQuantityChange(e, selectedPart.id)}
+                                                        />
                                                     </td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price * 2).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                                    <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price * selectedPart.quantity).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600 rounded-e-md'>
                                                         <button onClick={() => handleDeleteSelectedPart(selectedPart.id)} type='button' className='rounded-full text-red-500 hover:bg-red-500 hover:text-white p-2 cursor-pointer'>
                                                             <IconRenderer name={'close'} className={'w-5 h-5'}/>
