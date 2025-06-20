@@ -44,7 +44,7 @@ const NonChargeableAdd = () => {
     const [viewCustomers, setViewCustomers] = useState(false);
     const [showFsrr, setShowFsrr] = useState(false);
     const [parts, setParts] = useState([]);
-    const [selectedParts, setSelectedParts] = useState([]);
+    // const [selectedParts, setSelectedParts] = useState([]);
     const [showPartsList, setShowPartsList] = useState(false);
     const [fsrrPreview, setFsrrPreview] = useState('');
     const [errors, setErrors] = useState([]);
@@ -164,7 +164,10 @@ const NonChargeableAdd = () => {
     }
 
     const handleDeleteSelectedPart = (id) => {
-        setSelectedParts((prev) => prev.filter((i) => i.id !== id))
+        setItem((prev) => ({
+            ...prev, 
+            parts: prev.parts.filter((i) => (i.id !== id))
+        }));
     }
 
     const handleQuantityChange = (e, id) => {
@@ -180,10 +183,38 @@ const NonChargeableAdd = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // setItem((prev) => ({...prev, parts: selectedParts}));
+        setErrors([]);
+
+        const data = new FormData();
+        data.append('date_needed', item.date_needed);
+        data.append('for', item.for);
+        data.append('order_type', item.order_type);
+        data.append('delivery_type', item.delivery_type);
+        data.append('customer_name', item.customer_name);
+        data.append('customer_address', item.customer_address);
+        data.append('area', item.area);
+        data.append('fsrr_number', item.fsrr_number);
+        data.append('fsrr_attachment', item.fsrr_attachment);
+        data.append('fleet_number', item.fleet_number);
+        data.append('brand', item.brand);
+        data.append('model', item.model);
+        data.append('serial_number', item.serial_number);
+        data.append('request_remarks', item.request_remarks);
+
+        item.parts.forEach((part, index) => {
+            data.append(`parts[${index}][id]`, part.id);
+            data.append(`parts[${index}][item_number]`, part.item_number);
+            data.append(`parts[${index}][number]`, part.number);
+            data.append(`parts[${index}][name]`, part.name);
+            data.append(`parts[${index}][brand]`, part.brand);
+            data.append(`parts[${index}][price]`, part.price);
+            data.append(`parts[${index}][quantity]`, part.quantity);
+        });
+
+        // data.append('parts', item.parts);
         
         try {
-            const response = await requestCreate(item);
+            const response = await requestCreate(data);
             // console.log(response);
             
             if(response.status === 400){
@@ -272,13 +303,13 @@ const NonChargeableAdd = () => {
             {/* Select Parts / Parts List */}
             {
                 showPartsList &&
-                <SelectParts closeButton={(e) => handleClosePartsList(e)} addSelectedParts={handleSelectedParts} collection={parts} sParts={selectedParts} />
+                <SelectParts closeButton={(e) => handleClosePartsList(e)} addSelectedParts={handleSelectedParts} collection={parts} sParts={item.parts} />
             }
 
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 py-2 pr-4 text-neutral-700 dark:text-neutral-100'>
 
-                <form onSubmit={handleSubmit} className='w-full h-full'>
+                <form onSubmit={handleSubmit} encType="multipart/form-data" className='w-full h-full'>
                     <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
                     
                     {/* CONTROLS */}
@@ -505,7 +536,7 @@ const NonChargeableAdd = () => {
                             <div className='flex items-end justify-between'>
                                 <h1 className='font-bold text-2xl text-neutral-600 dark:text-neutral-100 h-9'>Parts Request</h1>
                                 <div className='flex items-center'>
-                                    <Button onClick={handleOpenPartsList} color='blue' className={'flex items-center gap-x-1'}>
+                                    <Button onClick={handleOpenPartsList} color='blue' className={`flex items-center gap-x-1 ${errors.find((err) => err.path == "parts") ? 'border-2' : ''} border-red-500`}>
                                         <IconRenderer name={'add'} className={'w-5 h-5'}/>
                                         Add
                                     </Button>
