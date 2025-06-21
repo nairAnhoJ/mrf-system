@@ -25,8 +25,10 @@ const NonChargeableAdd = () => {
     const [item, setItem] = useState({
         'date_needed' : today,
         'for' : '',
+        'pm_attachment' : null,
         'order_type' : '',
         'delivery_type' : '',
+        'customer_id' : '',
         'customer_name' : '',
         'customer_address' : '',
         'area' : '',
@@ -51,6 +53,7 @@ const NonChargeableAdd = () => {
     const [notif, setNotif] = useState([]);
     const customerDiv = useRef();
     const fsrrRef = useRef();
+    const pmRef = useRef();
 
     const getAreas = async() => {
         try {
@@ -127,9 +130,21 @@ const NonChargeableAdd = () => {
 
     const handleCustomerSelect = (customer) => {
         console.log(customer);
-        setItem({...item, customer_name: customer.name, customer_address: customer.address, area: customer.area})
+        setItem({...item, customer_id: customer.id, customer_name: customer.name, customer_address: customer.address, area: customer.area})
         setViewCustomers(false)
     }
+
+    const handlePMUpload = (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const previewUrl = URL.createObjectURL(file);
+        setFsrrPreview(previewUrl);
+      }
+      setItem((prev) => ({
+        ...prev,
+        pm_attachment: file,
+      }));
+    };
 
     const handleFsrrUpload = (e) => {
       const file = e.target.files[0];
@@ -188,8 +203,10 @@ const NonChargeableAdd = () => {
         const data = new FormData();
         data.append('date_needed', item.date_needed);
         data.append('for', item.for);
+        data.append('pm_attachment', item.pm_attachment);
         data.append('order_type', item.order_type);
         data.append('delivery_type', item.delivery_type);
+        data.append('customer_id', item.customer_id);
         data.append('customer_name', item.customer_name);
         data.append('customer_address', item.customer_address);
         data.append('area', item.area);
@@ -345,7 +362,7 @@ const NonChargeableAdd = () => {
 
                             <div className='flex w-full'>
                                 {/* For */}
-                                <div className='flex flex-col w-1/3 pr-3'>
+                                <div className='flex flex-col w-1/4 pr-3'>
                                     <h1 className='text-xs 2xl:text-sm'>For</h1>
                                     <select onChange={(e) => setItem({...item, for: e.target.value})} value={item.for} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
                                         <option hidden value="">-</option>
@@ -358,8 +375,19 @@ const NonChargeableAdd = () => {
                                         ) : null
                                     }
                                 </div>
+                                {/* PM Sttachment */}
+                                <div className={`flex flex-col w-1/4 px-3 relative ${item.for !== 'PM' ? 'opacity-50' : ''}`}>
+                                    <h1 className='text-xs 2xl:text-sm'>PM Attachment</h1>
+                                    <button disabled={item.for !== 'PM'} type='button' onClick={() => pmRef.current.click()} className='w-[79px] 2xl:w-[90px] h-6 2xl:h-[26px] border border-neutral-600 absolute top-5 2xl:top-[25px] left-[17px] rounded shadow cursor-pointer disabled:pointer-events-none'></button>
+                                    <input disabled={item.for !== 'PM'} onChange={handlePMUpload} ref={pmRef} type="file" accept="image/*" className='w-full text-sm h-8 leading-3.5 py-[8px] 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 cursor-pointer disabled:pointer-events-none'/>
+                                    {
+                                        errors.find((err) => err.path == "pm_attachment") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "pm_attachment")?.msg }</p>
+                                        ) : null
+                                    }
+                                </div>
                                 {/* Order Type */}
-                                <div className='flex flex-col w-1/3 px-3'>
+                                <div className='flex flex-col w-1/4 px-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Order Type</h1>
                                     <select onChange={(e) => setItem({...item, order_type: e.target.value})} value={item.order_type} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
                                         <option hidden value="">-</option>
@@ -377,7 +405,7 @@ const NonChargeableAdd = () => {
                                     }
                                 </div>
                                 {/* Delivery Type */}
-                                <div className='flex flex-col w-1/3 pl-3'>
+                                <div className='flex flex-col w-1/4 pl-3'>
                                     <h1 className='text-xs 2xl:text-sm'>Delivery Type</h1>
                                     <select onChange={(e) => setItem({...item, delivery_type: e.target.value})} value={item.delivery_type} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
                                         <option hidden value="">-</option>
