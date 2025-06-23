@@ -45,16 +45,13 @@ export const getByRequestId = async(id) => {
 };
 
 export const create = async(data) => {
-    console.log(data);
-    
     try {
         const response = await config.post(`${baseURL}/create`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
-                // 'Content-Type': 'multipart/form-data',
             },
         });
-        return response.request;
+        return response;
     } catch (error) {
         return error.response;
     }

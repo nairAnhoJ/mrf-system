@@ -1,3 +1,10 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@font-face {
+    font-family: ProtoMono;
+    src: url('/public/fonts/ProtoMonoRegular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

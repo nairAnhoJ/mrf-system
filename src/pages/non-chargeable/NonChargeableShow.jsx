@@ -150,7 +150,7 @@ const NonChargeableShow = ({id, closeButton}) => {
                             <div className='flex w-full'>
                                 <div className='flex flex-col w-full'>
                                     <h1 className='text-xs 2xl:text-sm'>Request Remarks</h1>
-                                    <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto'>{item.request_remarks}ujdhfs guiodsaghjk sdgfjohu dfuig dsfgsd jfg sdfh fsdhsdf hsdfh sdfhsdf hsdfth drfthdft hbkdfthm ofdth nkjdfg nhkljfdg nhjklfdgn hjkldf ngjkhfd gjkh ndfikoghnjdfkgnh sdkjfgbn kjldfbgjklsdfbgjklsdfjklgdsfjkgsdfg hsdfkg hkdsjf hgjklsdf gklsdfghdsfklgj hsdklfg hkjlsdfhgkjlsdfhgkjsd fgusdhh gkjsdb guysdb gds bfgyukbds fjkgb dfyugb yudfb gsd fgusdhh gkjsdb guysdb gds bfgyug</div>
+                                    <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto'>{item.request_remarks}</div>
                                 </div>
                             </div>
                         </div>

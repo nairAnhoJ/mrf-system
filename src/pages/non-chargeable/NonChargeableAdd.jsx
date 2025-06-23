@@ -4,7 +4,7 @@ import Button from '../../components/Button'
 import IconRenderer from '../../components/icons'
 import ImageViewer from '../../components/ImageViewer'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as partsGetAll } from '../../services/partsService'
 import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
@@ -54,6 +54,7 @@ const NonChargeableAdd = () => {
     const customerDiv = useRef();
     const fsrrRef = useRef();
     const pmRef = useRef();
+    const navigate = useNavigate();
 
     const getAreas = async() => {
         try {
@@ -238,11 +239,10 @@ const NonChargeableAdd = () => {
                 // console.log(response.data.errors);
                 setErrors(response.data.errors);
             }else if(response.status === 201){
-                console.log(response);
-                
-                // setNotif('New Customer has been Added');
-                // getCustomers();
-                // setAddCustomerModal(false);
+                navigate('/', { state: {
+                    type: 'success',
+                    message: response.data.message
+                } });
             }
         } catch (error) {
             console.log(error);
