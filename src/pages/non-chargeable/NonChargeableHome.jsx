@@ -4,9 +4,12 @@ import IconRenderer from '../../components/icons'
 import Table from '../../components/Table'
 import { getAll } from '../../services/nonChargeableService'
 import NonChargeableShow from './NonChargeableShow'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const NonChargeableHome = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [collection, setCollection] = useState([]);
@@ -14,8 +17,7 @@ const NonChargeableHome = () => {
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     // const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
     const [showRow, setShowRow] = useState(false);
-
-    const navigate = useNavigate();
+    const [notif, setNotif] = useState(location.state?.message);
 
     const handleSearch = () => {
         let url = `?sort=${sort}&search=${search}`;
@@ -73,6 +75,7 @@ const NonChargeableHome = () => {
 
     useEffect(()=>{
         getCollection();
+
         // setCollection([
         //     {'id': '1', 'mrf_number': '89634893', 'customer_name': 'ABC'},
         //     {'id': '2', 'mrf_number': '56785263', 'customer_name': 'DEF'},
@@ -99,6 +102,15 @@ const NonChargeableHome = () => {
 
     return (
         <>
+            {(notif) && (
+                <div className='absolute flex items-center justify-between left-1/2 -translate-x-1/2 text-white bg-green-600 pl-5 pr-3 py-3 my-5 rounded font-bold tracking-wide border border-green-900 z-[90]'>
+                    <p className='flex items-center pr-20 pt-1'>{notif}</p>
+                    <button onClick={() => { setNotif(''); navigate('.', { replace: true, state: {} }); }}>
+                        <IconRenderer name='close' className='w-6 h-6'></IconRenderer>
+                    </button>
+                </div>
+            )}
+
             {showRow && <NonChargeableShow closeButton={handleShowCloseButton} id={selectedItem} />}
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4'>

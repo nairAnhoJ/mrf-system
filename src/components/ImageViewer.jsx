@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ImageViewer = ({closeButton, path}) => {
+const ImageViewer = ({closeButton, path, alt}) => {
   return (
     <>
         <div onClick={(e) => closeButton(e)} className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-900/60 z-100">
@@ -9,7 +9,7 @@ const ImageViewer = ({closeButton, path}) => {
                     <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                 </svg>
             </button>
-            <img src={path} alt="fsrr attachment" className="max-h-[80%] w-auto object-contain" />
+            <img src={path} alt={alt} className="max-h-[80%] w-auto object-contain" />
         </div>
     </>
   )

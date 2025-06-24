@@ -36,7 +36,7 @@ const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
     return (
         <>
             <div onClick={(e) => closeButton(e)} className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-900/60 z-100">
-                <aside className='bg-white dark:bg-neutral-600 w-3/4 h-3/4 rounded text-neutral-600 dark:text-neutral-100'>
+                <aside className='bg-white dark:bg-neutral-600 w-3/4 h-3/4 rounded text-neutral-600 dark:text-neutral-50'>
                     <div className='w-full p-6 border-b border-neutral-300 text-xl leading-5 font-bold flex justify-between'>
                         <h1>Parts List</h1>
                     </div>
@@ -60,7 +60,7 @@ const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
                                 <tbody className='block w-full h-[calc(100%-34px)] overflow-auto'>
                                     {
                                         filteredCollection.map((item) => (
-                                            <tr key={item.id} onClick={() => toggleRow(item)} className='w-full cursor-pointer not-last:border-b border-neutral-300 hover:bg-neutral-100 table table-fixed'>
+                                            <tr key={item.id} onClick={() => toggleRow(item)} className='w-full cursor-pointer not-last:border-b border-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-500 table table-fixed'>
                                                 <th className='text-center py-1 w-[3.47%]'>
                                                     <input checked={isChecked(item)} onChange={() => toggleRow(item)} onClick={(e) => e.stopPropagation()} type="checkbox" />
                                                 </th>

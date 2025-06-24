@@ -239,7 +239,7 @@ const NonChargeableAdd = () => {
                 // console.log(response.data.errors);
                 setErrors(response.data.errors);
             }else if(response.status === 201){
-                navigate('/', { state: {
+                navigate('/non-chargeable', { state: {
                     type: 'success',
                     message: response.data.message
                 } });
@@ -479,7 +479,7 @@ const NonChargeableAdd = () => {
                             <div className='flex w-full'>
                                 {/* FSRR */}
                                 <div className='flex flex-col w-1/5 pr-3'>
-                                    <h1 className='text-xs 2xl:text-sm'>FSSR Number</h1>
+                                    <h1 className='text-xs 2xl:text-sm'>FSRR Number</h1>
                                     <div className='flex relative'>
                                         <input onChange={(e) => setItem({...item, fsrr_number: e.target.value})} value={item.fsrr_number} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'></input>
                                         <div className='flex absolute right-1 top-1 gap-x-1'>
