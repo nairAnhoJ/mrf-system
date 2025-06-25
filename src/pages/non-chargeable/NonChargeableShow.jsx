@@ -4,6 +4,7 @@ import Button from '../../components/Button';
 import Table from '../../components/Table';
 import { getById, getByRequestId } from '../../services/nonChargeableService'
 import ImageViewer from '../../components/ImageViewer'
+import FleetHistory from '../../components/FleetHistory';
 import config from '../../config/config';
 
 const NonChargeableShow = ({id, closeButton, }) => {
@@ -12,17 +13,18 @@ const NonChargeableShow = ({id, closeButton, }) => {
     const [loading, setLoading] = useState(true);
     const [showFsrr, setShowFsrr] = useState(false);
     const [showPm, setShowPm] = useState(false);
+    const [showHistory, setShowHistory] = useState(false);
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     const baseURL = config.defaults.baseURL;
 
     const parts_columns = [
-        {'key': 'item_number', 'label': 'Item Number', 'className': 'py-1 px-2 text-center'},
-        {'key': 'number', 'label': 'Part Number', 'className': 'py-1 px-2 text-center'},
-        {'key': 'name', 'label': 'Description', 'className': 'py-1 px-2 text-center'},
-        {'key': 'brand', 'label': 'Brand', 'className': 'py-1 px-2 text-center'},
-        {'key': 'quantity', 'label': 'Quantity', 'className': 'py-1 px-2 text-center'},
-        {'key': 'price', 'label': 'Price', 'className': 'py-1 px-2 text-center'},
-        {'key': 'total_price', 'label': 'Total Price', 'className': 'py-1 px-2 text-center'},
+        {'key': 'item_number', 'label': 'Item Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'number', 'label': 'Part Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'name', 'label': 'Description', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'brand', 'label': 'Brand', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'quantity', 'label': 'Quantity', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'price', 'label': 'Price (₱)', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'total_price', 'label': 'Total Price (₱)', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
     ]
 
     const updateDateFormat = () => {
@@ -65,6 +67,12 @@ const NonChargeableShow = ({id, closeButton, }) => {
         setShowPm(false);
     }
 
+    const handleShowHistory = async () => {
+        setLoading(true);
+        setShowHistory(true);
+        setLoading(false);
+    }
+
     return (
         <>
             {/* FSRR VIEWER */}
@@ -77,6 +85,12 @@ const NonChargeableShow = ({id, closeButton, }) => {
             {
                 showPm &&
                 <ImageViewer path={baseURL + '/MRF/'+item.pm_attachment}  closeButton={(e) => handleCloseImageViewer(e)} alt="pm report" />
+            }
+
+            {/* HISTORY */}
+            {
+                showHistory &&
+                <FleetHistory fleetNumber={item.fleet_number} closeButton={() => setShowHistory(false)} />
             }
 
             <div className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
@@ -158,7 +172,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
                                         <h1 className='text-xs 2xl:text-sm'>Fleet Number</h1>
                                         <div className='flex relative'>
                                             <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fleet_number}</div>
-                                            <button className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
+                                            <button onClick={handleShowHistory} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
                                                 <IconRenderer name="history" className="w-5 h-5"/>
                                             </button>
                                         </div>
@@ -184,7 +198,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
                                 </div>
                             </div>
 
-                            <h1 className='text-xl font-bold tracking-wide mt-6 leading-5'>Part/s Requested</h1>
+                            <h1 className='text-xl font-bold tracking-wide mt-6 leading-5 mb-3'>Part/s Requested</h1>
                             <div className='w-full'>
                                 <Table columns={parts_columns} collection={parts} loading={loading}></Table>
                             </div>

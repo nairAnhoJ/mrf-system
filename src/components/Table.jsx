@@ -18,7 +18,7 @@ const Table = ({ loading, columns, collection, onRowClick, actionRender } ) => {
                     {   loading == false ?
                             collection.length > 0 ?
                                 collection.map((item, index) => (
-                                    <tr key={index} onClick={() => onRowClick(item)}  className={`font-normal cursor-pointer border-b border-neutral-300 dark:text-neutral-100 dark:hover:text-neutral-800  hover:bg-neutral-300 dark:hover:bg-neutral-400 dark:border-neutral-500 ${index%2 === 1 ? 'bg-neutral-200 dark:bg-neutral-500' : 'dark:bg-neutral-600'}`}>
+                                    <tr key={index} onClick={() => onRowClick(item)}  className={`font-normal text-sm 2xl:text-base cursor-pointer dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-500 ${index%2 === 1 ? 'bg-neutral-200 dark:bg-neutral-600' : 'dark:bg-neutral-700'}`}>
                                         {   columns.map((row, index) => (
                                                 <td key={index} className={row.className}>{item[row.key]}</td>
                                             ))
