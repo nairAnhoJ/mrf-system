@@ -44,6 +44,19 @@ export const getByRequestId = async(id) => {
     }
 };
 
+export const getByFleetNumber = async(fleet_number) => {
+    try {
+        const response = await config.get(`${baseURL}/history/${fleet_number}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const create = async(data) => {
     try {
         const response = await config.post(`${baseURL}/create`, data, {

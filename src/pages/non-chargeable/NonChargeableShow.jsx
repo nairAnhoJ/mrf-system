@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import IconRenderer from '../../components/icons';
 import Button from '../../components/Button';
 import Table from '../../components/Table';
-import { getById, getByRequestId } from '../../services/nonChargeableService'
+import { getByFleetNumber, getById, getByRequestId } from '../../services/nonChargeableService'
 import ImageViewer from '../../components/ImageViewer'
 import FleetHistory from '../../components/FleetHistory';
 import config from '../../config/config';
@@ -14,6 +14,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
     const [showFsrr, setShowFsrr] = useState(false);
     const [showPm, setShowPm] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
+    const [history, setHistory] = useState([]);
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     const baseURL = config.defaults.baseURL;
 
@@ -38,7 +39,6 @@ const NonChargeableShow = ({id, closeButton, }) => {
     const getItem = async() => {
         try {
             const response = await getById(id);
-            console.log(response[0]);
             setItem(response[0]);
             updateDateFormat();
         } catch (error) {
@@ -67,8 +67,19 @@ const NonChargeableShow = ({id, closeButton, }) => {
         setShowPm(false);
     }
 
-    const handleShowHistory = async () => {
+    const handleShowHistory = async (fleet_number) => {
         setLoading(true);
+
+        try {
+            const response = await getByFleetNumber(fleet_number);
+            console.log(response);
+            
+            setHistory(response);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+
         setShowHistory(true);
         setLoading(false);
     }
@@ -90,7 +101,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
             {/* HISTORY */}
             {
                 showHistory &&
-                <FleetHistory fleetNumber={item.fleet_number} closeButton={() => setShowHistory(false)} />
+                <FleetHistory fleetNumber={item.fleet_number} history={history} closeButton={() => setShowHistory(false)} />
             }
 
             <div className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
@@ -172,7 +183,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
                                         <h1 className='text-xs 2xl:text-sm'>Fleet Number</h1>
                                         <div className='flex relative'>
                                             <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fleet_number}</div>
-                                            <button onClick={handleShowHistory} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
+                                            <button onClick={() => handleShowHistory(item.fleet_number)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
                                                 <IconRenderer name="history" className="w-5 h-5"/>
                                             </button>
                                         </div>

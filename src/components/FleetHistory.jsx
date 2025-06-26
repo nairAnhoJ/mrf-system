@@ -2,14 +2,33 @@ import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 import Table from './Table'
 import IconRenderer from './icons'
+import { getByRequestId } from '../services/nonChargeableService'
 
-const FleetHistory = ({closeButton, fleetNumber}) => {
+const FleetHistory = ({closeButton, fleetNumber, history}) => {
+    // const [requestHistory, setRequestHistory] = useState(history);
+    const [selectedId, setSelectedId] = useState(history[0].id);
     const [parts, setParts] = useState([]);
     const [loading, setLoading] = useState(false);
+    
+    const getParts = async(id) => {
+        setLoading(true);
+        try {
+            const response = await getByRequestId(id);
+            setParts(response);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
-
+        getParts(history[0].id);
     }, []);
+
+    const handleHistoryClick = async (id) => {
+        setSelectedId(id);
+        getParts(id);
+    }
 
     const parts_columns = [
         {'key': 'item_number', 'label': 'Item Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
@@ -40,17 +59,21 @@ const FleetHistory = ({closeButton, fleetNumber}) => {
                                         For
                                     </div>
                                 </div>
-                                <div className='grid grid-cols-[144px_80px] cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700'>
-                                    <div className='text-center font-semibold py-1'>
-                                        NC0625-000012
-                                    </div>
-                                    <div className='text-center font-semibold py-1'>
-                                        REPAIR
-                                    </div>
-                                </div>
+                                {   history.map((request) => (
+                                        <div key={request.id} onClick={() => handleHistoryClick(request.id)} className={`grid grid-cols-[144px_80px] cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 ${request.id === selectedId ? 'bg-neutral-200 dark:bg-neutral-700' : ''}`}>
+                                            <div className='text-center font-semibold py-1'>
+                                                {request.mrf_number}
+                                            </div>
+                                            <div className='text-center font-semibold py-1'>
+                                                {request.for}
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+
                             </div>
                             <div className='w-[calc(100%-224px)] pl-6'>
-                                <Table columns={parts_columns} collection={parts} loading={loading}></Table>
+                                <Table columns={parts_columns} collection={parts} loading={loading} ></Table>
                             </div>
                         </div>
                     </div>
