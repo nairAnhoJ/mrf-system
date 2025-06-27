@@ -3,8 +3,10 @@ import Button from './Button'
 import Table from './Table'
 import IconRenderer from './icons'
 import { getByRequestId } from '../services/nonChargeableService'
+import { format } from 'date-fns'
 
 const FleetHistory = ({closeButton, fleetNumber, history}) => {
+
     // const [requestHistory, setRequestHistory] = useState(history);
     const [selectedId, setSelectedId] = useState(history[0].id);
     const [parts, setParts] = useState([]);
@@ -50,29 +52,37 @@ const FleetHistory = ({closeButton, fleetNumber, history}) => {
                     </div>
                     <div className='w-full h-[calc(100%-158px)] p-6'>
                         <div className='w-full h-full flex text-sm'>
-                            <div className='w-[248px] flex flex-col border-r pr-6'>
-                                <div className='grid grid-cols-[144px_80px] border-b border-neutral-400 bg-neutral-300 dark:bg-neutral-800'>
+                            <div className='w-[348px] flex flex-col border-r pr-6'>
+                                <div className='grid grid-cols-[144px_80px_100px] border-b border-neutral-400 bg-neutral-300 dark:bg-neutral-800'>
                                     <div className='text-center font-semibold py-1'>
                                         MRF Number
                                     </div>
                                     <div className='text-center font-semibold py-1'>
                                         For
                                     </div>
+                                    <div className='text-center font-semibold py-1'>
+                                        Date
+                                    </div>
                                 </div>
                                 {   history.map((request) => (
-                                        <div key={request.id} onClick={() => handleHistoryClick(request.id)} className={`grid grid-cols-[144px_80px] cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 ${request.id === selectedId ? 'bg-neutral-200 dark:bg-neutral-700' : ''}`}>
+                                        <div key={request.id} onClick={() => handleHistoryClick(request.id)} className={`grid grid-cols-[144px_80px_100px] cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 ${request.id === selectedId ? 'bg-neutral-200 dark:bg-neutral-700' : ''}`}>
                                             <div className='text-center font-semibold py-1'>
                                                 {request.mrf_number}
                                             </div>
                                             <div className='text-center font-semibold py-1'>
                                                 {request.for}
                                             </div>
+                                            <div className='text-center font-semibold py-1'>
+                                                {
+                                                    format(new Date(request.date_requested), "MM/dd/yyyy")
+                                                }
+                                            </div>
                                         </div>
                                     ))
                                 }
 
                             </div>
-                            <div className='w-[calc(100%-224px)] pl-6'>
+                            <div className='w-[calc(100%-324px)] pl-6'>
                                 <Table columns={parts_columns} collection={parts} loading={loading} ></Table>
                             </div>
                         </div>
