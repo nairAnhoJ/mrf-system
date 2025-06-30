@@ -33,7 +33,7 @@ function AppRouter() {
                     <Route path="/" element={<NonChargeableHome />} />
                     <Route path="/non-chargeable" element={<NonChargeableHome />} />
                     <Route path="/non-chargeable/add" element={<NonChargeableAdd />} />
-                    <Route path="/non-chargeable/edit" element={<NonChargeableEdit />} />
+                    <Route path="/non-chargeable/edit/:id" element={<NonChargeableEdit />} />
 
                     {/* <Route element={<AdminAuth />}> */}
                         {/* SETTING */}
@@ -55,9 +55,10 @@ const HeaderWrapper = () => {
     const token = localStorage.getItem("token");
     
     const path = useLocation();
-    const hideHeaderRoutes = ['/', '/non-chargeable', '/non-chargeable/add', '/non-chargeable/edit'];
+    const hideHeaderRoutes = ['/', '/non-chargeable', '/non-chargeable/add'];
+    const isEditPage = path.pathname.startsWith('/non-chargeable/edit/');
 
-    if(hideHeaderRoutes.includes(path.pathname) && token){
+    if((hideHeaderRoutes.includes(path.pathname) || isEditPage) && token){
         return <Sidebar />
     }
 }

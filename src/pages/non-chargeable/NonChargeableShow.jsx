@@ -118,7 +118,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
                     <div className='w-full bg-neutral-50 dark:bg-neutral-700 rounded-t border-b-2 border-neutral-200 text-neutral-600 dark:text-neutral-200 shadow flex items-center justify-between p-6'>
                         <h1 className='text-xl font-semibold leading-5'>{item.mrf_number}</h1>
                         <div className='flex gap-x-2'>
-                            <button onClick={() => navigate('/non-chargeable/edit')} type='button' className="cursor-pointer hover:text-neutral-400">
+                            <button onClick={() => navigate(`/non-chargeable/edit/${item.id}`)} type='button' className="cursor-pointer hover:text-neutral-400">
                                 <IconRenderer name="edit" className="w-5 h-5"/>
                             </button>
                             <button type='button' onClick={closeButton} className="cursor-pointer hover:text-neutral-400">

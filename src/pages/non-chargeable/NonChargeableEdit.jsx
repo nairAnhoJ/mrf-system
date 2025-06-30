@@ -1,18 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { format } from 'date-fns'
 // import Table from '../../components/Table'
 import Button from '../../components/Button'
 import IconRenderer from '../../components/icons'
 import ImageViewer from '../../components/ImageViewer'
+import Loading from '../../components/Loading'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as partsGetAll } from '../../services/partsService'
 import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
-import { create as requestCreate, getById } from '../../services/nonChargeableService'
+import { create as requestCreate, getById, getByRequestId } from '../../services/nonChargeableService'
 import { Notification } from '../../components/Notification'
 import SelectParts from '../../components/SelectParts'
 
 const NonChargeableEdit = () => {
+    const params = useParams();
+
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const today = new Date().toISOString().split('T')[0];
@@ -84,10 +88,51 @@ const NonChargeableEdit = () => {
     }
         
     const getItem = async() => {
+        const id = params.id
+        
         try {
             const response = await getById(id);
-            setItem(response[0]);
-            updateDateFormat();
+
+            setItem((prev) => ({
+                ...prev, 
+                date_needed: format(response[0].date_needed, "yyyy-MM-dd"),
+                for: response[0].for,
+                pm_attachment: response[0].pm_attachment,
+                order_type: response[0].order_type,
+                delivery_type: response[0].delivery_type,
+                customer_id: response[0].customer_id,
+                customer_name: response[0].customer_name,
+                customer_address: response[0].customer_address,
+                area: response[0].area,
+                fsrr_number: response[0].fsrr_number,
+                fsrr_attachment: response[0].fsrr_attachment,
+                fleet_number: response[0].fleet_number,
+                brand: response[0].brand,
+                model: response[0].model,
+                serial_number: response[0].serial_number,
+                request_remarks: response[0].request_remarks,
+            }));
+            
+            const selectedParts = await getByRequestId(id);
+
+            const editParts = selectedParts.map((part)=>({
+                    'id': part.part_id,
+                    'item_number': part.item_number,
+                    'number': part.number,
+                    'name': part.name,
+                    'brand': part.brand,
+                    'quantity': part.quantity,
+                    'price': part.price,
+            }))
+
+            setItem((prev) => ({
+                ...prev,
+                parts: editParts,
+            }));
+
+            console.log(item);
+
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -268,6 +313,11 @@ const NonChargeableEdit = () => {
                 <Notification message={notif} closeButton={() => setNotif('')}/>
             }
 
+            {
+                loading &&
+                <Loading />
+            }
+
 
             {/* ADD CUSTOMER */}
             <div className={`w-screen h-screen fixed top-0 left-0 bg-neutral-900/50 z-100 flex items-center justify-center text-neutral-600 ${!addCustomerModal ? 'hidden' : ''}`}>
@@ -346,7 +396,7 @@ const NonChargeableEdit = () => {
                             <Link to="/non-chargeable" className='rounded-full hover:bg-neutral-500 hover:text-white p-2'>
                                 <IconRenderer name={'back'} className={'w-6 h-6'}/>
                             </Link>
-                            <div className='text-xl font-semibold'>Add a New Request</div>
+                            <div className='text-xl font-semibold'>Edit Request</div>
                         </div>
                         <Button type='submit' onClick={(e) => e.stopPropagation()} color='blue'>
                             Submit
