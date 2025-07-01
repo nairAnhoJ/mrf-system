@@ -10,7 +10,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as partsGetAll } from '../../services/partsService'
 import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
-import { create as requestCreate, getById, getByRequestId } from '../../services/nonChargeableService'
+import { update as requestUpdate, getById, getByRequestId } from '../../services/nonChargeableService'
 import { Notification } from '../../components/Notification'
 import SelectParts from '../../components/SelectParts'
 
@@ -88,7 +88,7 @@ const NonChargeableEdit = () => {
     }
         
     const getItem = async() => {
-        const id = params.id
+        const id = params.id;
         
         try {
             const response = await getById(id);
@@ -258,6 +258,7 @@ const NonChargeableEdit = () => {
         setErrors([]);
 
         const data = new FormData();
+        data.append('id', params.id);
         data.append('date_needed', item.date_needed);
         data.append('for', item.for);
         data.append('pm_attachment', item.pm_attachment);
@@ -288,7 +289,7 @@ const NonChargeableEdit = () => {
         // data.append('parts', item.parts);
         
         try {
-            const response = await requestCreate(data);
+            const response = await requestUpdate(params.id, data);
             // console.log(response);
             
             if(response.status === 400){
