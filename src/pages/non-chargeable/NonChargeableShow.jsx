@@ -5,6 +5,7 @@ import Table from '../../components/Table';
 import { getByFleetNumber, getById, getByRequestId } from '../../services/nonChargeableService'
 import ImageViewer from '../../components/ImageViewer'
 import FleetHistory from '../../components/FleetHistory';
+import LogViewer from '../../components/LogViewer';
 import config from '../../config/config';
 import { useNavigate } from 'react-router-dom';
 
@@ -104,6 +105,12 @@ const NonChargeableShow = ({id, closeButton, }) => {
             {
                 showHistory &&
                 <FleetHistory fleetNumber={item.fleet_number} history={history} closeButton={() => setShowHistory(false)} />
+            }
+
+            {/* LOGS */}
+            {
+                // showHistory &&
+                <LogViewer logs={item.logs} closeButton={() => setShowHistory(false)} />
             }
 
             <div className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
@@ -214,7 +221,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
                                 <div className='flex w-full'>
                                     <div className='flex flex-col w-full'>
                                         <h1 className='text-xs 2xl:text-sm'>Request Remarks</h1>
-                                        <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto'>{item.request_remarks}</div>
+                                        <textarea className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto' value={item.request_remarks}></textarea>
                                     </div>
                                 </div>
                             </div>
