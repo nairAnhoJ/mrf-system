@@ -17,6 +17,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
     const [showFsrr, setShowFsrr] = useState(false);
     const [showPm, setShowPm] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
+    const [showLogs, setShowLogs] = useState(false);
     const [history, setHistory] = useState([]);
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     const baseURL = config.defaults.baseURL;
@@ -109,11 +110,10 @@ const NonChargeableShow = ({id, closeButton, }) => {
 
             {/* LOGS */}
             {
-                // showHistory &&
-                <LogViewer logs={item.logs} closeButton={() => setShowHistory(false)} />
+                <LogViewer logs={item.logs} closeButton={() => setShowLogs(false)} show={showLogs}/>
             }
 
-            <div className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
+            <div onClick={(e) => setShowLogs(false)} className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
                 <div className='w-8/12 h-11/12 bg-neutral-50 dark:bg-neutral-700 rounded flex flex-col relative'>
                     { loading && 
                         <div className='w-full h-full absolute bg-neutral-700/60 dark:bg-neutral-700/90 z-99 flex items-center justify-center text-white dark:text-neutral-100'>
@@ -128,7 +128,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
                             <button onClick={() => navigate(`/non-chargeable/edit/${item.id}`)} type='button' className="cursor-pointer hover:text-neutral-400">
                                 <IconRenderer name="edit" className="w-5 h-5"/>
                             </button>
-                            <button type='button' onClick={closeButton} className="cursor-pointer hover:text-neutral-400">
+                            <button type='button' onClick={(e) => {e.stopPropagation(); setShowLogs(true);}} className="cursor-pointer hover:text-neutral-400">
                                 <IconRenderer name="logs" className="w-5 h-5"/>
                             </button>
                             <button type='button' onClick={closeButton} className="cursor-pointer hover:text-neutral-400">
@@ -221,7 +221,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
                                 <div className='flex w-full'>
                                     <div className='flex flex-col w-full'>
                                         <h1 className='text-xs 2xl:text-sm'>Request Remarks</h1>
-                                        <textarea className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto' value={item.request_remarks}></textarea>
+                                        <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.request_remarks}</div>
                                     </div>
                                 </div>
                             </div>
