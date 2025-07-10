@@ -13,9 +13,11 @@ import { getAll as customerGetAll, create as customerCreate } from '../../servic
 import { update as requestUpdate, getById, getByRequestId } from '../../services/nonChargeableService'
 import { Notification } from '../../components/Notification'
 import SelectParts from '../../components/SelectParts'
+import config from '../../config/config';
 
 const NonChargeableEdit = () => {
     const params = useParams();
+    const baseURL = config.defaults.baseURL;
 
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
@@ -49,10 +51,12 @@ const NonChargeableEdit = () => {
     const [customers, setCustomers] = useState([]);
     const [viewCustomers, setViewCustomers] = useState(false);
     const [showFsrr, setShowFsrr] = useState(false);
+    const [showPm, setShowPm] = useState(false);
     const [parts, setParts] = useState([]);
     // const [selectedParts, setSelectedParts] = useState([]);
     const [showPartsList, setShowPartsList] = useState(false);
     const [fsrrPreview, setFsrrPreview] = useState('');
+    const [pmPreview, setPmPreview] = useState('');
     const [errors, setErrors] = useState([]);
     const [notif, setNotif] = useState([]);
     const customerDiv = useRef();
@@ -112,6 +116,8 @@ const NonChargeableEdit = () => {
                 serial_number: response[0].serial_number,
                 request_remarks: response[0].request_remarks,
             }));
+            setFsrrPreview(baseURL + '/MRF/'+response[0].fsrr_attachment);
+            setPmPreview(baseURL + '/MRF/'+response[0].pm_attachment);
             
             const selectedParts = await getByRequestId(id);
 
@@ -195,7 +201,7 @@ const NonChargeableEdit = () => {
       const file = e.target.files[0];
       if (file && file.type.startsWith('image/')) {
         const previewUrl = URL.createObjectURL(file);
-        setFsrrPreview(previewUrl);
+        setPmPreview(previewUrl);
       }
       setItem((prev) => ({
         ...prev,
@@ -218,6 +224,7 @@ const NonChargeableEdit = () => {
     const handleCloseImageViewer = (e) => {
         if (e.target.closest('img')) return;
         setShowFsrr(false);
+        setShowPm(false);
     }
 
     const handleOpenPartsList = async () => {
@@ -372,10 +379,17 @@ const NonChargeableEdit = () => {
             </div>
 
             
-            {/* IMAGE VIEWER */}
+            {/* Show FSRR */}
             {
                 showFsrr &&
                 <ImageViewer path={fsrrPreview}  closeButton={(e) => handleCloseImageViewer(e)} />
+            }
+
+            
+            {/* Show PM */}
+            {
+                showPm &&
+                <ImageViewer path={pmPreview}  closeButton={(e) => handleCloseImageViewer(e)} />
             }
 
             
@@ -442,6 +456,9 @@ const NonChargeableEdit = () => {
                                     <h1 className='text-xs 2xl:text-sm'>PM Attachment</h1>
                                     <button disabled={item.for !== 'PM'} type='button' onClick={() => pmRef.current.click()} className='w-[79px] 2xl:w-[90px] h-6 2xl:h-[26px] border border-neutral-600 absolute top-5 2xl:top-[25px] left-[17px] rounded shadow cursor-pointer disabled:pointer-events-none'></button>
                                     <input disabled={item.for !== 'PM'} onChange={handlePMUpload} ref={pmRef} type="file" accept="image/*" className='w-full text-sm h-8 leading-3.5 py-[8px] 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 cursor-pointer disabled:pointer-events-none'/>
+                                    <button disabled={(pmPreview == '') || item.for !== 'PM'} type='button' onClick={() => setShowPm(true)} className='h-6 aspect-square absolute bottom-1 right-4 bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
+                                        <IconRenderer name="visibility" className="w-5 h-5"/>
+                                    </button>
                                     {
                                         errors.find((err) => err.path == "pm_attachment") ? (
                                             <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "pm_attachment")?.msg }</p>
