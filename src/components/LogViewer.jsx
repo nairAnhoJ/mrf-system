@@ -3,6 +3,14 @@ import Button from './Button'
 import IconRenderer from './icons'
 
 const LogViewer = ({closeButton, logs, show}) => {
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      }, [logs]);
+
     return (
         <>
             {/* <div onClick={(e) => closeButton(e)} className="fixed top-0 left-0 w-screen h-screen bg-gray-900/10 z-100"> */}
@@ -14,7 +22,7 @@ const LogViewer = ({closeButton, logs, show}) => {
                         </button>
                     </div>
                     <div className='w-full h-[calc(100%-69px)] py-6 pl-6'>
-                        <div disabled className='w-full h-full overflow-auto resize-none whitespace-pre-wrap' dangerouslySetInnerHTML={{ __html: logs }}></div>
+                        <div ref={scrollRef} className='w-full h-full overflow-auto resize-none whitespace-pre-wrap' dangerouslySetInnerHTML={{ __html: logs }}></div>
                     </div>
                 </aside>
             {/* </div> */}
