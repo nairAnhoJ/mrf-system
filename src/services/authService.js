@@ -6,11 +6,12 @@ const token = localStorage.getItem("token");
 const baseURL = `${config.defaults.baseURL}/api/auth`;
 
 export const UserLogin = async(data) => {
-    
     try {
         const response = await axios.post(`${baseURL}/login`, data);
-        console.log(response);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        console.log(response.data.user);
         
+
         return response.data;
     } catch (error) {
         return error;
@@ -20,6 +21,26 @@ export const UserLogin = async(data) => {
 export const Me = async() => {
     try {
         const response = await axios.get(`${baseURL}/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        // console.log(response);
+        
+        return response.data;
+    } catch (error) {
+        if(error.status === 403){
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+        }
+        
+        return error;
+    }
+}
+
+export const IsValid = async() => {
+    try {
+        const response = await axios.get(`${baseURL}/is-valid`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

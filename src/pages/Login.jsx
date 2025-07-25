@@ -13,7 +13,6 @@ function Login() {
         setErrors([]);
         try {
             const response = await UserLogin(data);
-            console.log(response);
             
             if(response.status === 400){
                 setErrors(response.response.data.errors);

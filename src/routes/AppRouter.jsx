@@ -46,6 +46,7 @@ function AppRouter() {
                 </Route> */}
 
                 <Route path="*" element={<NotFoundPage />} />
+                <Route path="/page-not-found" element={<NotFoundPage />} />
             </Routes>
         </Router>
     );

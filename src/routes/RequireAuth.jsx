@@ -1,40 +1,45 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { Me } from '../services/authService';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { IsValid } from '../services/authService';
 
 const RequireAuth = () => {
     const token = localStorage.getItem("token");
+    const userString = localStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
     const [firstTimeLogin, setFirstTimeLogin] = useState(false);
+    const [userValid, setUserValid] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate()
 
     useEffect(() => {
-        const getMe = async() => {
+        const isValid = async() => {
             try {
-                const response = await Me();
-                const { first_time_login } = response.user;
+                const response = await IsValid();
+                
+                const { first_time_login, allowed_app, is_active, is_deleted } = response.user;
+                console.log(response.user);
+                
+                if(allowed_app == "mrf" && is_active == 1 && is_deleted == 0){
+                    navigate("/page-not-found", { replace: true });
+                    // setUserValid(true);
+                }
+                
                 if(first_time_login === 1){
-                    setFirstTimeLogin(true);
+                    navigate("/change-password", { replace: true });
+                    // setFirstTimeLogin(true);
+                }
+                
+                if(location.pathname == "/"){
+                    navigate("/non-chargeable", { replace: true }); 
+                }else{
+                    return <Outlet />
                 }
             } catch (error) {
                 console.log(error);
             }
         }
-        getMe();
+        isValid();
     }, [])
-
-    if(token){
-        if(firstTimeLogin){
-            return <Navigate to="/change-password" replace /> 
-        }else{
-            if(location.pathname == "/"){
-                return <Navigate to="/non-chargeable" replace /> 
-            }else{
-                return <Outlet />
-            }
-        }
-    }else{
-        return <Navigate to="/login" replace />;
-    }
 }
 
 export default RequireAuth
