@@ -56,6 +56,24 @@ export const IsValid = async() => {
     }
 }
 
+export const getRole = async() => {
+    try {
+        const response = await axios.get(`${baseURL}/get-role`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        if(error.status === 403){
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+        }
+        
+        return error;
+    }
+}
+
 export const ChangePassword = async(id, data) => {
     try {
         const response = await axios.post(`${baseURL}/change-password/${id}`, data, {
