@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { IsValid } from '../services/authService';
+import { IsValid, getRole } from '../services/authService';
 
 const RequireAuth = () => {
     const [outlet, setOutlet] = useState(false);
@@ -22,6 +22,9 @@ const RequireAuth = () => {
                 }else if(first_time_login === 1){
                     navigate("/change-password", { replace: true });
                 }else{
+                    const role = await getRole();
+                    console.log(role);
+                    
                     if(location.pathname == "/"){
                         navigate("/non-chargeable", { replace: true }); 
                         setOutlet(true);

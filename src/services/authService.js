@@ -58,12 +58,12 @@ export const IsValid = async() => {
 
 export const getRole = async() => {
     try {
-        const response = await axios.get(`${baseURL}/get-role`, {
+        const response = await axios.get(`${baseURL}/mrf-get-role`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return response.data;
+        return response.data.role;
     } catch (error) {
         if(error.status === 403){
             localStorage.removeItem("token");
