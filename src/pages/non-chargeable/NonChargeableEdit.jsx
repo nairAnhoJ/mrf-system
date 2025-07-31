@@ -192,8 +192,7 @@ const NonChargeableEdit = () => {
     }
 
     const handleCustomerSelect = (customer) => {
-        console.log(customer);
-        setItem({...item, customer_id: customer.id, customer_name: customer.name, customer_address: customer.address, area: customer.area})
+        setItem({...item, customer_id: customer.id, customer_name: customer.name, customer_address: customer.address, area: customer.area, area_id: customer.area_id})
         setViewCustomers(false)
     }
 

@@ -10,6 +10,9 @@ const NonChargeableHome = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const roles = JSON.parse(localStorage.getItem('roles'));
+    // console.log(roles);
+    
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [collection, setCollection] = useState([]);
@@ -40,7 +43,7 @@ const NonChargeableHome = () => {
     };
 
     const columns = [
-        {'key': 'mrf_number', 'label': 'Request Number', 'className': 'py-1 px-2 text-center font-semibold'},
+        {'key': 'mrf_number', 'label': 'Request Number', 'className': `py-2 px-2 text-center font-semibold`},
         {'key': 'customer_name', 'label': 'Customer Name', 'className': 'py-1 px-2 text-center'},
         {'key': 'area', 'label': 'Area', 'className': 'py-1 px-2 text-center'},
         {'key': 'date_requested', 'label': 'Date Requested', 'className': 'py-1 px-2 text-center'},
@@ -131,7 +134,62 @@ const NonChargeableHome = () => {
                 </div>
 
                 <div className='mt-3'>
-                    <Table
+                    <div className="w-full">
+                        <table className='w-full'>
+                            <thead className='border-b rounded-t-lg bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-100 text-neutral-700 border-neutral-500 text-sm'>
+                                <tr className="">
+                                    {   columns.map((row) => (
+                                            <th key={row.key} className={row.className}>{row.label}</th>
+                                        ))
+                                    }
+                                </tr>
+                            </thead>
+
+                            {/* ${ (index%2 === 1) ? 
+                                                        (item.is_validated == 0 && ) ?
+                                                        'bg-emerald-400 dark:bg-emerald-500 hover:bg-emerald-300 dark:hover:bg-emerald-600' 
+                                                        :
+                                                        'bg-neutral-200 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500' 
+                                                    : 
+                                                        (item.is_validated == 0 && roles == 'admin') ?
+                                                        'bg-emerald-400 dark:bg-emerald-500 hover:bg-emerald-300 dark:hover:bg-emerald-600'
+                                                        :
+                                                        'dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-500'
+                                                    }  */}
+
+                            <tbody>
+                                {   loading == false ?
+                                        collection.length > 0 ?
+                                            collection.map((item, index) => (
+                                                <tr key={index} onClick={() => handleRowClick(item.id)}  className={`font-normal text-sm 2xl:text-base cursor-pointer dark:text-neutral-100
+                                                    ${
+                                                        (item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'tl') ?
+                                                        'bg-emerald-400 dark:bg-emerald-500 hover:bg-emerald-300 dark:hover:bg-emerald-600' 
+                                                        :
+                                                        'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500'
+                                                    }
+                                                `}>
+                                                    {/* {roles.find(role => role.area_id == item.area_id)} */}
+                                                    {   columns.map((row, index) => (
+                                                            <td key={index} className={`${row.className}`}>{item[row.key]}</td>
+                                                        ))
+                                                    }
+                                                </tr>
+                                            ))
+                                        : 
+                                            <tr>
+                                                <th colSpan={columns.length} className='py-2 px-4'>No data.</th>
+                                            </tr>
+                                    :
+                                        <tr>
+                                            <th colSpan={columns.length} className='py-2 px-4'>Loading...</th>
+                                        </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* <Table
                         columns={columns} 
                         collection={collection}
                         onRowClick={(item) => handleRowClick(item.id)}
@@ -141,7 +199,7 @@ const NonChargeableHome = () => {
                         //         <button onClick={() => handleEdit(item)} className='pr-1 hover:underline cursor-pointer'>EDIT</button> | <button onClick={() => handleDelete(item)} className='pl-1 hover:underline cursor-pointer'>DELETE</button>
                         //     </div>
                         // )}
-                    />
+                    /> */}
                 </div>
 
             </div>

@@ -32,6 +32,7 @@ const NonChargeableAdd = () => {
         'customer_name' : '',
         'customer_address' : '',
         'area' : '',
+        'area_id' : 0,
         'fsrr_number' : '',
         'fsrr_attachment' : null,
         'fleet_number' : '',
@@ -133,7 +134,7 @@ const NonChargeableAdd = () => {
 
     const handleCustomerSelect = (customer) => {
         console.log(customer);
-        setItem({...item, customer_id: customer.id, customer_name: customer.name, customer_address: customer.address, area: customer.area})
+        setItem({...item, customer_id: customer.id, customer_name: customer.name, customer_address: customer.address, area: customer.area, area_id: customer.area_id})
         setViewCustomers(false)
     }
 
@@ -214,6 +215,7 @@ const NonChargeableAdd = () => {
         data.append('customer_name', item.customer_name);
         data.append('customer_address', item.customer_address);
         data.append('area', item.area);
+        data.append('area_id', item.area_id);
         data.append('fsrr_number', item.fsrr_number);
         data.append('fsrr_attachment', item.fsrr_attachment);
         data.append('fleet_number', item.fleet_number);
@@ -390,7 +392,7 @@ const NonChargeableAdd = () => {
                                     <h1 className='text-xs 2xl:text-sm'>PM Attachment</h1>
                                     <button disabled={item.for !== 'PM'} type='button' onClick={() => pmRef.current.click()} className='w-[79px] 2xl:w-[90px] h-6 2xl:h-[26px] border border-neutral-600 absolute top-5 2xl:top-[25px] left-[17px] rounded shadow cursor-pointer disabled:pointer-events-none'></button>
                                     <input disabled={item.for !== 'PM'} onChange={handlePMUpload} ref={pmRef} type="file" accept="image/*" className='w-full text-sm h-8 leading-3.5 py-[8px] 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 cursor-pointer disabled:pointer-events-none'/>
-                                    <button disabled={(pmPreview == '') || item.for !== 'PM'} type='button' onClick={() => setShowPm(true)} className='h-6 aspect-square absolute bottom-1 right-4 bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
+                                    <button disabled={(pmPreview == '') || item.for !== 'PM'} type='button' onClick={() => setShowPm(true)} className='h-6 aspect-square absolute top-[21px] right-4 bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
                                         <IconRenderer name="visibility" className="w-5 h-5"/>
                                     </button>
                                     {

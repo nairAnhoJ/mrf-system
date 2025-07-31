@@ -9,8 +9,6 @@ const RequireAuth = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(user);
-        
         const isValid = async() => {
             try {
                 const response = await IsValid();
@@ -22,8 +20,10 @@ const RequireAuth = () => {
                 }else if(first_time_login === 1){
                     navigate("/change-password", { replace: true });
                 }else{
-                    const role = await getRole();
-                    console.log(role);
+                    const roles = await getRole();
+                    // console.log(roles);
+                    
+                    localStorage.setItem("roles",  JSON.stringify(roles));
                     
                     if(location.pathname == "/"){
                         navigate("/non-chargeable", { replace: true }); 

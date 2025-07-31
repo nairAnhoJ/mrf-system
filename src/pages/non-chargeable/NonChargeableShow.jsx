@@ -6,11 +6,13 @@ import { getByFleetNumber, getById, getByRequestId } from '../../services/nonCha
 import ImageViewer from '../../components/ImageViewer'
 import FleetHistory from '../../components/FleetHistory';
 import LogViewer from '../../components/LogViewer';
+import Confirmation from '../../components/Confirmation';
 import config from '../../config/config';
 import { useNavigate } from 'react-router-dom';
 
 const NonChargeableShow = ({id, closeButton, }) => {
     const navigate = useNavigate();
+    const roles = JSON.parse(localStorage.getItem('roles'));
     const [item, setItem] = useState({});
     const [parts, setParts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,6 +20,9 @@ const NonChargeableShow = ({id, closeButton, }) => {
     const [showPm, setShowPm] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
     const [showLogs, setShowLogs] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [confirmationTitle, setConfirmationTitle] = useState('');
+    const [confirmationBody, setConfirmationBody] = useState('');
     const [history, setHistory] = useState([]);
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     const baseURL = config.defaults.baseURL;
@@ -106,6 +111,12 @@ const NonChargeableShow = ({id, closeButton, }) => {
             {
                 showHistory &&
                 <FleetHistory fleetNumber={item.fleet_number} history={history} closeButton={() => setShowHistory(false)} />
+            }
+
+            {/* CONFIRMATION */}
+            {
+                showConfirmation &&
+                <Confirmation id={item.id} title={confirmationTitle} body={confirmationBody} closeButton={() => setShowConfirmation(false)} />
             }
 
             {/* LOGS */}
@@ -234,10 +245,12 @@ const NonChargeableShow = ({id, closeButton, }) => {
 
                     </div>
 
-                    <div className='w-full bg-neutral-50 dark:bg-neutral-700 border-t border-neutral-200 rounded-b p-6 flex items-center'>
+                    <div className='w-full bg-neutral-50 dark:bg-neutral-700 border-t border-neutral-200 rounded-b p-6 flex items-center gap-x-3'>
+                        { (item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'tl') &&
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Validate'); setConfirmationBody('Are you sure you want to validate this request?') }}>VALIDATE</Button>
+                        }
                         <Button color="white" onClick={closeButton}>CLOSE</Button>
                     </div>
-
                 </div>
             </div>
         </>

@@ -63,7 +63,7 @@ export const getRole = async() => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return response.data.role;
+        return response.data.roles;
     } catch (error) {
         if(error.status === 403){
             localStorage.removeItem("token");

@@ -4,7 +4,11 @@ import { NavLink } from 'react-router-dom';
 import { Me } from '../services/authService';
 
 const Sidebar = () => {
-    const [me, setMe] = useState({});
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const roles = JSON.parse(localStorage.getItem('roles'));
+    console.log(user, roles);
+    // const [me, setMe] = useState({});
 
     const navItems = [
         { key: "nonChargeable",label: "Non-Chargeable", path: "/non-chargeable" },
@@ -28,17 +32,17 @@ const Sidebar = () => {
         }
     }, [theme]);
 
-    useEffect(() => {
-        const getMe = async() => {
-            try {
-                const response = await Me();
-                setMe(response.user);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getMe();
-    }, [])
+    // useEffect(() => {
+    //     const getMe = async() => {
+    //         try {
+    //             const response = await Me();
+    //             setMe(response.user);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    //     getMe();
+    // }, [])
 
     const toggleTheme = () => {
         if(theme == 'dark'){
@@ -93,8 +97,8 @@ const Sidebar = () => {
                 <div className='w-72 h-12 pl-4 border-s-4 border-neutral-800 flex whitespace-nowrap items-center my-4'>
                     <img src="/default_profile_pic.png" alt="default_profile_pic" className='w-10 h-10 rounded-full' />
                     <div>
-                        <h1 className='ms-[21px] font-semibold leading-4 pr-8'>John Arian Malondras</h1>
-                        <p className='ms-[21px] leading-4 text-xs'>Team Leader</p>
+                        <h1 className='ms-[21px] font-semibold leading-4 pr-8'>{user.name}</h1>
+                        {/* <p className='ms-[21px] leading-4 text-xs'>Team Leader</p> */}
                     </div>
                 </div>
             </div>
