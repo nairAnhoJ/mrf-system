@@ -43,7 +43,7 @@ const NonChargeableHome = () => {
     };
 
     const columns = [
-        {'key': 'mrf_number', 'label': 'Request Number', 'className': `py-2 px-2 text-center font-semibold`},
+        {'key': 'mrf_number', 'label': 'Request Number', 'className': `py-2 px-2 text-center font-bold`},
         {'key': 'customer_name', 'label': 'Customer Name', 'className': 'py-1 px-2 text-center'},
         {'key': 'area', 'label': 'Area', 'className': 'py-1 px-2 text-center'},
         {'key': 'date_requested', 'label': 'Date Requested', 'className': 'py-1 px-2 text-center'},
@@ -91,16 +91,22 @@ const NonChargeableHome = () => {
         setShowRow(true);
     }
 
-    const handleEdit = (item) => {
-        console.log(item);
-    }
+    // const handleEdit = (item) => {
+    //     console.log(item);
+    // }
 
-    const handleDelete = (item) => {
-        console.log(item);
-    }
+    // const handleDelete = (item) => {
+    //     console.log(item);
+    // }
 
     const handleShowCloseButton = () => {
         setShowRow(false)
+    }
+
+    const handleApproveSuccess = (message) => {
+        setNotif(message);
+        getCollection();
+        setShowRow(false);
     }
 
     return (
@@ -114,7 +120,7 @@ const NonChargeableHome = () => {
                 </div>
             )}
 
-            {showRow && <NonChargeableShow closeButton={handleShowCloseButton} id={selectedItem} />}
+            {showRow && <NonChargeableShow closeButton={handleShowCloseButton} id={selectedItem} approveSuccess={(message) => handleApproveSuccess(message)} />}
 
             <div className='bg-white dark:bg-neutral-700 h-full w-[calc(100%-96px)] rounded-r-2xl ml-24 pt-2 pr-4'>
                 <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
@@ -157,23 +163,42 @@ const NonChargeableHome = () => {
                                                         'dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-500'
                                                     }  */}
 
+
+                            {/* ${(item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'tl') ?
+                                'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500' 
+                                :
+                                'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500'
+                            } */}
+
                             <tbody>
                                 {   loading == false ?
                                         collection.length > 0 ?
                                             collection.map((item, index) => (
                                                 <tr key={index} onClick={() => handleRowClick(item.id)}  className={`font-normal text-sm 2xl:text-base cursor-pointer dark:text-neutral-100
                                                     ${
-                                                        (item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'tl') ?
-                                                        'bg-emerald-400 dark:bg-emerald-500 hover:bg-emerald-300 dark:hover:bg-emerald-600' 
+                                                        (new Date(item.date_needed) < new Date() ) ?
+                                                        'bg-red-200 dark:bg-neutral-600 hover:bg-red-300 dark:hover:bg-neutral-500' 
                                                         :
                                                         'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500'
                                                     }
                                                 `}>
                                                     {/* {roles.find(role => role.area_id == item.area_id)} */}
-                                                    {   columns.map((row, index) => (
+                                                    {
+                                                        (item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'tl')
+                                                        ?
+                                                            columns.map((row, index) => (
+                                                                <td key={index} className={`${row.className} ${index == 0 && 'text-green-600'}`}>{item[row.key]}</td>
+                                                            ))
+                                                        :
+                                                            columns.map((row, index) => (
+                                                                <td key={index} className={`${row.className}`}>{item[row.key]}</td>
+                                                            ))
+                                                    }
+
+                                                    {/* {   columns.map((row, index) => (
                                                             <td key={index} className={`${row.className}`}>{item[row.key]}</td>
                                                         ))
-                                                    }
+                                                    } */}
                                                 </tr>
                                             ))
                                         : 

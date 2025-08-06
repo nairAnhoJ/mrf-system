@@ -10,7 +10,7 @@ import Confirmation from '../../components/Confirmation';
 import config from '../../config/config';
 import { useNavigate } from 'react-router-dom';
 
-const NonChargeableShow = ({id, closeButton, }) => {
+const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
     const navigate = useNavigate();
     const roles = JSON.parse(localStorage.getItem('roles'));
     const [item, setItem] = useState({});
@@ -93,6 +93,11 @@ const NonChargeableShow = ({id, closeButton, }) => {
         setLoading(false);
     }
 
+    const handleApproveSuccess = (message) => {
+        approveSuccess(message);
+        setShowConfirmation(false);
+    }
+
     return (
         <>
             {/* FSRR VIEWER */}
@@ -116,7 +121,7 @@ const NonChargeableShow = ({id, closeButton, }) => {
             {/* CONFIRMATION */}
             {
                 showConfirmation &&
-                <Confirmation id={item.id} title={confirmationTitle} body={confirmationBody} closeButton={() => setShowConfirmation(false)} />
+                <Confirmation id={item.id} title={confirmationTitle} body={confirmationBody} approveSuccess={(message) => handleApproveSuccess(message)} closeButton={() => setShowConfirmation(false)} />
             }
 
             {/* LOGS */}

@@ -1,12 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
+import { validate } from '../services/nonChargeableService'
+import { useNavigate } from 'react-router-dom'
 
-const Confirmation = ({closeButton, id, title, body}) => {
+const Confirmation = ({closeButton, approveSuccess, id, title, body}) => {
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    const navigate = useNavigate();
 
-
-    const handleYes = () => {
-        console.log(id, 'yes');
+    const handleYes = async () => {
+        if(title === 'Validate'){
+            try {
+                const response = await validate(id);
+                if(response.status === 201){
+                    approveSuccess(response.data.message);
+                }
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+        }
         closeButton();
     }
 
