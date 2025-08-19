@@ -9,7 +9,7 @@ import Loading from '../../components/Loading'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as partsGetAll } from '../../services/partsService'
-import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
+import { getByArea as customerGetByArea, create as customerCreate } from '../../services/customerService'
 import { update as requestUpdate, getById, getByRequestId } from '../../services/nonChargeableService'
 import { Notification } from '../../components/Notification'
 import SelectParts from '../../components/SelectParts'
@@ -84,7 +84,7 @@ const NonChargeableEdit = () => {
 
     const getCustomers = async() => {
         try {
-            const response = await customerGetAll();
+            const response = await customerGetByArea();
             setCustomers(response);
         } catch (error) {
             console.log(error);

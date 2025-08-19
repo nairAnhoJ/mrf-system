@@ -7,7 +7,7 @@ import ImageViewer from '../../components/ImageViewer'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as partsGetAll } from '../../services/partsService'
-import { getAll as customerGetAll, create as customerCreate } from '../../services/customerService'
+import { getByArea as customerGetByArea, create as customerCreate } from '../../services/customerService'
 import { create as requestCreate } from '../../services/nonChargeableService'
 import { Notification } from '../../components/Notification'
 import SelectParts from '../../components/SelectParts'
@@ -79,7 +79,7 @@ const NonChargeableAdd = () => {
 
     const getCustomers = async() => {
         try {
-            const response = await customerGetAll();
+            const response = await customerGetByArea();
             setCustomers(response);
         } catch (error) {
             console.log(error);
@@ -120,7 +120,6 @@ const NonChargeableAdd = () => {
         try {
             const response = await customerCreate(newCustomer);
             if(response.status === 400){
-                console.log(response.data.errors);
                 setErrors(response.data.errors);
             }else if(response.status === 201){
                 setNotif('New Customer has been Added');
@@ -133,7 +132,6 @@ const NonChargeableAdd = () => {
     }
 
     const handleCustomerSelect = (customer) => {
-        console.log(customer);
         setItem({...item, customer_id: customer.id, customer_name: customer.name, customer_address: customer.address, area: customer.area, area_id: customer.area_id})
         setViewCustomers(false)
     }
@@ -233,15 +231,10 @@ const NonChargeableAdd = () => {
             data.append(`parts[${index}][price]`, part.price);
             data.append(`parts[${index}][quantity]`, part.quantity);
         });
-
-        // data.append('parts', item.parts);
         
         try {
             const response = await requestCreate(data);
-            // console.log(response);
-            
             if(response.status === 400){
-                // console.log(response.data.errors);
                 setErrors(response.data.errors);
             }else if(response.status === 201){
                 navigate('/non-chargeable', { state: {
