@@ -16,8 +16,8 @@ import RequireAuth from "./RequireAuth";
 import NonChargeableAdd from "../pages/non-chargeable/NonChargeableAdd";
 import NonChargeableEdit from "../pages/non-chargeable/NonChargeableEdit";
 // import AdminAuth from "./AdminAuth";
-// import ChangePassword from "../pages/ChangePassword";
-// import RequireAuthOnly from "./RequireAuthOnly";
+import ChangePassword from "../pages/ChangePassword";
+import RequireAuthOnly from "./RequireAuthOnly";
 
 
 function AppRouter() {
@@ -41,9 +41,9 @@ function AppRouter() {
                     {/* </Route> */}
                 </Route>
                 
-                {/* <Route element={<RequireAuthOnly />}>
+                <Route element={<RequireAuthOnly />}>
                     <Route path="/change-password" element={<ChangePassword />} />
-                </Route> */}
+                </Route>
 
                 <Route path="*" element={<NotFoundPage />} />
                 <Route path="/page-not-found" element={<NotFoundPage />} />

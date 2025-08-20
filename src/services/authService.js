@@ -2,7 +2,7 @@ import axios from "axios"
 import config from "../config/config"
 
 const token = localStorage.getItem("token");
-
+const user = JSON.parse(localStorage.getItem('user'));
 const baseURL = `${config.defaults.baseURL}/api/auth`;
 
 export const UserLogin = async(data) => {
@@ -74,7 +74,9 @@ export const getRole = async() => {
     }
 }
 
-export const ChangePassword = async(id, data) => {
+export const ChangePassword = async(data) => {
+    const id = user.id;
+    
     try {
         const response = await axios.post(`${baseURL}/change-password/${id}`, data, {
             headers: {

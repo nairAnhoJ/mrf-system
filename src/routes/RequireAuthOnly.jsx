@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { IsValid, getRole } from '../services/authService';
 
-const RequireAuth = () => {
+const RequireAuthOnly = () => {
     const [outlet, setOutlet] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
     const location = useLocation();
@@ -13,13 +13,11 @@ const RequireAuth = () => {
             try {
                 const response = await IsValid();
                 
-                const { first_time_login, is_active, is_deleted } = response.user;
+                const { is_active, is_deleted } = response.user;
                 const allowed_app = response.user.allowed_app.split(';');
                 
                 if(!allowed_app.includes("mrf") || is_active != 1 || is_deleted != 0){
                     navigate("/page-not-found", { replace: true });
-                }else if(first_time_login === 1){
-                    navigate("/change-password", { replace: true });
                 }else{
                     const roles = await getRole();
                     // console.log(roles);
@@ -39,10 +37,10 @@ const RequireAuth = () => {
         }
         isValid();
     }, []);
-
+    
     if(outlet){
         return <Outlet />
     }
 }
 
-export default RequireAuth
+export default RequireAuthOnly

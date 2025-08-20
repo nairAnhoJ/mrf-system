@@ -5,21 +5,33 @@ import IconRenderer from './icons'
 const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
     const [partSearch, setPartSearch] = useState('');
     const [selectedParts, setSelectedParts] = useState([]);
+    const [filteredCollection, setFilteredCollection] = useState([]);
 
     useEffect(() => {
         setSelectedParts(sParts);
     }, []);
 
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            if (partSearch.length >= 3) {
+            setFilteredCollection(
+                collection.filter(item => 
+                    item.item_number.toLowerCase().includes(partSearch.toLowerCase()) || 
+                    item.number.toLowerCase().includes(partSearch.toLowerCase()) || 
+                    item.name.toLowerCase().includes(partSearch.toLowerCase()) || 
+                    item.brand.toLowerCase().includes(partSearch.toLowerCase())
+                ) 
+            );
+            } else {
+                setFilteredCollection([]);
+            }
+        }, 300);
+        return () => clearTimeout(handler);
+    }, [partSearch, collection]);
+
     const handlePartSearchInput = (e) => {
         setPartSearch(e.target.value);
     }
-    
-    const filteredCollection = collection.filter(item =>
-        item.item_number.toLowerCase().includes(partSearch.toLowerCase()) || 
-        item.number.toLowerCase().includes(partSearch.toLowerCase()) || 
-        item.name.toLowerCase().includes(partSearch.toLowerCase()) || 
-        item.brand.toLowerCase().includes(partSearch.toLowerCase())
-    );
 
     const toggleRow = (item) => {
         setSelectedParts((prev) =>
@@ -43,12 +55,12 @@ const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
                     <div className='w-full h-[calc(100%-158px)] p-6'>
                         <div className='flex items-center gap-x-1 relative text-neutral-700 mb-1'>
                             <IconRenderer name={'search'} className='h-5 w-5 ml-2 absolute'></IconRenderer>
-                            <input onChange={(e) => handlePartSearchInput(e)} value={partSearch} type="text" className='px-2 py-1 rounded w-80 border border-gray-300 pl-8 dark:bg-neutral-400 dark:border-neutral-400 shadow-inner' />
+                            <input onChange={(e) => setPartSearch(e.target.value)} value={partSearch} type="text" className='px-2 py-1 rounded w-80 border border-gray-300 pl-8 dark:bg-neutral-400 dark:border-neutral-400 shadow-inner' />
                         </div>
                         <div className='w-full h-[calc(100%-34px)] border-b border-neutral-300'>
                             <table className='w-full h-full'>
                                 <thead className='w-full block pr-[15px]'>
-                                    <tr className='border-b border-neutral-500 w-full table table-fixed'>
+                                    <tr className='border-b border-neutral-500 w-full table table-  fixed'>
                                         <th className='px-4 w-[3.47%]'></th>
                                         <th className='py-1 w-[11.94%] whitespace-nowrap'>Item Number</th>
                                         <th className='w-[17.26%] whitespace-nowrap'>Part Number</th>
