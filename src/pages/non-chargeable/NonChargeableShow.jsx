@@ -247,12 +247,19 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 <Table columns={parts_columns} collection={parts} loading={loading}></Table>
                             </div>
                         </div>
-
                     </div>
 
                     <div className='w-full bg-neutral-50 dark:bg-neutral-700 border-t border-neutral-200 rounded-b p-6 flex items-center gap-x-3'>
-                        { (item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'tl') &&
+                        {   (
+                                (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv'))
+                            ) &&
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Validate'); setConfirmationBody('Are you sure you want to validate this request?') }}>VALIDATE</Button>
+                        }
+                        
+                        {  (
+                                (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech')
+                            ) &&
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify</Button>
                         }
                         <Button color="white" onClick={closeButton}>CLOSE</Button>
                     </div>

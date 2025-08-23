@@ -7,7 +7,7 @@ const Sidebar = () => {
 
     const user = JSON.parse(localStorage.getItem('user'));
     const roles = JSON.parse(localStorage.getItem('roles'));
-    console.log(user, roles);
+    // console.log(user, roles);
     // const [me, setMe] = useState({});
 
     const navItems = [
