@@ -101,3 +101,19 @@ export const validate = async(id) => {
         return error.response;
     }
 };
+
+export const verify = async(id, data) => {
+    try {
+        const response = await config.post(`${baseURL}/verify/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error.response;
+    }
+};
