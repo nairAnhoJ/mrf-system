@@ -261,6 +261,14 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                             ) &&
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify</Button>
                         }
+
+                        
+                        {  (
+                                (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_head')
+                            ) &&
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Approve'); setConfirmationBody('Are you sure you want to approve this request?') }}>Approve</Button>
+                        }
+
                         <Button color="white" onClick={closeButton}>CLOSE</Button>
                     </div>
                 </div>

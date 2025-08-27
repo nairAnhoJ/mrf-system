@@ -117,3 +117,19 @@ export const verify = async(id, data) => {
         return error.response;
     }
 };
+
+export const approve = async(id, data) => {
+    try {
+        const response = await config.post(`${baseURL}/approve/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error.response;
+    }
+};
