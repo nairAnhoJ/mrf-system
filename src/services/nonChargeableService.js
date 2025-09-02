@@ -133,3 +133,19 @@ export const approve = async(id, data) => {
         return error.response;
     }
 };
+
+export const mri = async(id, data) => {
+    try {
+        const response = await config.post(`${baseURL}/mri/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error.response;
+    }
+};

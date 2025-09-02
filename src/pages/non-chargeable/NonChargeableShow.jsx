@@ -269,6 +269,13 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Approve'); setConfirmationBody('Are you sure you want to approve this request?') }}>Approve</Button>
                         }
 
+                        
+                        {  (
+                                (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri')
+                            ) && 
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('MRI'); setConfirmationBody('') }}>Encode</Button>
+                        }
+
                         <Button color="white" onClick={closeButton}>CLOSE</Button>
                     </div>
                 </div>

@@ -22,7 +22,6 @@ const RequireAuth = () => {
                     navigate("/change-password", { replace: true });
                 }else{
                     const roles = await getRole();
-                    // console.log(roles);
                     
                     localStorage.setItem("roles",  JSON.stringify(roles));
                     
