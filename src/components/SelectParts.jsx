@@ -60,7 +60,7 @@ const SelectParts = ({closeButton, addSelectedParts, collection, sParts}) => {
                         <div className='w-full h-[calc(100%-34px)] border-b border-neutral-300'>
                             <table className='w-full h-full'>
                                 <thead className='w-full block pr-[15px]'>
-                                    <tr className='border-b border-neutral-500 w-full table table-  fixed'>
+                                    <tr className='border-b border-neutral-500 w-full table table-fixed'>
                                         <th className='px-4 w-[3.47%]'></th>
                                         <th className='py-1 w-[11.94%] whitespace-nowrap'>Item Number</th>
                                         <th className='w-[17.26%] whitespace-nowrap'>Part Number</th>

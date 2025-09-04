@@ -126,7 +126,11 @@ const NonChargeableHome = () => {
                 <h1 className='text-2xl font-bold text-neutral-600 dark:text-white'>Non Chargeable Requests</h1>
 
                 <div className='mt-3 flex justify-between items-center h-10'>
-                    <Button onClick={() => navigate('/non-chargeable/add')} className='w-40 h-full'>ADD</Button>
+                    {   (roles.find(role => role.role === 'site_tl') || roles.find(role => role.role === 'site_supv') || roles.find(role => role.role === 'site_admin')) ?
+                            <Button onClick={() => navigate('/non-chargeable/add')} className='w-40 h-full'>ADD</Button>
+                        :
+                        <div></div>
+                    }
                     <div className='flex h-full'>
                         <div className='h-full flex items-center gap-x-1 relative text-neutral-700'>
                             <IconRenderer name={'search'} className='h-5 w-5 ml-2 absolute'></IconRenderer>

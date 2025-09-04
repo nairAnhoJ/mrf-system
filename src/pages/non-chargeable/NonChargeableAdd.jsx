@@ -189,11 +189,25 @@ const NonChargeableAdd = () => {
     }
 
     const handleQuantityChange = (e, id) => {
+        const onlyNumbers = e.target.value.replace(/[^0-9]/g, ""); 
         setItem((prev) => ({
             ...prev,
             parts: prev.parts.map((part) => (
                 part.id === id ?
-                { ...part, quantity: e.target.value < 1 ? 1 : e.target.value }
+                { ...part, quantity: onlyNumbers }
+                : part
+            ))
+        }))
+    }
+
+    const handleQuantityBlur = (id) => {
+        console.log(id);
+        
+        setItem((prev) => ({
+            ...prev,
+            parts: prev.parts.map((part) => (
+                part.id === id ?
+                { ...part, quantity: (part.quantity == "" || part.quantity < 1) ? 1 : part.quantity }
                 : part
             ))
         }))
@@ -231,9 +245,12 @@ const NonChargeableAdd = () => {
             data.append(`parts[${index}][price]`, part.price);
             data.append(`parts[${index}][quantity]`, part.quantity);
         });
+
+        
         
         try {
             const response = await requestCreate(data);
+            console.log(response);
             if(response.status === 400){
                 setErrors(response.data.errors);
             }else if(response.status === 201){
@@ -592,7 +609,7 @@ const NonChargeableAdd = () => {
                                             <th className='py-2 border-b-1 border-neutral-300'>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className='pt-3'>
                                         {
                                             item.parts.map((selectedPart) => (
                                                 <tr key={selectedPart.id} className='hover:border-4 border-blue-500'>
@@ -607,6 +624,7 @@ const NonChargeableAdd = () => {
                                                             className='border-b w-14 text-center' 
                                                             value={selectedPart.quantity} 
                                                             onChange={(e) => handleQuantityChange(e, selectedPart.id)}
+                                                            onBlur={() => handleQuantityBlur(selectedPart.id)}
                                                         />
                                                     </td>
                                                     <td className='text-center bg-neutral-200 dark:bg-neutral-600'>{Number(selectedPart.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>

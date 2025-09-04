@@ -64,8 +64,11 @@ export const create = async(data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
+        console.log(response);
+        
         return response;
     } catch (error) {
+        console.log(error);
         return error.response;
     }
 };
