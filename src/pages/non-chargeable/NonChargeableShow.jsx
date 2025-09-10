@@ -121,7 +121,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
             {/* CONFIRMATION */}
             {
                 showConfirmation &&
-                <Confirmation id={item.id} title={confirmationTitle} body={confirmationBody} approveSuccess={(message) => handleApproveSuccess(message)} closeButton={() => setShowConfirmation(false)} />
+                <Confirmation id={item.id} parts={parts} title={confirmationTitle} body={confirmationBody} approveSuccess={(message) => handleApproveSuccess(message)} closeButton={() => setShowConfirmation(false)} />
             }
 
             {/* LOGS */}
@@ -273,7 +273,14 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         {  (
                                 (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri')
                             ) && 
-                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('MRI'); setConfirmationBody('') }}>Encode</Button>
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('MRI'); setConfirmationBody('') }}>Encode MRI Number</Button>
+                        }
+
+                        
+                        {  (
+                                ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded == 0 && roles[0].role == 'doc_enc')
+                            ) && 
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DOCUMENT NUMBER'); setConfirmationBody('') }}>Encode Document Number</Button>
                         }
 
                         <Button color="white" onClick={closeButton}>CLOSE</Button>
