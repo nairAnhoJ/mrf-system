@@ -8,11 +8,13 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
     const user = JSON.parse(localStorage.getItem('user'));
     const [data, setData] = useState({
         mri: '',
+        doc_number: '',
         remarks: '',
         checkedPart: [],
     })
     // const [checkedPart, setCheckedPart] = useState([]);
     const [allChecked, setAllChecked] = useState(false);
+    const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
 
     const handleCheckAll = () => {
@@ -27,12 +29,12 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
         setAllChecked(!allChecked);
     }
 
-    const handleCheckPart = (id) => {
+    const handleCheckPart = (part_id) => {
         setData((prev) => {
-            const next = prev.checkedPart.includes(id) ?
-            prev.checkedPart.filter((pid) => pid !== id)
+            const next = prev.checkedPart.includes(part_id) ?
+            prev.checkedPart.filter((pid) => pid !== part_id)
             :
-            [...prev.checkedPart, id];
+            [...prev.checkedPart, part_id];
 
             if(parts.length === next.length){
                 setAllChecked(true);
@@ -55,6 +57,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             } catch (error) {
                 console.log(error);
             }
+            closeButton();
         }else if(title === 'Verify'){
             try {
                 const response = await verify(id, data);
@@ -65,6 +68,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             } catch (error) {
                 console.log(error);
             }
+            closeButton();
         }else if(title === 'Approve'){
             try {
                 const response = await approve(id, data);
@@ -75,6 +79,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             } catch (error) {
                 console.log(error);
             }
+            closeButton();
         }else if(title === 'MRI'){
             try {
                 const response = await mri(id, data);
@@ -85,18 +90,26 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             } catch (error) {
                 console.log(error);
             }
+            closeButton();
         }else if(title === 'DOCUMENT NUMBER'){
-            try {
-                const response = await doc_number(id, data);
-                if(response.status === 201){
-                    approveSuccess(response.data.message);
+            if(data.doc_number == '' || data.doc_number == null){
+                setErrors([{
+                    path: 'doc_number',
+                    msg: 'Document number is required.'
+                }])
+            }else{
+                try {
+                    const response = await doc_number(id, data);
+                    if(response.status === 201){
+                        approveSuccess(response.data.message);
+                    }
+                    console.log(response);
+                } catch (error) {
+                    console.log(error);
                 }
-                console.log(response);
-            } catch (error) {
-                console.log(error);
+                closeButton();
             }
         }
-        closeButton();
     }
 
     return (
@@ -122,7 +135,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                     <thead className='border-b border-neutral-500'>
                                         <tr>
                                             <th>
-                                                <input type="checkbox" checked={allChecked} onChange={handleCheckAll} /></th>
+                                                <input type="checkbox" className='cursor-pointer' checked={allChecked} onChange={handleCheckAll} /></th>
                                             <th className='text-center py-1'>Item Number</th>
                                             <th>Part Number</th>
                                             <th>Description</th>
@@ -133,9 +146,9 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                     <tbody>
                                         {
                                             parts.map((part, index) => (
-                                                <tr key={index} className='last:border-b border-neutral-500' >
+                                                <tr key={index} className='last:border-b border-neutral-500 hover:bg-gray-100 cursor-pointer' onClick={() => handleCheckPart(part.id)}>
                                                     <td className='text-center py-1'>
-                                                        <input type="checkbox" onChange={() => handleCheckPart(part.id)} checked={data.checkedPart.includes(part.id)}/>
+                                                        <input type="checkbox" className='cursor-pointer' checked={data.checkedPart.includes(part.id)}/>
                                                     </td>
                                                     <td className='text-center py-1'>{part.item_number}</td>
                                                     <td className='text-center py-1'>{part.number}</td>
@@ -149,7 +162,11 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                 </table>
                                 <div className='flex flex-col text-sm font-normal mt-3'>
                                     <label>Document Number</label>
-                                    <input type='text' className='border rounded p-2 resize-none w-64' onChange={(e) => setData({...data, mri: e.target.value})}></input>
+                                    <input type='text' className='border rounded p-2 resize-none w-64' onChange={(e) => setData({...data, doc_number: e.target.value})}></input>{
+                                    errors.find((err) => err.path == "doc_number") ? (
+                                        <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "doc_number")?.msg }</p>
+                                    ) : null
+                                }
                                 </div>
                             </div>
                         }

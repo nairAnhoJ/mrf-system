@@ -155,7 +155,7 @@ export const mri = async(id, data) => {
 
 export const doc_number = async(id, data) => {
     try {
-        const response = await config.post(`${baseURL}/mri/${id}`, data, {
+        const response = await config.post(`${baseURL}/doc_number/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
