@@ -21,7 +21,9 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
         if(allChecked == false){
             setData((prev) => ({...prev, checkedPart: []}))
             parts.forEach(part => {
-                setData((prev) => ({...prev, checkedPart: [...prev.checkedPart, part.id]}))
+                if(part.doc_number == null){
+                    setData((prev) => ({...prev, checkedPart: [...prev.checkedPart, part.id]}))
+                }
             });
         }else if(allChecked == true){
             setData((prev) => ({...prev, checkedPart: []}))
@@ -36,7 +38,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             :
             [...prev.checkedPart, part_id];
 
-            if(parts.length === next.length){
+            if(parts.filter((pid) => pid.doc_number == null).length === next.length){
                 setAllChecked(true);
             }else{
                 setAllChecked(false);
@@ -92,12 +94,28 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             }
             closeButton();
         }else if(title === 'DOCUMENT NUMBER'){
+            const err = [];
             if(data.doc_number == '' || data.doc_number == null){
-                setErrors([{
+                err.push({
                     path: 'doc_number',
                     msg: 'Document number is required.'
-                }])
-            }else{
+                })
+                // setErrors([{
+                //     path: 'doc_number',
+                //     msg: 'Document number is required.'
+                // }])
+            }
+
+            if(data.checkedPart.length == 0){
+                err.push({
+                    path: 'parts',
+                    msg: 'Please select part/s.'
+                })
+            }
+
+            setErrors(err);
+            
+            if(err.length == 0){
                 try {
                     const response = await doc_number(id, data);
                     if(response.status === 201){
@@ -131,16 +149,23 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
 
                         {title == 'DOCUMENT NUMBER' && 
                             <div className='flex flex-col text-sm font-normal'>
-                                <table className='w-[60vw]'>
+                                <table className='w-[75vw]'>
                                     <thead className='border-b border-neutral-500'>
                                         <tr>
                                             <th>
-                                                <input type="checkbox" className='cursor-pointer' checked={allChecked} onChange={handleCheckAll} /></th>
+                                                {(parts.filter(part => part.doc_number === null).length > 0) ? 
+                                                    <input type="checkbox" className='cursor-pointer' checked={allChecked} onChange={handleCheckAll} />
+                                                :
+                                                    <input disabled type="checkbox" className='cursor-pointer disabled:opacity-50' />
+                                                }
+                                            </th>
                                             <th className='text-center py-1'>Item Number</th>
                                             <th>Part Number</th>
                                             <th>Description</th>
                                             <th>Brand</th>
                                             <th>Quantity</th>
+                                            <th>Doc Number</th>
+                                            <th>DR Number</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -148,25 +173,38 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                             parts.map((part, index) => (
                                                 <tr key={index} className='last:border-b border-neutral-500 hover:bg-gray-100 cursor-pointer' onClick={() => handleCheckPart(part.id)}>
                                                     <td className='text-center py-1'>
-                                                        <input type="checkbox" className='cursor-pointer' checked={data.checkedPart.includes(part.id)}/>
+                                                        {
+                                                            part.doc_number != null
+                                                            ?
+                                                                <input disabled readOnly type="checkbox" className='cursor-pointer disabled:opacity-50'/>
+                                                            :
+                                                                <input readOnly type="checkbox" className={`cursor-pointer`} checked={data.checkedPart.includes(part.id)}/>
+                                                        }
                                                     </td>
                                                     <td className='text-center py-1'>{part.item_number}</td>
                                                     <td className='text-center py-1'>{part.number}</td>
                                                     <td className='text-center py-1'>{part.name}</td>
                                                     <td className='text-center py-1'>{part.brand}</td>
                                                     <td className='text-center py-1'>{part.quantity}</td>
+                                                    <td className='text-center py-1'>{part.doc_number}</td>
+                                                    <td className='text-center py-1'>{part.dr_number}</td>
                                                 </tr>
                                             ))
                                         }
                                     </tbody>
                                 </table>
+                                {
+                                    errors.find((err) => err.path == "parts") && 
+                                    <p className='text-red-500 text-xs italic mt-1'>{errors.find((err) => err.path == "parts").msg}</p>
+                                }
                                 <div className='flex flex-col text-sm font-normal mt-3'>
                                     <label>Document Number</label>
-                                    <input type='text' className='border rounded p-2 resize-none w-64' onChange={(e) => setData({...data, doc_number: e.target.value})}></input>{
-                                    errors.find((err) => err.path == "doc_number") ? (
-                                        <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "doc_number")?.msg }</p>
-                                    ) : null
-                                }
+                                    <input type='text' className='border rounded p-2 resize-none w-64' onChange={(e) => setData({...data, doc_number: e.target.value})}></input>
+                                    {
+                                        errors.find((err) => err.path == "doc_number") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "doc_number")?.msg }</p>
+                                        ) : null
+                                    }
                                 </div>
                             </div>
                         }

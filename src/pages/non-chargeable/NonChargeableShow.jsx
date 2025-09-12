@@ -35,6 +35,8 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
         {'key': 'quantity', 'label': 'Quantity', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'price', 'label': 'Price (₱)', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'total_price', 'label': 'Total Price (₱)', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'doc_number', 'label': 'Document Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'dr_number', 'label': 'DR Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
     ]
 
     const updateDateFormat = () => {
