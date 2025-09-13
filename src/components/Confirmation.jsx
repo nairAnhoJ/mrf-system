@@ -21,8 +21,14 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
         if(allChecked == false){
             setData((prev) => ({...prev, checkedPart: []}))
             parts.forEach(part => {
-                if(part.doc_number == null){
-                    setData((prev) => ({...prev, checkedPart: [...prev.checkedPart, part.id]}))
+                if(title == "DOCUMENT NUMBER"){
+                    if(part.doc_number == null){
+                        setData((prev) => ({...prev, checkedPart: [...prev.checkedPart, part.id]}))
+                    }
+                }else if(title == "DR NUMBER"){
+                    if(part.dr_number == null){
+                        setData((prev) => ({...prev, checkedPart: [...prev.checkedPart, part.id]}))
+                    }
                 }
             });
         }else if(allChecked == true){
@@ -38,10 +44,18 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             :
             [...prev.checkedPart, part_id];
 
-            if(parts.filter((pid) => pid.doc_number == null).length === next.length){
-                setAllChecked(true);
-            }else{
-                setAllChecked(false);
+            if(title == "DOCUMENT NUMBER"){
+                if(parts.filter((pid) => pid.doc_number == null).length === next.length){
+                    setAllChecked(true);
+                }else{
+                    setAllChecked(false);
+                }
+            }else if(title == "DR NUMBER"){
+                if(parts.filter((pid) => pid.dr_number == null).length === next.length){
+                    setAllChecked(true);
+                }else{
+                    setAllChecked(false);
+                }
             }
 
             return {...prev, checkedPart: next};
@@ -209,7 +223,69 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                             </div>
                         }
 
-                        { (title !== 'Validate' && title !== 'MRI' && title !== 'DOCUMENT NUMBER') && 
+                        {title == 'DR NUMBER' && 
+                            <div className='flex flex-col text-sm font-normal'>
+                                <table className='w-[75vw]'>
+                                    <thead className='border-b border-neutral-500'>
+                                        <tr>
+                                            <th>
+                                                {(parts.filter(part => part.doc_number !== null).length > 0) ? 
+                                                    <input type="checkbox" className='cursor-pointer' checked={allChecked} onChange={handleCheckAll} />
+                                                :
+                                                    <input disabled type="checkbox" className='cursor-pointer disabled:opacity-50' />
+                                                }
+                                            </th>
+                                            <th className='text-center py-1'>Item Number</th>
+                                            <th>Part Number</th>
+                                            <th>Description</th>
+                                            <th>Brand</th>
+                                            <th>Quantity</th>
+                                            <th>Doc Number</th>
+                                            <th>DR Number</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            parts.map((part, index) => (
+                                                <tr key={index} className='last:border-b border-neutral-500 hover:bg-gray-100 cursor-pointer' onClick={() => handleCheckPart(part.id)}>
+                                                    <td className='text-center py-1'>
+                                                        {
+                                                            part.doc_number === null
+                                                            ?
+                                                                <input disabled readOnly type="checkbox" className='cursor-pointer disabled:opacity-50'/>
+                                                            :
+                                                                <input readOnly type="checkbox" className={`cursor-pointer`} checked={data.checkedPart.includes(part.id)}/>
+                                                        }
+                                                    </td>
+                                                    <td className='text-center py-1'>{part.item_number}</td>
+                                                    <td className='text-center py-1'>{part.number}</td>
+                                                    <td className='text-center py-1'>{part.name}</td>
+                                                    <td className='text-center py-1'>{part.brand}</td>
+                                                    <td className='text-center py-1'>{part.quantity}</td>
+                                                    <td className='text-center py-1'>{part.doc_number}</td>
+                                                    <td className='text-center py-1'>{part.dr_number}</td>
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
+                                </table>
+                                {
+                                    errors.find((err) => err.path == "parts") && 
+                                    <p className='text-red-500 text-xs italic mt-1'>{errors.find((err) => err.path == "parts").msg}</p>
+                                }
+                                <div className='flex flex-col text-sm font-normal mt-3'>
+                                    <label>DR Number</label>
+                                    <input type='text' className='border rounded p-2 resize-none w-64' onChange={(e) => setData({...data, doc_number: e.target.value})}></input>
+                                    {
+                                        errors.find((err) => err.path == "doc_number") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "doc_number")?.msg }</p>
+                                        ) : null
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        { (title !== 'Validate' && title !== 'MRI' && title !== 'DOCUMENT NUMBER' && title !== 'DR NUMBER') && 
                             <div className='flex flex-col mt-3 text-sm font-normal'>
                                 <label>Remarks</label>
                                 <textarea className='border rounded h-24 p-2 resize-none' onChange={(e) => setData({...data, remarks: e.target.value})}></textarea>

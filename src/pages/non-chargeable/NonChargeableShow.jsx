@@ -132,7 +132,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
             }
 
             <div onClick={(e) => setShowLogs(false)} className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
-                <div className='w-8/12 h-11/12 bg-neutral-50 dark:bg-neutral-700 rounded flex flex-col relative'>
+                <div className='w-10/12 h-11/12 bg-neutral-50 dark:bg-neutral-700 rounded flex flex-col relative'>
                     { loading && 
                         <div className='w-full h-full absolute bg-neutral-700/60 dark:bg-neutral-700/90 z-99 flex items-center justify-center text-white dark:text-neutral-100'>
                             <div className='animate-spin border-[3px] border-t-transparent w-6 h-6 rounded-full'></div>
@@ -283,6 +283,13 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded == 0 && roles[0].role == 'doc_enc')
                             ) && 
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DOCUMENT NUMBER'); setConfirmationBody('') }}>Encode Document Number</Button>
+                        }
+
+                        
+                        {  (
+                                ((parts.filter((pid) => pid.doc_number != null).length) > 0 && roles[0].role == 'dr_enc')
+                            ) && 
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DR NUMBER'); setConfirmationBody('') }}>Encode DR Number</Button>
                         }
 
                         <Button color="white" onClick={closeButton}>CLOSE</Button>
