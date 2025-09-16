@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
-import { validate, verify, approve, mri, doc_number } from '../services/nonChargeableService'
+import { validate, verify, approve, mri, doc_number, dr_number } from '../services/nonChargeableService'
 import { useNavigate } from 'react-router-dom'
 
 const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => {
@@ -9,6 +9,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
     const [data, setData] = useState({
         mri: '',
         doc_number: '',
+        dr_number: '',
         remarks: '',
         checkedPart: [],
     })
@@ -112,7 +113,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             if(data.doc_number == '' || data.doc_number == null){
                 err.push({
                     path: 'doc_number',
-                    msg: 'Document number is required.'
+                    msg: 'Document Number is required.'
                 })
                 // setErrors([{
                 //     path: 'doc_number',
@@ -132,6 +133,40 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             if(err.length == 0){
                 try {
                     const response = await doc_number(id, data);
+                    if(response.status === 201){
+                        approveSuccess(response.data.message);
+                    }
+                    console.log(response);
+                } catch (error) {
+                    console.log(error);
+                }
+                closeButton();
+            }
+        }else if(title === 'DR NUMBER'){
+            const err = [];
+            if(data.dr_number == '' || data.dr_number == null){
+                err.push({
+                    path: 'dr_number',
+                    msg: 'DR Number is required.'
+                })
+                // setErrors([{
+                //     path: 'doc_number',
+                //     msg: 'Document number is required.'
+                // }])
+            }
+
+            if(data.checkedPart.length == 0){
+                err.push({
+                    path: 'parts',
+                    msg: 'Please select part/s.'
+                })
+            }
+
+            setErrors(err);
+            
+            if(err.length == 0){
+                try {
+                    const response = await dr_number(id, data);
                     if(response.status === 201){
                         approveSuccess(response.data.message);
                     }
@@ -229,7 +264,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                     <thead className='border-b border-neutral-500'>
                                         <tr>
                                             <th>
-                                                {(parts.filter(part => part.doc_number !== null).length > 0) ? 
+                                                {(parts.filter(part => part.dr_number === null).length > 0) ? 
                                                     <input type="checkbox" className='cursor-pointer' checked={allChecked} onChange={handleCheckAll} />
                                                 :
                                                     <input disabled type="checkbox" className='cursor-pointer disabled:opacity-50' />
@@ -250,7 +285,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                                 <tr key={index} className='last:border-b border-neutral-500 hover:bg-gray-100 cursor-pointer' onClick={() => handleCheckPart(part.id)}>
                                                     <td className='text-center py-1'>
                                                         {
-                                                            part.doc_number === null
+                                                            part.dr_number !== null
                                                             ?
                                                                 <input disabled readOnly type="checkbox" className='cursor-pointer disabled:opacity-50'/>
                                                             :
@@ -275,10 +310,10 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                 }
                                 <div className='flex flex-col text-sm font-normal mt-3'>
                                     <label>DR Number</label>
-                                    <input type='text' className='border rounded p-2 resize-none w-64' onChange={(e) => setData({...data, doc_number: e.target.value})}></input>
+                                    <input type='text' className='border rounded p-2 resize-none w-64' onChange={(e) => setData({...data, dr_number: e.target.value})}></input>
                                     {
-                                        errors.find((err) => err.path == "doc_number") ? (
-                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "doc_number")?.msg }</p>
+                                        errors.find((err) => err.path == "dr_number") ? (
+                                            <p className='text-red-500 text-xs italic'>{ errors.find((err) => err.path == "dr_number")?.msg }</p>
                                         ) : null
                                     }
                                 </div>

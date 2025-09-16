@@ -287,7 +287,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
                         
                         {  (
-                                ((parts.filter((pid) => pid.doc_number != null).length) > 0 && roles[0].role == 'dr_enc')
+                                ((parts.filter((pid) => pid.doc_number != null).length) > 0 && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc')
                             ) && 
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DR NUMBER'); setConfirmationBody('') }}>Encode DR Number</Button>
                         }

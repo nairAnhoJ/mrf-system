@@ -168,3 +168,20 @@ export const doc_number = async(id, data) => {
         return error.response;
     }
 };
+
+export const dr_number = async(id, data) => {
+    try {
+    console.log(id);
+        const response = await config.post(`${baseURL}/dr_number/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error.response;
+    }
+};

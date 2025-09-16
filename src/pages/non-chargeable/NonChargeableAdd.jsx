@@ -461,10 +461,10 @@ const NonChargeableAdd = () => {
                                     }
                                     <div className={`w-[calc(100%-12px)] absolute left-0 -bottom-[2px] translate-y-full bg-neutral-100 z-49 border border-neutral-400 dark:bg-neutral-600 ${!viewCustomers && 'hidden'}`}>
                                         <div className='w-full overflow-hidden'>
-                                            <button type='button' onClick={handleAddCustomerModal} className='w-full p-2 border-b flex items-center bg-neutral-100 border-neutral-400 hover:bg-gray-200 dark:bg-neutral-600 dark:hover:bg-neutral-700 cursor-pointer'>
+                                            {/* <button type='button' onClick={handleAddCustomerModal} className='w-full p-2 border-b flex items-center bg-neutral-100 border-neutral-400 hover:bg-gray-200 dark:bg-neutral-600 dark:hover:bg-neutral-700 cursor-pointer'>
                                                 <IconRenderer name='add' className='w-5 h-5' />
                                                 <span className='pl-1'>Add new customer</span>
-                                            </button>
+                                            </button> */}
                                             <div className='relative w-full p-2 border-b bg-neutral-100 border-neutral-400 dark:bg-neutral-600 dark:hover:bg-neutral-600'>
                                                 <input type="text" onChange={(e) => setSearch(e.target.value)} className='w-full border rounded pl-6 p-1 text-sm' />
                                                 <IconRenderer name='search' className='w-5 h-5 absolute top-1/2 -translate-y-1/2 left-3' />

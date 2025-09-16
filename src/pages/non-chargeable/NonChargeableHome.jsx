@@ -188,7 +188,7 @@ const NonChargeableHome = () => {
                                                 `}>
                                                     {/* {roles.find(role => role.area_id == item.area_id)} */}
                                                     {
-                                                        (item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'site_tl')
+                                                        (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv'))
                                                         ?
                                                             columns.map((row, index) => (
                                                                 <td key={index} className={`${row.className} ${index == 0 && 'text-green-600'}`}>{item[row.key]}</td>
