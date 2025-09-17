@@ -186,23 +186,29 @@ const NonChargeableHome = () => {
                                                         'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500'
                                                     }
                                                 `}>
-                                                    {/* {roles.find(role => role.area_id == item.area_id)} */}
                                                     {
-                                                        (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv'))
-                                                        ?
+                                                        // Site TL and Site Supervisor
+                                                        (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv')) ?
                                                             columns.map((row, index) => (
-                                                                <td key={index} className={`${row.className} ${index == 0 && 'text-green-600'}`}>{item[row.key]}</td>
+                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
+                                                            ))
+                                                        : (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech') ?
+                                                            columns.map((row, index) => (
+                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
+                                                            ))
+                                                        : (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_head') ?
+                                                            columns.map((row, index) => (
+                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
+                                                            ))
+                                                        : (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri') ?
+                                                            columns.map((row, index) => (
+                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
                                                             ))
                                                         :
                                                             columns.map((row, index) => (
                                                                 <td key={index} className={`${row.className}`}>{item[row.key]}</td>
                                                             ))
                                                     }
-
-                                                    {/* {   columns.map((row, index) => (
-                                                            <td key={index} className={`${row.className}`}>{item[row.key]}</td>
-                                                        ))
-                                                    } */}
                                                 </tr>
                                             ))
                                         : 
