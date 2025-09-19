@@ -264,7 +264,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                     <thead className='border-b border-neutral-500'>
                                         <tr>
                                             <th>
-                                                {(parts.filter(part => part.dr_number === null).length > 0) ? 
+                                                {(parts.filter(part => part.dr_number === null).length != parts.filter(part => part.doc_number === null).length) ? 
                                                     <input type="checkbox" className='cursor-pointer' checked={allChecked} onChange={handleCheckAll} />
                                                 :
                                                     <input disabled type="checkbox" className='cursor-pointer disabled:opacity-50' />
@@ -285,7 +285,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                                                 <tr key={index} className='last:border-b border-neutral-500 hover:bg-gray-100 cursor-pointer' onClick={() => handleCheckPart(part.id)}>
                                                     <td className='text-center py-1'>
                                                         {
-                                                            part.dr_number !== null
+                                                            (part.dr_number !== null || part.doc_number === null)
                                                             ?
                                                                 <input disabled readOnly type="checkbox" className='cursor-pointer disabled:opacity-50'/>
                                                             :

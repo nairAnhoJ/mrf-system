@@ -204,6 +204,14 @@ const NonChargeableHome = () => {
                                                             columns.map((row, index) => (
                                                                 <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
                                                             ))
+                                                        : ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded != 1 && roles[0].role == 'doc_enc') ?
+                                                            columns.map((row, index) => (
+                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
+                                                            ))
+                                                        : (item.is_doc_number_encoded == 2 && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc') ?
+                                                            columns.map((row, index) => (
+                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
+                                                            ))
                                                         :
                                                             columns.map((row, index) => (
                                                                 <td key={index} className={`${row.className}`}>{item[row.key]}</td>
