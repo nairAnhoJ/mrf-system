@@ -16,6 +16,7 @@ const NonChargeableHome = () => {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [collection, setCollection] = useState([]);
+    const [isNew, setIsNew] = useState(false);
     const [selectedItem, setSelectedItem] = useState();
     const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     // const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium', timeStyle: 'short'});
@@ -43,14 +44,20 @@ const NonChargeableHome = () => {
     };
 
     const columns = [
-        {'key': 'mrf_number', 'label': 'Request Number', 'className': `py-2 px-2 text-center font-bold`},
-        {'key': 'customer_name', 'label': 'Customer Name', 'className': 'py-1 px-2 text-center'},
-        {'key': 'area', 'label': 'Area', 'className': 'py-1 px-2 text-center'},
-        {'key': 'date_requested', 'label': 'Date Requested', 'className': 'py-1 px-2 text-center'},
-        {'key': 'date_needed', 'label': 'Date Needed', 'className': 'py-1 px-2 text-center'},
-        {'key': 'brand', 'label': 'Brand', 'className': 'py-1 px-2 text-center'},
-        {'key': 'fleet_number', 'label': 'Fleet Number', 'className': 'py-1 px-2 text-center'},
-        {'key': 'requested_by', 'label': 'Requested By', 'className': 'py-1 px-2 text-center'},
+        {'key': 'mrf_number', 'label': 'Request Number', 'className': `py-2 px-2 text-center font-bold whitespace-nowrap`},
+        {'key': 'customer_name', 'label': 'Customer Name', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'area', 'label': 'Area', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'date_requested', 'label': 'Date Requested', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'date_needed', 'label': 'Date Needed', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'brand', 'label': 'Brand', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'fleet_number', 'label': 'Fleet Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'requested_by', 'label': 'Requested By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'validated_by', 'label': 'Validated By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'parts_approved_by', 'label': 'Parts Verified By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'service_head_approved_by', 'label': 'Service Approved By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'mri_number', 'label': 'MRI Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'is_doc_number_encoded', 'label': 'Document Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'is_dr_number_encoded', 'label': 'DR Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
     ]
 
     const getCollection = async() => {
@@ -144,7 +151,7 @@ const NonChargeableHome = () => {
                 </div>
 
                 <div className='mt-3'>
-                    <div className="w-full">
+                    <div className="w-full overflow-auto">
                         <table className='w-full'>
                             <thead className='border-b rounded-t-lg bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-100 text-neutral-700 border-neutral-500 text-sm'>
                                 <tr className="">
@@ -155,66 +162,41 @@ const NonChargeableHome = () => {
                                 </tr>
                             </thead>
 
-                            {/* ${ (index%2 === 1) ? 
-                                                        (item.is_validated == 0 && ) ?
-                                                        'bg-emerald-400 dark:bg-emerald-500 hover:bg-emerald-300 dark:hover:bg-emerald-600' 
-                                                        :
-                                                        'bg-neutral-200 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500' 
-                                                    : 
-                                                        (item.is_validated == 0 && roles == 'admin') ?
-                                                        'bg-emerald-400 dark:bg-emerald-500 hover:bg-emerald-300 dark:hover:bg-emerald-600'
-                                                        :
-                                                        'dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-500'
-                                                    }  */}
-
-
-                            {/* ${(item.is_validated == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'tl') ?
-                                'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500' 
-                                :
-                                'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500'
-                            } */}
-
                             <tbody>
                                 {   loading == false ?
                                         collection.length > 0 ?
                                             collection.map((item, index) => (
                                                 <tr key={index} onClick={() => handleRowClick(item.id)}  className={`font-normal text-sm 2xl:text-base cursor-pointer dark:text-neutral-100
                                                     ${
-                                                        (new Date(item.date_needed) < new Date() ) ?
+                                                        (new Date(item.date_needed) < new Date() && item.is_dr_number_encoded != 1) ?
                                                         'bg-red-200 dark:bg-neutral-600 hover:bg-red-300 dark:hover:bg-neutral-500' 
                                                         :
                                                         'bg-neutral-100 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500'
                                                     }
                                                 `}>
                                                     {
-                                                        // Site TL and Site Supervisor
-                                                        (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv')) ?
-                                                            columns.map((row, index) => (
-                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
-                                                            ))
-                                                        : (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech') ?
-                                                            columns.map((row, index) => (
-                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
-                                                            ))
-                                                        : (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_head') ?
-                                                            columns.map((row, index) => (
-                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
-                                                            ))
-                                                        : (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri') ?
-                                                            columns.map((row, index) => (
-                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
-                                                            ))
-                                                        : ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded != 1 && roles[0].role == 'doc_enc') ?
-                                                            columns.map((row, index) => (
-                                                                <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
-                                                            ))
-                                                        : (item.is_doc_number_encoded == 2 && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc') ?
+                                                        (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv')) ||
+                                                        (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech') ||
+                                                        (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_head') ||
+                                                        (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri') ||
+                                                        ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded != 1 && roles[0].role == 'doc_enc') ||
+                                                        (item.is_doc_number_encoded == 2 && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc')
+                                                        ?
                                                             columns.map((row, index) => (
                                                                 <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
                                                             ))
                                                         :
                                                             columns.map((row, index) => (
-                                                                <td key={index} className={`${row.className}`}>{item[row.key]}</td>
+                                                                <td key={index} className={`${row.className}`}>
+                                                                    { row.key == 'is_doc_number_encoded' || row.key == 'is_dr_number_encoded' ?
+                                                                        item[row.key] == 1 ?
+                                                                            'DONE'
+                                                                        :
+                                                                            ''
+                                                                    : 
+                                                                        item[row.key] 
+                                                                    }
+                                                                </td>
                                                             ))
                                                     }
                                                 </tr>

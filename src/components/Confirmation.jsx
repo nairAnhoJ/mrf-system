@@ -27,11 +27,12 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                         setData((prev) => ({...prev, checkedPart: [...prev.checkedPart, part.id]}))
                     }
                 }else if(title == "DR NUMBER"){
-                    if(part.dr_number == null){
+                    if(part.dr_number == null && part.doc_number != null ){
+                    console.log(parts);
                         setData((prev) => ({...prev, checkedPart: [...prev.checkedPart, part.id]}))
                     }
                 }
-            });
+            });8
         }else if(allChecked == true){
             setData((prev) => ({...prev, checkedPart: []}))
         }
@@ -52,7 +53,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                     setAllChecked(false);
                 }
             }else if(title == "DR NUMBER"){
-                if(parts.filter((pid) => pid.dr_number == null).length === next.length){
+                if(parts.filter((pid) => (pid.doc_number != null && pid.dr_number == null)).length === next.length){
                     setAllChecked(true);
                 }else{
                     setAllChecked(false);

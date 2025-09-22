@@ -280,14 +280,14 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
                         
                         {  (
-                                ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded == 0 && roles[0].role == 'doc_enc')
+                                ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded !== 1 && roles[0].role == 'doc_enc')
                             ) && 
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DOCUMENT NUMBER'); setConfirmationBody('') }}>Encode Document Number</Button>
                         }
 
                         
                         {  (
-                                ((parts.filter((pid) => pid.doc_number != null).length) != parts.filter(part => part.doc_number === null).length && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc')
+                                ((parts.filter((pid) => pid.doc_number !== null).length) > parts.filter(part => part.dr_number !== null).length && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc')
                             ) && 
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DR NUMBER'); setConfirmationBody('') }}>Encode DR Number</Button>
                         }
