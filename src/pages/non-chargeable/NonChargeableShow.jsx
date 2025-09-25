@@ -143,19 +143,99 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                     <div className='w-full bg-neutral-50 dark:bg-neutral-700 rounded-t border-b-2 border-neutral-200 text-neutral-600 dark:text-neutral-200 shadow flex items-center justify-between p-6'>
                         <h1 className='text-xl font-semibold leading-5'>{item.mrf_number}</h1>
                         <div className='flex gap-x-2'>
-                            <button onClick={() => navigate(`/non-chargeable/edit/${item.id}`)} type='button' className="cursor-pointer hover:text-neutral-400">
-                                <IconRenderer name="edit" className="w-5 h-5"/>
-                            </button>
-                            <button type='button' onClick={(e) => {e.stopPropagation(); setShowLogs(true);}} className="cursor-pointer hover:text-neutral-400">
+                            {
+                                item.is_validated == 0 &&
+                                <>
+                                    <button onClick={() => navigate(`/non-chargeable/edit/${item.id}`)} type='button' className="cursor-pointer hover:text-neutral-600">
+                                        <IconRenderer name="edit" className="w-5 h-5"/>
+                                    </button>
+                                    <button onClick={() => navigate(`/non-chargeable/edit/${item.id}`)} type='button' className="cursor-pointer text-red-500 hover:text-red-600">
+                                        <IconRenderer name="delete" className="w-5 h-5"/>
+                                    </button>
+                                </>
+                            }
+                            <button type='button' onClick={(e) => {e.stopPropagation(); setShowLogs(true);}} className="cursor-pointer hover:text-neutral-600">
                                 <IconRenderer name="logs" className="w-5 h-5"/>
                             </button>
-                            <button type='button' onClick={closeButton} className="cursor-pointer hover:text-neutral-400">
+                            <button type='button' onClick={closeButton} className="cursor-pointer hover:text-neutral-600">
                                 <IconRenderer name="close" className="w-5 h-5"/>
                             </button>
                         </div>
                     </div>
 
                     <div className='w-full h-full bg-neutral-50 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-200 shadow p-6 overflow-auto'>
+                        <div className="w-full mb-6">
+                            <ol className="flex items-center w-full">
+                                {/* Requested */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                    <span className='h-6 w-3'></span>
+                                    <div className="flex items-center justify-center w-10 h-10 border-2 border-green-600 rounded-full bg-green-600 text-white">
+                                        ✓
+                                    </div>
+                                    <span className="mt-2 text-sm font-medium">Requested</span>
+                                    {/*  Line  */}
+                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                </li>
+                                {/* Validated */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                    <span className='h-6 w-3 text-gray-500'>{ item.is_validated == 0 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_validated == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                        {item.is_validated == 1 ? '✓' : '2' }
+                                    </div>
+                                    <span className="mt-2 text-sm font-medium">Validated</span>
+                                    {/*  Line  */}
+                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                </li>
+                                {/* Parts Verified */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                    <span className='h-6 w-3'>{ item.is_validated == 1 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_parts_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                        {item.is_parts_approved == 1 ? '✓' : '3' }
+                                    </div>
+                                    <span className="mt-2 text-sm font-medium">Parts Verified</span>
+                                    {/*  Line  */}
+                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                </li>
+                                {/* Service */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                    <span className='h-6 w-3'>{ item.is_parts_approved == 1 && item.is_service_head_approved == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_service_head_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                        {item.is_service_head_approved == 1 ? '✓' : '4' }
+                                    </div>
+                                    <span className="mt-2 text-sm font-medium">Service</span>
+                                    {/*  Line  */}
+                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                </li>
+                                {/* MRI Number */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                    <span className='h-6 w-3'>{ item.is_service_head_approved == 1 && item.is_mri_number_encoded == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_mri_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                        {item.is_mri_number_encoded == 1 ? '✓' : '5' }
+                                    </div>
+                                    <span className="mt-2 text-sm font-medium">MRI Number</span>
+                                    {/*  Line  */}
+                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                </li>
+                                {/* Doc Number */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                    <span className='h-6 w-3'>{ item.is_mri_number_encoded == 1 && item.is_doc_number_encoded != 1 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_doc_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                        {item.is_doc_number_encoded == 1 ? '✓' : '6' }
+                                    </div>
+                                    <span className="mt-2 text-sm font-medium">Doc Number</span>
+                                    {/*  Line  */}
+                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                </li>
+                                {/* DR Number */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                    <span className='h-6 w-3'>{ item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_dr_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                        {item.is_dr_number_encoded == 1 ? '✓' : '7' }
+                                    </div>
+                                    <span className="mt-2 text-sm font-medium">DR Number</span>
+                                </li>
+                            </ol>
+                        </div>
                         <div className='w-full'>
                             <h1 className='text-xl font-bold tracking-wide leading-5'>Request Details</h1>
                             <div className='w-full flex flex-col gap-y-2 mt-2'>
@@ -242,6 +322,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.request_remarks}</div>
                                     </div>
                                 </div>
+
                             </div>
 
                             <h1 className='text-xl font-bold tracking-wide mt-6 leading-5 mb-3'>Part/s Requested</h1>

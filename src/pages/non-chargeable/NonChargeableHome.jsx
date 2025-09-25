@@ -226,7 +226,6 @@ const NonChargeableHome = () => {
                         // )}
                     /> */}
                 </div>
-
             </div>
         </>
     )
