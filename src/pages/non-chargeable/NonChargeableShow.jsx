@@ -102,34 +102,37 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
     return (
         <>
-            {/* FSRR VIEWER */}
-            {
-                showFsrr &&
-                <ImageViewer path={baseURL + '/MRF/'+item.fsrr_attachment}  closeButton={(e) => handleCloseImageViewer(e)} alt="fsrr" />
-            }
+            {/* Modals */}
+            <>
+                {/* FSRR VIEWER */}
+                {
+                    showFsrr &&
+                    <ImageViewer path={baseURL + '/MRF/'+item.fsrr_attachment}  closeButton={(e) => handleCloseImageViewer(e)} alt="fsrr" />
+                }
 
-            {/* PM VIEWER */}
-            {
-                showPm &&
-                <ImageViewer path={baseURL + '/MRF/'+item.pm_attachment}  closeButton={(e) => handleCloseImageViewer(e)} alt="pm report" />
-            }
+                {/* PM VIEWER */}
+                {
+                    showPm &&
+                    <ImageViewer path={baseURL + '/MRF/'+item.pm_attachment}  closeButton={(e) => handleCloseImageViewer(e)} alt="pm report" />
+                }
 
-            {/* HISTORY */}
-            {
-                showHistory &&
-                <FleetHistory fleetNumber={item.fleet_number} history={history} closeButton={() => setShowHistory(false)} />
-            }
+                {/* HISTORY */}
+                {
+                    showHistory &&
+                    <FleetHistory fleetNumber={item.fleet_number} history={history} closeButton={() => setShowHistory(false)} />
+                }
 
-            {/* CONFIRMATION */}
-            {
-                showConfirmation &&
-                <Confirmation id={item.id} parts={parts} title={confirmationTitle} body={confirmationBody} approveSuccess={(message) => handleApproveSuccess(message)} closeButton={() => setShowConfirmation(false)} />
-            }
+                {/* CONFIRMATION */}
+                {
+                    showConfirmation &&
+                    <Confirmation id={item.id} parts={parts} title={confirmationTitle} body={confirmationBody} approveSuccess={(message) => handleApproveSuccess(message)} closeButton={() => setShowConfirmation(false)} />
+                }
 
-            {/* LOGS */}
-            {
-                <LogViewer logs={item.logs} closeButton={() => setShowLogs(false)} show={showLogs}/>
-            }
+                {/* LOGS */}
+                {
+                    <LogViewer logs={item.logs} closeButton={() => setShowLogs(false)} show={showLogs}/>
+                }
+            </>
 
             <div onClick={(e) => setShowLogs(false)} className='fixed left-0 top-0 w-screen h-screen bg-neutral-900/50 flex items-center justify-center z-99'>
                 <div className='w-10/12 h-11/12 bg-neutral-50 dark:bg-neutral-700 rounded flex flex-col relative'>
@@ -164,15 +167,18 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                     </div>
 
                     <div className='w-full h-full bg-neutral-50 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-200 shadow p-6 overflow-auto'>
+                        {/* Stepper */}
                         <div className="w-full mb-6">
                             <ol className="flex items-center w-full">
                                 {/* Requested */}
-                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     <span className='h-6 w-3'></span>
-                                    <div className="flex items-center justify-center w-7 h-7 border-2 border-green-600 rounded-full bg-green-600 text-white">
-                                        ✓
+                                    <div className="absolute top-6 w-7 h-7 border-2 border-green-600 rounded-[6px] bg-green-600 text-white z-10 cursor-default transition-all duration-500 ease-in-out hover:w-44 hover:h-20 hover:-top-0.5 group">
+                                        <span className='absolute left-1/2 top-1/2 -translate-1/2 transition-all duration-500 ease-in-out group-hover:top-4 font-bold'>✓</span>
+                                        <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-7 group-hover:opacity-100 text-sm font-bold'>John Arian Malondras</span>
+                                        <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-11 group-hover:opacity-100 text-sm font-bold'>Sept 26, 2025</span>
                                     </div>
-                                    <span className="mt-2 text-sm font-medium text-gray-500">Requested</span>
+                                    <span className="mt-9 text-sm font-medium text-gray-500">Requested</span>
                                     {/*  Line  */}
                                     <div className="absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 bg-green-600"></div>
                                 </li>
@@ -236,6 +242,8 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 </li>
                             </ol>
                         </div>
+
+                        {/* Details */}
                         <div className='w-full'>
                             <h1 className='text-xl font-bold tracking-wide leading-5'>Request Details</h1>
                             <div className='w-full flex flex-col gap-y-2 mt-2'>
@@ -322,6 +330,18 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.request_remarks}</div>
                                     </div>
                                 </div>
+                                <div className='flex w-full'>
+                                    <div className='flex flex-col w-full'>
+                                        <h1 className='text-xs 2xl:text-sm'>Parts Remarks</h1>
+                                        <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.parts_approved_remarks}</div>
+                                    </div>
+                                </div>
+                                <div className='flex w-full'>
+                                    <div className='flex flex-col w-full'>
+                                        <h1 className='text-xs 2xl:text-sm'>Service Remarks</h1>
+                                        <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.service_head_approved_remarks}</div>
+                                    </div>
+                                </div>
 
                             </div>
 
@@ -332,6 +352,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         </div>
                     </div>
 
+                    {/*  */}
                     <div className='w-full bg-neutral-50 dark:bg-neutral-700 border-t border-neutral-200 rounded-b p-6 flex items-center gap-x-3'>
                         {   (
                                 (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv'))
