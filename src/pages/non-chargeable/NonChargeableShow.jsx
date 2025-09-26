@@ -169,70 +169,70 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 {/* Requested */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
                                     <span className='h-6 w-3'></span>
-                                    <div className="flex items-center justify-center w-10 h-10 border-2 border-green-600 rounded-full bg-green-600 text-white">
+                                    <div className="flex items-center justify-center w-7 h-7 border-2 border-green-600 rounded-full bg-green-600 text-white">
                                         ✓
                                     </div>
-                                    <span className="mt-2 text-sm font-medium">Requested</span>
+                                    <span className="mt-2 text-sm font-medium text-gray-500">Requested</span>
                                     {/*  Line  */}
-                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                    <div className="absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 bg-green-600"></div>
                                 </li>
                                 {/* Validated */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3 text-gray-500'>{ item.is_validated == 0 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_validated == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 0 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_validated == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_validated == 1 ? '✓' : '2' }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium">Validated</span>
+                                    <span className="mt-2 text-sm font-medium text-gray-500">Validated</span>
                                     {/*  Line  */}
-                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_validated == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
                                 </li>
                                 {/* Parts Verified */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3'>{ item.is_validated == 1 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_parts_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 1 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_parts_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_parts_approved == 1 ? '✓' : '3' }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium">Parts Verified</span>
+                                    <span className="mt-2 text-sm font-medium text-gray-500">Parts Verified</span>
                                     {/*  Line  */}
-                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_parts_approved == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
                                 </li>
                                 {/* Service */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3'>{ item.is_parts_approved == 1 && item.is_service_head_approved == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_service_head_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_parts_approved == 1 && item.is_service_head_approved == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_service_head_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_service_head_approved == 1 ? '✓' : '4' }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium">Service</span>
+                                    <span className="mt-2 text-sm font-medium text-gray-500">Service</span>
                                     {/*  Line  */}
-                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_service_head_approved == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
                                 </li>
                                 {/* MRI Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3'>{ item.is_service_head_approved == 1 && item.is_mri_number_encoded == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_mri_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_service_head_approved == 1 && item.is_mri_number_encoded == 0 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_mri_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_mri_number_encoded == 1 ? '✓' : '5' }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium">MRI Number</span>
+                                    <span className="mt-2 text-sm font-medium text-gray-500">MRI Number</span>
                                     {/*  Line  */}
-                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_mri_number_encoded == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
                                 </li>
                                 {/* Doc Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3'>{ item.is_mri_number_encoded == 1 && item.is_doc_number_encoded != 1 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_doc_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_mri_number_encoded == 1 && item.is_doc_number_encoded != 1 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_doc_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_doc_number_encoded == 1 ? '✓' : '6' }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium">Doc Number</span>
+                                    <span className="mt-2 text-sm font-medium text-gray-500">Doc Number</span>
                                     {/*  Line  */}
-                                    <div className="absolute top-[42px] left-[calc(50%+20px)] w-[calc(100%-40px)] h-1 bg-gray-400"></div>
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_doc_number_encoded == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
                                 </li>
                                 {/* DR Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3'>{ item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-10 h-10 border-2 rounded-full font-bold ${item.is_dr_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 ? '⋎' : '' }</span>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_dr_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_dr_number_encoded == 1 ? '✓' : '7' }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium">DR Number</span>
+                                    <span className="mt-2 text-sm font-medium text-gray-500">DR Number</span>
                                 </li>
                             </ol>
                         </div>
