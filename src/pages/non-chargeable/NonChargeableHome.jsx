@@ -63,6 +63,8 @@ const NonChargeableHome = () => {
     const getCollection = async() => {
         try {
             const response = await getAll();
+            console.log(response);
+            
             setCollection(response);
             updateDateFormat();
             setLoading(false);
@@ -77,6 +79,10 @@ const NonChargeableHome = () => {
                 {
                     ...item,
                     date_requested: dateTimeFormatter.format(new Date(item.date_requested)),
+                    // validated_at: item.validated_at && dateTimeFormatter.format(new Date(item.validated_at)),
+                    // parts_approved_at: item.parts_approved_at && dateTimeFormatter.format(new Date(item.parts_approved_at)),
+                    // service_head_approved_at: item.service_head_approved_at && dateTimeFormatter.format(new Date(item.service_head_approved_at)),
+                    // mri_number_encoded_at: item.mri_number_encoded_at && dateTimeFormatter.format(new Date(item.mri_number_encoded_at)),
                     date_needed: dateTimeFormatter.format(new Date(item.date_needed)),
                 }
             ))

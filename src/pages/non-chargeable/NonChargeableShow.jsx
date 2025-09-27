@@ -43,6 +43,10 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
         setItem((prevItem) => ({
             ...prevItem,
             date_requested: dateTimeFormatter.format(new Date(prevItem.date_requested)),
+            validated_at: prevItem.validated_at && dateTimeFormatter.format(new Date(prevItem.validated_at)),
+            parts_approved_at: prevItem.parts_approved_at && dateTimeFormatter.format(new Date(prevItem.parts_approved_at)),
+            service_head_approved_at: prevItem.service_head_approved_at && dateTimeFormatter.format(new Date(prevItem.service_head_approved_at)),
+            mri_number_encoded_at: prevItem.mri_number_encoded_at && dateTimeFormatter.format(new Date(prevItem.mri_number_encoded_at)),
             date_needed: dateTimeFormatter.format(new Date(prevItem.date_needed)),
         }));
     };
@@ -175,67 +179,113 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     <span className='h-6 w-3'></span>
                                     <div className="absolute top-6 w-7 h-7 border-2 border-green-600 rounded-[6px] bg-green-600 text-white z-10 cursor-default transition-all duration-500 ease-in-out hover:w-44 hover:h-20 hover:-top-0.5 group">
                                         <span className='absolute left-1/2 top-1/2 -translate-1/2 transition-all duration-500 ease-in-out group-hover:top-4 font-bold'>✓</span>
-                                        <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-7 group-hover:opacity-100 text-sm font-bold'>John Arian Malondras</span>
-                                        <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-11 group-hover:opacity-100 text-sm font-bold'>Sept 26, 2025</span>
+                                        <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.requested_by}</span>
+                                        <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_requested}</span>
                                     </div>
                                     <span className="mt-9 text-sm font-medium text-gray-500">Requested</span>
                                     {/*  Line  */}
                                     <div className="absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 bg-green-600"></div>
                                 </li>
+
                                 {/* Validated */}
-                                <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 0 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_validated == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
-                                        {item.is_validated == 1 ? '✓' : '2' }
+                                <li className="relative flex flex-col items-center text-green-600 w-full h-20">
+                                    {/* Arrow Down */}
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 0 ? '⋎' : '' }</span>
+                                    {/* Box */}
+                                    <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_validated == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
+                                        {/* Check or Number */}
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_validated == 1 ? 'group-hover:top-4' : ''}`}>{item.is_validated == 1 ? '✓' : '2' }</span>
+                                        {/* Name and Date */}
+                                        {item.is_validated == 1 && 
+                                            <>
+                                                <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.validated_by}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.validated_at}</span>
+                                            </> 
+                                        }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium text-gray-500">Validated</span>
-                                    {/*  Line  */}
-                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_validated == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
+                                    <span className="mt-9 text-sm font-medium text-gray-500">Validated</span>
+                                    {/* Line */}
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_validated == 1 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
                                 </li>
+
                                 {/* Parts Verified */}
-                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                <li className="relative flex flex-col items-center text-green-600 w-full h-20">
+                                    {/* Arrow Down */}
                                     <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 1 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_parts_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
-                                        {item.is_parts_approved == 1 ? '✓' : '3' }
+                                    {/* Box */}
+                                    <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_parts_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
+                                        {/* Check or Number */}
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_parts_approved == 1 ? 'group-hover:top-4' : ''}`}>{item.is_parts_approved == 1 ? '✓' : '2' }</span>
+                                        {/* Name and Date */}
+                                        {item.is_parts_approved == 1 && 
+                                            <>
+                                                <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.parts_approved_by}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.parts_approved_at}</span>
+                                            </> 
+                                        }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium text-gray-500">Parts Verified</span>
-                                    {/*  Line  */}
-                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_parts_approved == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
+                                    <span className="mt-9 text-sm font-medium text-gray-500">Parts Verified</span>
+                                    {/* Line */}
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_parts_approved == 1 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
                                 </li>
+
                                 {/* Service */}
-                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                <li className="relative flex flex-col items-center text-green-600 w-full h-20">
+                                    {/* Arrow Down */}
                                     <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_parts_approved == 1 && item.is_service_head_approved == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_service_head_approved == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
-                                        {item.is_service_head_approved == 1 ? '✓' : '4' }
+                                    {/* Box */}
+                                    <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_service_head_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
+                                        {/* Check or Number */}
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_service_head_approved == 1 ? 'group-hover:top-4' : ''}`}>{item.is_service_head_approved == 1 ? '✓' : '2' }</span>
+                                        {/* Name and Date */}
+                                        {item.is_service_head_approved == 1 && 
+                                            <>
+                                                <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.service_head_approved_by}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.service_head_approved_at}</span>
+                                            </> 
+                                        }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium text-gray-500">Service</span>
-                                    {/*  Line  */}
-                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_service_head_approved == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
+                                    <span className="mt-9 text-sm font-medium text-gray-500">Service</span>
+                                    {/* Line */}
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_service_head_approved == 1 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
                                 </li>
+                                
                                 {/* MRI Number */}
-                                <li className="relative flex flex-col items-center text-green-600 w-full">
+                                <li className="relative flex flex-col items-center text-green-600 w-full h-20">
+                                    {/* Arrow Down */}
                                     <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_service_head_approved == 1 && item.is_mri_number_encoded == 0 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_mri_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
-                                        {item.is_mri_number_encoded == 1 ? '✓' : '5' }
+                                    {/* Box */}
+                                    <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_mri_number_encoded == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
+                                        {/* Check or Number */}
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_mri_number_encoded == 1 ? 'group-hover:top-4' : ''}`}>{item.is_mri_number_encoded == 1 ? '✓' : '2' }</span>
+                                        {/* Name and Date */}
+                                        {item.is_mri_number_encoded == 1 && 
+                                            <>
+                                                <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.mri_number_encoder}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.mri_number_encoded_at}</span>
+                                            </> 
+                                        }
                                     </div>
-                                    <span className="mt-2 text-sm font-medium text-gray-500">MRI Number</span>
-                                    {/*  Line  */}
-                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_mri_number_encoded == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
+                                    <span className="mt-9 text-sm font-medium text-gray-500">MRI Number</span>
+                                    {/* Line */}
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_mri_number_encoded == 1 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
                                 </li>
+
                                 {/* Doc Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
                                     <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_mri_number_encoded == 1 && item.is_doc_number_encoded != 1 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_doc_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded font-bold ${item.is_doc_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_doc_number_encoded == 1 ? '✓' : '6' }
                                     </div>
                                     <span className="mt-2 text-sm font-medium text-gray-500">Doc Number</span>
                                     {/*  Line  */}
                                     <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_doc_number_encoded == 1 ? 'bg-green-600' : 'bg-gray-400' }`}></div>
                                 </li>
+
                                 {/* DR Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
                                     <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 ? '⋎' : '' }</span>
-                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded-full font-bold ${item.is_dr_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
+                                    <div className={`flex items-center justify-center w-7 h-7 border-2 rounded font-bold ${item.is_dr_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_dr_number_encoded == 1 ? '✓' : '7' }
                                     </div>
                                     <span className="mt-2 text-sm font-medium text-gray-500">DR Number</span>
