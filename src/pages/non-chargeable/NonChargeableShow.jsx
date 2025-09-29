@@ -147,6 +147,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         </div>
                     }
                     
+                    {/* Header */}
                     <div className='w-full bg-neutral-50 dark:bg-neutral-700 rounded-t border-b-2 border-neutral-200 text-neutral-600 dark:text-neutral-200 shadow flex items-center justify-between p-6'>
                         <h1 className='text-xl font-semibold leading-5'>{item.mrf_number}</h1>
                         <div className='flex gap-x-2'>
@@ -157,7 +158,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         <IconRenderer name="edit" className="w-5 h-5"/>
                                     </button>
                                     <button onClick={() => navigate(`/non-chargeable/edit/${item.id}`)} type='button' className="cursor-pointer text-red-500 hover:text-red-600">
-                                        <IconRenderer name="delete" className="w-5 h-5"/>
+                                        <IconRenderer name="cancel" className="w-5 h-5"/>
                                     </button>
                                 </>
                             }
@@ -170,6 +171,8 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         </div>
                     </div>
 
+
+                    {/* Body */}
                     <div className='w-full h-full bg-neutral-50 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-200 shadow p-6 overflow-auto'>
                         {/* Stepper */}
                         <div className="w-full mb-6">
@@ -215,7 +218,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_parts_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
-                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_parts_approved == 1 ? 'group-hover:top-4' : ''}`}>{item.is_parts_approved == 1 ? '✓' : '2' }</span>
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_parts_approved == 1 ? 'group-hover:top-4' : ''}`}>{item.is_parts_approved == 1 ? '✓' : '3' }</span>
                                         {/* Name and Date */}
                                         {item.is_parts_approved == 1 && 
                                             <>
@@ -236,7 +239,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_service_head_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
-                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_service_head_approved == 1 ? 'group-hover:top-4' : ''}`}>{item.is_service_head_approved == 1 ? '✓' : '2' }</span>
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_service_head_approved == 1 ? 'group-hover:top-4' : ''}`}>{item.is_service_head_approved == 1 ? '✓' : '4' }</span>
                                         {/* Name and Date */}
                                         {item.is_service_head_approved == 1 && 
                                             <>
@@ -249,6 +252,27 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     {/* Line */}
                                     <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_service_head_approved == 1 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
                                 </li>
+
+                                {/* Rental */}
+                                <li className="relative flex flex-col items-center text-green-600 w-full h-20">
+                                    {/* Arrow Down */}
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_service_head_approved == 1 && item.is_rental_approved == 0 ? '⋎' : '' }</span>
+                                    {/* Box */}
+                                    <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_rental_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
+                                        {/* Check or Number */}
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_rental_approved == 1 ? 'group-hover:top-4' : ''}`}>{item.is_rental_approved == 1 ? '✓' : '5' }</span>
+                                        {/* Name and Date */}
+                                        {item.is_rental_approved == 1 && 
+                                            <>
+                                                <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.rental_approved_by}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.rental_approved_at}</span>
+                                            </> 
+                                        }
+                                    </div>
+                                    <span className="mt-9 text-sm font-medium text-gray-500">Rental</span>
+                                    {/* Line */}
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_rental_approved == 1 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
+                                </li>
                                 
                                 {/* MRI Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
@@ -257,7 +281,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_mri_number_encoded == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
-                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_mri_number_encoded == 1 ? 'group-hover:top-4' : ''}`}>{item.is_mri_number_encoded == 1 ? '✓' : '2' }</span>
+                                        <span className={`absolute left-1/2 top-1/2 -translate-1/2 transition-[top] duration-500 ease-in-out font-bold ${item.is_mri_number_encoded == 1 ? 'group-hover:top-4' : ''}`}>{item.is_mri_number_encoded == 1 ? '✓' : '6' }</span>
                                         {/* Name and Date */}
                                         {item.is_mri_number_encoded == 1 && 
                                             <>
@@ -275,7 +299,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
                                     <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_mri_number_encoded == 1 && item.is_doc_number_encoded != 1 ? '⋎' : '' }</span>
                                     <div className={`flex items-center justify-center w-7 h-7 border-2 rounded font-bold ${item.is_doc_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
-                                        {item.is_doc_number_encoded == 1 ? '✓' : '6' }
+                                        {item.is_doc_number_encoded == 1 ? '✓' : '7' }
                                     </div>
                                     <span className="mt-2 text-sm font-medium text-gray-500">Doc Number</span>
                                     {/*  Line  */}
@@ -286,7 +310,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
                                     <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 ? '⋎' : '' }</span>
                                     <div className={`flex items-center justify-center w-7 h-7 border-2 rounded font-bold ${item.is_dr_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
-                                        {item.is_dr_number_encoded == 1 ? '✓' : '7' }
+                                        {item.is_dr_number_encoded == 1 ? '✓' : '8' }
                                     </div>
                                     <span className="mt-2 text-sm font-medium text-gray-500">DR Number</span>
                                 </li>
@@ -380,18 +404,33 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.request_remarks}</div>
                                     </div>
                                 </div>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-full'>
-                                        <h1 className='text-xs 2xl:text-sm'>Parts Remarks</h1>
-                                        <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.parts_approved_remarks}</div>
+                                {
+                                    item.is_parts_approved == 1 &&
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-full'>
+                                            <h1 className='text-xs 2xl:text-sm'>Parts Remarks</h1>
+                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.parts_approved_remarks}</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-full'>
-                                        <h1 className='text-xs 2xl:text-sm'>Service Remarks</h1>
-                                        <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.service_head_approved_remarks}</div>
+                                }
+                                {
+                                    item.is_service_head_approved == 1 &&
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-full'>
+                                            <h1 className='text-xs 2xl:text-sm'>Service Remarks</h1>
+                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.service_head_approved_remarks}</div>
+                                        </div>
                                     </div>
-                                </div>
+                                }
+                                {
+                                    item.is_rental_approved == 1 &&
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-full'>
+                                            <h1 className='text-xs 2xl:text-sm'>Rental Remarks</h1>
+                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.rental_approved_remarks}</div>
+                                        </div>
+                                    </div>
+                                }
 
                             </div>
 
@@ -402,7 +441,8 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         </div>
                     </div>
 
-                    {/*  */}
+
+                    {/* Footer */}
                     <div className='w-full bg-neutral-50 dark:bg-neutral-700 border-t border-neutral-200 rounded-b p-6 flex items-center gap-x-3'>
                         {   (
                                 (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv'))
@@ -413,7 +453,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         {  (
                                 (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech')
                             ) &&
-                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify</Button>
+                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Parts'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify Parts</Button>
                         }
 
                         
@@ -423,6 +463,16 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Approve'); setConfirmationBody('Are you sure you want to approve this request?') }}>Approve</Button>
                         }
 
+                        
+                        {  (
+                                (item.is_service_head_approved == 1 && item.is_rental_approved == 0 && roles[0].role == 'rental')
+                            ) && 
+                            <>
+                                <Button color='blue'>Update Details</Button>
+                                <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Details'); setConfirmationBody('Are you sure you want to verify the details of this request?') }}>Verify Details</Button>
+                            </>
+
+                        }
                         
                         {  (
                                 (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri')

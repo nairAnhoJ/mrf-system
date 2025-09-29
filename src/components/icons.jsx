@@ -26,6 +26,7 @@ import IconNonChargeable from './icons/IconNonChargeable';
 import IconChargeable from './icons/IconChargeable';
 import IconUpload from './icons/IconUpload';
 import IconLogs from './icons/IconLogs';
+import IconCancel from './icons/IconCancel';
 
 const icons = {
     add: IconAdd,
@@ -56,6 +57,7 @@ const icons = {
     chargeable: IconChargeable,
     upload: IconUpload,
     logs: IconLogs,
+    cancel: IconCancel,
 };
 
 const IconRenderer = ({name, className}) => {

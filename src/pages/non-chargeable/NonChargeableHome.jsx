@@ -55,6 +55,7 @@ const NonChargeableHome = () => {
         {'key': 'validated_by', 'label': 'Validated By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'parts_approved_by', 'label': 'Parts Verified By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'service_head_approved_by', 'label': 'Service Approved By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
+        {'key': 'rental_approved_by', 'label': 'Details Verified By', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'mri_number', 'label': 'MRI Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'is_doc_number_encoded', 'label': 'Document Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'is_dr_number_encoded', 'label': 'DR Number', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
@@ -63,8 +64,7 @@ const NonChargeableHome = () => {
     const getCollection = async() => {
         try {
             const response = await getAll();
-            console.log(response);
-            
+
             setCollection(response);
             updateDateFormat();
             setLoading(false);
@@ -79,10 +79,6 @@ const NonChargeableHome = () => {
                 {
                     ...item,
                     date_requested: dateTimeFormatter.format(new Date(item.date_requested)),
-                    // validated_at: item.validated_at && dateTimeFormatter.format(new Date(item.validated_at)),
-                    // parts_approved_at: item.parts_approved_at && dateTimeFormatter.format(new Date(item.parts_approved_at)),
-                    // service_head_approved_at: item.service_head_approved_at && dateTimeFormatter.format(new Date(item.service_head_approved_at)),
-                    // mri_number_encoded_at: item.mri_number_encoded_at && dateTimeFormatter.format(new Date(item.mri_number_encoded_at)),
                     date_needed: dateTimeFormatter.format(new Date(item.date_needed)),
                 }
             ))
@@ -184,9 +180,10 @@ const NonChargeableHome = () => {
                                                         (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv')) ||
                                                         (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech') ||
                                                         (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_head') ||
-                                                        (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri') ||
+                                                        // (item.is_service_head_approved == 1 && is_rental_approved == 0 && roles[0].role == 'rental') ||
+                                                        (item.is_rental_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri') ||
                                                         ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded != 1 && roles[0].role == 'doc_enc') ||
-                                                        (item.is_doc_number_encoded == 2 && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc')
+                                                        (item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 && roles[0].role == 'dr_enc')
                                                         ?
                                                             columns.map((row, index) => (
                                                                 <td key={index} className={`${row.className} first:text-green-600`}>{item[row.key]}</td>
@@ -219,6 +216,8 @@ const NonChargeableHome = () => {
                             </tbody>
                         </table>
                     </div>
+
+
 
                     {/* <Table
                         columns={columns} 
