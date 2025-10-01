@@ -137,6 +137,22 @@ export const approve = async(id, data) => {
     }
 };
 
+export const updateDetails = async(id, data) => {
+    try {
+        const response = await config.post(`${baseURL}/update-details/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error.response;
+    }
+};
+
 export const verifyDetails = async(id, data) => {
     try {
         const response = await config.post(`${baseURL}/verify-details/${id}`, data, {

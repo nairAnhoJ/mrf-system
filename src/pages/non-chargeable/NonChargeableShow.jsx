@@ -3,6 +3,7 @@ import IconRenderer from '../../components/icons';
 import Button from '../../components/Button';
 import Table from '../../components/Table';
 import { getByFleetNumber, getById, getByRequestId } from '../../services/nonChargeableService'
+import { updateDetails } from '../../services/nonChargeableService'
 import ImageViewer from '../../components/ImageViewer'
 import FleetHistory from '../../components/FleetHistory';
 import LogViewer from '../../components/LogViewer';
@@ -14,12 +15,23 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
     const navigate = useNavigate();
     const roles = JSON.parse(localStorage.getItem('roles'));
     const [item, setItem] = useState({});
+    const [updatedDetails, setUpdatedDetails] = useState({
+        customer_id: '',
+        customer_name: '',
+        customer_address: '',
+        fleet_number: '',
+        brand: '',
+        model: '',
+        serial_number: '',
+    });
+    const [updatedDetailsErrors, setUpdatedDetailsErrors] = useState([]);
     const [parts, setParts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showFsrr, setShowFsrr] = useState(false);
     const [showPm, setShowPm] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
     const [showLogs, setShowLogs] = useState(false);
+    const [showUpdateDetails, setShowUpdateDetails] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [confirmationTitle, setConfirmationTitle] = useState('');
     const [confirmationBody, setConfirmationBody] = useState('');
@@ -54,6 +66,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
     const getItem = async() => {
         try {
             const response = await getById(id);
+            console.log(response);
             setItem(response[0]);
             updateDateFormat();
         } catch (error) {
@@ -104,6 +117,38 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
         setShowConfirmation(false);
     }
 
+    const handleShowUpdateDetails = () => {
+        setUpdatedDetails({
+            customer_id: item.customer_id,
+            customer_name: item.customer_name,
+            customer_address: item.customer_address,
+            fleet_number: item.fleet_number,
+            brand: item.brand,
+            model: item.model,
+            serial_number: item.serial_number,
+        });
+        setShowUpdateDetails(true);
+        setUpdatedDetailsErrors([]);
+    }
+
+    const handleUpdateDetails = async () => {
+        const id = item.id;
+        const emptyFields = Object.keys(updatedDetails).filter(key => updatedDetails[key] === "");
+        setUpdatedDetailsErrors(emptyFields);
+        if(emptyFields.length === 0){
+            try {
+                const response = await updateDetails(id, updatedDetails);
+                if(response.status === 201){
+                    approveSuccess(response.data.message);
+                }
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+            setShowUpdateDetails(false)
+        }
+    }
+
     return (
         <>
             {/* Modals */}
@@ -135,6 +180,56 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                 {/* LOGS */}
                 {
                     <LogViewer logs={item.logs} closeButton={() => setShowLogs(false)} show={showLogs}/>
+                }
+
+                {
+                    showUpdateDetails && 
+                    <div className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-900/30 z-100'>
+                        <div className='bg-white dark:bg-neutral-600 w-[55vw] min-w-[500px] rounded text-neutral-600 dark:text-neutral-50'>
+                            <div className='w-full p-6 border-b border-neutral-300 text-xl leading-5 font-bold flex justify-center items-center'>
+                                <h1>Update Details</h1>
+                            </div>
+                            <div className='w-full h-[calc(100%-158px)] p-6 font-medium flex flex-col'>
+                                <div className='flex flex-col w-full px-3'>
+                                    <h1 className='text-xs 2xl:text-sm'>Customer Name</h1>
+                                    <input onChange={(e) => setUpdatedDetails({...updatedDetails, customer_name: e.target.value})} value={updatedDetails.customer_name} className={`w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 ${updatedDetailsErrors.includes('customer_name') && 'bg-red-200'}`} />
+                                </div>
+                                <div className='flex flex-col w-full px-3 mt-3'>
+                                    <h1 className='text-xs 2xl:text-sm'>Customer Address</h1>
+                                    <input onChange={(e) => setUpdatedDetails({...updatedDetails, customer_address: e.target.value})} value={updatedDetails.customer_address} className={`w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 ${updatedDetailsErrors.includes('customer_address') && 'bg-red-200'}`} />
+                                </div>
+                                <div className='flex gap-x-6 mt-3'>
+                                    <div className='flex flex-col w-1/2 pl-3'>
+                                        <h1 className='text-xs 2xl:text-sm'>Brand</h1>
+                                        <select onChange={(e) => setUpdatedDetails({...updatedDetails, brand: e.target.value})} value={updatedDetails.brand} className='w-full text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>
+                                            <option value="TOYOTA">TOYOTA</option>
+                                            <option value="BT">BT</option>
+                                            <option value="RAYMOND">RAYMOND</option>
+                                        </select>
+                                    </div>
+                                    <div className='flex flex-col w-1/2 pr-3'>
+                                        <h1 className='text-xs 2xl:text-sm'>Model</h1>
+                                        <input onChange={(e) => setUpdatedDetails({...updatedDetails, model: e.target.value})} value={updatedDetails.model} className={`w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 ${updatedDetailsErrors.includes('model') && 'bg-red-200'}`} />
+                                    </div>
+                                </div>
+
+                                <div className='flex gap-x-6 mt-3'>
+                                    <div className='flex flex-col w-1/2 pl-3'>
+                                        <h1 className='text-xs 2xl:text-sm'>Fleet Number</h1>
+                                        <input onChange={(e) => setUpdatedDetails({...updatedDetails, fleet_number: e.target.value})} value={updatedDetails.fleet_number} className={`w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 ${updatedDetailsErrors.includes('fleet_number') && 'bg-red-200'}`} />
+                                    </div>
+                                    <div className='flex flex-col w-1/2 pr-3'>
+                                        <h1 className='text-xs 2xl:text-sm'>Serial Number</h1>
+                                        <input onChange={(e) => setUpdatedDetails({...updatedDetails, serial_number: e.target.value})} value={updatedDetails.serial_number} className={`w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 ${updatedDetailsErrors.includes('serial_number') && 'bg-red-200'}`} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='w-full p-6 border-t border-neutral-300 flex gap-x-3'>
+                                <Button color='blue' onClick={handleUpdateDetails} className="w-32">Update</Button>
+                                <Button color='gray' onClick={() => setShowUpdateDetails(false)} className="w-32">Close</Button>
+                            </div>
+                        </div>
+                    </div>
                 }
             </>
 
@@ -277,7 +372,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 {/* MRI Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     {/* Arrow Down */}
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_service_head_approved == 1 && item.is_mri_number_encoded == 0 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_rental_approved == 1 && item.is_mri_number_encoded == 0 ? '⋎' : '' }</span>
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_mri_number_encoded == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
@@ -468,7 +563,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 (item.is_service_head_approved == 1 && item.is_rental_approved == 0 && roles[0].role == 'rental')
                             ) && 
                             <>
-                                <Button color='blue'>Update Details</Button>
+                                <Button color='orange' onClick={handleShowUpdateDetails}>Update Details</Button>
                                 <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Details'); setConfirmationBody('Are you sure you want to verify the details of this request?') }}>Verify Details</Button>
                             </>
 

@@ -8,6 +8,8 @@ const Button = ({type = "button", children, color = "blue", onClick, className})
         green: "bg-green-500 hover:bg-green-600 text-white",
         gray: "bg-gray-500 hover:bg-gray-600 text-white",
         yellow: "bg-yellow-500 hover:bg-yellow-600 text-white",
+        orange: "bg-orange-500 hover:bg-orange-600 text-white",
+        amber: "bg-amber-500 hover:bg-amber-600 text-white",
     };
 
     return (
