@@ -58,6 +58,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
             validated_at: prevItem.validated_at && dateTimeFormatter.format(new Date(prevItem.validated_at)),
             parts_approved_at: prevItem.parts_approved_at && dateTimeFormatter.format(new Date(prevItem.parts_approved_at)),
             service_head_approved_at: prevItem.service_head_approved_at && dateTimeFormatter.format(new Date(prevItem.service_head_approved_at)),
+            rental_approved_at: prevItem.rental_approved_at && dateTimeFormatter.format(new Date(prevItem.rental_approved_at)),
             mri_number_encoded_at: prevItem.mri_number_encoded_at && dateTimeFormatter.format(new Date(prevItem.mri_number_encoded_at)),
             date_needed: dateTimeFormatter.format(new Date(prevItem.date_needed)),
         }));
@@ -500,7 +501,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                 </div>
                                 {
-                                    item.is_parts_approved == 1 &&
+                                    item.is_parts_approved === 1 &&
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
                                             <h1 className='text-xs 2xl:text-sm'>Parts Remarks</h1>
@@ -509,7 +510,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                 }
                                 {
-                                    item.is_service_head_approved == 1 &&
+                                    item.is_service_head_approved === 1 &&
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
                                             <h1 className='text-xs 2xl:text-sm'>Service Remarks</h1>
@@ -518,11 +519,20 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                 }
                                 {
-                                    item.is_rental_approved == 1 &&
+                                    item.is_rental_approved === 1 &&
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
                                             <h1 className='text-xs 2xl:text-sm'>Rental Remarks</h1>
                                             <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.rental_approved_remarks}</div>
+                                        </div>
+                                    </div>
+                                }
+                                {
+                                    item.is_mri_number_encoded === 1 &&
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-full'>
+                                            <h1 className='text-xs 2xl:text-sm'>MRI Number</h1>
+                                            <div className='w-80 flex items-start text-sm leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.mri_number}</div>
                                         </div>
                                     </div>
                                 }
