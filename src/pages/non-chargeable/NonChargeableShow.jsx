@@ -54,13 +54,42 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
     const updateDateFormat = () => {
         setItem((prevItem) => ({
             ...prevItem,
-            date_requested: dateTimeFormatter.format(new Date(prevItem.date_requested)),
-            validated_at: prevItem.validated_at && dateTimeFormatter.format(new Date(prevItem.validated_at)),
-            parts_approved_at: prevItem.parts_approved_at && dateTimeFormatter.format(new Date(prevItem.parts_approved_at)),
-            service_head_approved_at: prevItem.service_head_approved_at && dateTimeFormatter.format(new Date(prevItem.service_head_approved_at)),
-            rental_approved_at: prevItem.rental_approved_at && dateTimeFormatter.format(new Date(prevItem.rental_approved_at)),
-            mri_number_encoded_at: prevItem.mri_number_encoded_at && dateTimeFormatter.format(new Date(prevItem.mri_number_encoded_at)),
-            date_needed: dateTimeFormatter.format(new Date(prevItem.date_needed)),
+
+            date_requested: new Date(prevItem.date_requested).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_requested: new Date(prevItem.date_requested).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
+            date_validated: prevItem.validated_at && new Date(prevItem.validated_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_validated: prevItem.validated_at && new Date(prevItem.validated_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
+            date_parts_approved: prevItem.parts_approved_at && new Date(prevItem.parts_approved_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_parts_approved: prevItem.parts_approved_at && new Date(prevItem.parts_approved_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
+            date_service_head_approved: prevItem.service_head_approved_at && new Date(prevItem.service_head_approved_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_service_head_approved: prevItem.service_head_approved_at && new Date(prevItem.service_head_approved_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
+            date_rental_approved: prevItem.rental_approved_at && new Date(prevItem.rental_approved_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_rental_approved: prevItem.rental_approved_at && new Date(prevItem.rental_approved_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
+            date_mri_number_encoded: prevItem.mri_number_encoded_at && new Date(prevItem.mri_number_encoded_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_mri_number_encoded: prevItem.mri_number_encoded_at && new Date(prevItem.mri_number_encoded_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
+            date_needed: new Date(prevItem.date_needed).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+
+
+
+
+
+
+
+
+            // date_requested: dateTimeFormatter.format(new Date(prevItem.date_requested)),
+            // time_requested: 'test',
+            // validated_at: prevItem.validated_at && dateTimeFormatter.format(new Date(prevItem.validated_at)),
+            // parts_approved_at: prevItem.parts_approved_at && dateTimeFormatter.format(new Date(prevItem.parts_approved_at)),
+            // service_head_approved_at: prevItem.service_head_approved_at && dateTimeFormatter.format(new Date(prevItem.service_head_approved_at)),
+            // rental_approved_at: prevItem.rental_approved_at && dateTimeFormatter.format(new Date(prevItem.rental_approved_at)),
+            // mri_number_encoded_at: prevItem.mri_number_encoded_at && dateTimeFormatter.format(new Date(prevItem.mri_number_encoded_at)),
+            // date_needed: dateTimeFormatter.format(new Date(prevItem.date_needed)),
         }));
     };
     
@@ -279,7 +308,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     <div className="absolute top-6 w-7 h-7 border-2 border-green-600 rounded-[6px] bg-green-600 text-white z-10 cursor-default transition-all duration-500 ease-in-out hover:w-44 hover:h-20 hover:-top-0.5 group">
                                         <span className='absolute left-1/2 top-1/2 -translate-1/2 transition-all duration-500 ease-in-out group-hover:top-4 font-bold'>✓</span>
                                         <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.requested_by}</span>
-                                        <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_requested}</span>
+                                        <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_requested+' '+item.time_requested}</span>
                                     </div>
                                     <span className="mt-9 text-sm font-medium text-gray-500">Requested</span>
                                     {/*  Line  */}
@@ -298,7 +327,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         {item.is_validated == 1 && 
                                             <>
                                                 <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.validated_by}</span>
-                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.validated_at}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_validated+' '+item.time_validated}</span>
                                             </> 
                                         }
                                     </div>
@@ -319,7 +348,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         {item.is_parts_approved == 1 && 
                                             <>
                                                 <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.parts_approved_by}</span>
-                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.parts_approved_at}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_parts_approved+' '+item.time_parts_approved}</span>
                                             </> 
                                         }
                                     </div>
@@ -340,7 +369,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         {item.is_service_head_approved == 1 && 
                                             <>
                                                 <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.service_head_approved_by}</span>
-                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.service_head_approved_at}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_service_head_approved+' '+item.time_service_head_approved}</span>
                                             </> 
                                         }
                                     </div>
@@ -361,7 +390,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         {item.is_rental_approved == 1 && 
                                             <>
                                                 <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.rental_approved_by}</span>
-                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.rental_approved_at}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_rental_approved+' '+item.time_rental_approved}</span>
                                             </> 
                                         }
                                     </div>
@@ -382,7 +411,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         {item.is_mri_number_encoded == 1 && 
                                             <>
                                                 <span className='absolute left-1/2 top-full -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-8 group-hover:opacity-100 text-sm font-bold'>{item.mri_number_encoder}</span>
-                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.mri_number_encoded_at}</span>
+                                                <span className='absolute left-1/2 top-[calc(100%+16px)] -translate-x-1/2 whitespace-nowrap opacity-0 transition-all duration-500 ease-in-out group-hover:top-12 group-hover:opacity-100 text-sm font-bold'>{item.date_mri_number_encoded+' '+item.time_mri_number_encoded}</span>
                                             </> 
                                         }
                                     </div>
@@ -560,13 +589,15 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                             ) &&
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Parts'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify Parts</Button>
                         }
-
                         
                         {  (
                                 (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_head')
                             ) &&
-                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Approve'); setConfirmationBody('Are you sure you want to approve this request?') }}>Approve</Button>
-                        }
+                                <>
+                                    <Button color='red' >Return to Requestor</Button>
+                                    <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Approve'); setConfirmationBody('Are you sure you want to approve this request?') }}>Approve</Button>
+                                </>
+                            }
 
                         
                         {  (
@@ -576,7 +607,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 <Button color='orange' onClick={handleShowUpdateDetails}>Update Details</Button>
                                 <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Details'); setConfirmationBody('Are you sure you want to verify the details of this request?') }}>Verify Details</Button>
                             </>
-
                         }
                         
                         {  (
