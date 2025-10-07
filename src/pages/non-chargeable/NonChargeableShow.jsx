@@ -8,6 +8,7 @@ import ImageViewer from '../../components/ImageViewer'
 import FleetHistory from '../../components/FleetHistory';
 import LogViewer from '../../components/LogViewer';
 import Confirmation from '../../components/Confirmation';
+import UpdateParts from '../../components/UpdateParts';
 import config from '../../config/config';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,12 +32,12 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
     const [showPm, setShowPm] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
     const [showLogs, setShowLogs] = useState(false);
+    const [showUpdateParts, setShowUpdateParts] = useState(false);
     const [showUpdateDetails, setShowUpdateDetails] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [confirmationTitle, setConfirmationTitle] = useState('');
     const [confirmationBody, setConfirmationBody] = useState('');
     const [history, setHistory] = useState([]);
-    const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {dateStyle: 'medium'});
     const baseURL = config.defaults.baseURL;
 
     const parts_columns = [
@@ -74,22 +75,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
             time_mri_number_encoded: prevItem.mri_number_encoded_at && new Date(prevItem.mri_number_encoded_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
 
             date_needed: new Date(prevItem.date_needed).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
-
-
-
-
-
-
-
-
-            // date_requested: dateTimeFormatter.format(new Date(prevItem.date_requested)),
-            // time_requested: 'test',
-            // validated_at: prevItem.validated_at && dateTimeFormatter.format(new Date(prevItem.validated_at)),
-            // parts_approved_at: prevItem.parts_approved_at && dateTimeFormatter.format(new Date(prevItem.parts_approved_at)),
-            // service_head_approved_at: prevItem.service_head_approved_at && dateTimeFormatter.format(new Date(prevItem.service_head_approved_at)),
-            // rental_approved_at: prevItem.rental_approved_at && dateTimeFormatter.format(new Date(prevItem.rental_approved_at)),
-            // mri_number_encoded_at: prevItem.mri_number_encoded_at && dateTimeFormatter.format(new Date(prevItem.mri_number_encoded_at)),
-            // date_needed: dateTimeFormatter.format(new Date(prevItem.date_needed)),
         }));
     };
     
@@ -260,6 +245,11 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                             </div>
                         </div>
                     </div>
+                }
+
+                {
+                    showUpdateParts &&
+                    <UpdateParts parts={parts} closeButton={() => setShowUpdateParts(false)} ></UpdateParts>
                 }
             </>
 
@@ -587,7 +577,10 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         {  (
                                 (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech')
                             ) &&
-                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Parts'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify Parts</Button>
+                            <>
+                                <Button color='orange' onClick={() => setShowUpdateParts(true)} >Update Parts</Button>
+                                <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Parts'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify Parts</Button>
+                            </>
                         }
                         
                         {  (
