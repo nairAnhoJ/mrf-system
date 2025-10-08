@@ -81,7 +81,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
     const getItem = async() => {
         try {
             const response = await getById(id);
-            console.log(response);
             setItem(response[0]);
             updateDateFormat();
         } catch (error) {

@@ -1,21 +1,35 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
-import { validate, verify, approve, verifyDetails, mri, doc_number, dr_number } from '../services/nonChargeableService'
+import { getAll } from '../services/partBrandService'
 import { useNavigate } from 'react-router-dom'
 
 const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
 
     const user = JSON.parse(localStorage.getItem('user'));
+    const [partBrands, setPartBrands] = useState([])
     const [updatedParts, setUpdatedParts] = useState(parts)
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        getPartBrands();
+    }, [])
+
+    const getPartBrands = async() => {
+        try {
+            const response = await getAll();
+            setPartBrands(response);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleOnChange = (id, col_name, value) => {
-        console.log(id, col_name, value);
-        
         setUpdatedParts(prev => 
-            prev.map(epart => 
-                epart.id === id ? {...prev, [col_name]: value} : epart
+            prev.map(epart => (
+                    epart.id === id ? {...epart, [col_name]: value} : epart
+                )
             )
         );
     }
@@ -42,10 +56,16 @@ const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
                             updatedParts.map((part, index) => (
                                 <div key={index} className='mt-3'>
                                     <div className='flex gap-x-3'>
-                                        <input type="text" className='border border-neutral-500 rounded p-1 text-center text-sm w-40' onChange={(e) => handleOnChange(part.id, 'item_number', e.target.value)} value={part.item_number}/>
-                                        <input type="text" className='border border-neutral-500 rounded p-1 text-center text-sm w-56' onChange={(e) => handleOnChange(part.id, 'number', e.target.value)} value={part.number}/>
-                                        <input type="text" className='border border-neutral-500 rounded p-1 text-sm flex-1' onChange={(e) => handleOnChange(part.id, 'name', e.target.value)} value={part.name}/>
-                                        <input type="text" className='border border-neutral-500 rounded p-1 text-center text-sm w-52 pointer-events-none' value={part.brand} readOnly/>
+                                        <input type="text" name='item_number' className='border border-neutral-500 rounded p-1 text-center text-sm w-40' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.item_number}/>
+                                        <input type="text" name='number' className='border border-neutral-500 rounded p-1 text-center text-sm w-56' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.number}/>
+                                        <input type="text" name='name' className='border border-neutral-500 rounded p-1 text-sm flex-1' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.name}/>
+                                        <select name="brand_id" className='border border-neutral-500 rounded p-1 text-center text-sm w-52' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.brand_id}>
+                                            {
+                                                partBrands.map((brand, index) => (
+                                                    <option key={index} value={brand.id}>{brand.name}</option>
+                                                ))
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                             ))
