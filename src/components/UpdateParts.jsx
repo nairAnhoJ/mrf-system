@@ -1,25 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 import { getAll } from '../services/partBrandService'
+import { update } from '../services/partsService'
 import { useNavigate } from 'react-router-dom'
 
 const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
 
     const user = JSON.parse(localStorage.getItem('user'));
     const [partBrands, setPartBrands] = useState([])
-    const [updatedParts, setUpdatedParts] = useState(parts)
+    const [updatedParts, setUpdatedParts] = useState([])
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         getPartBrands();
+        initialUpdatedParts();
     }, [])
+
+    const initialUpdatedParts = () => {
+        setUpdatedParts([]);
+        parts.forEach(part =>
+            setUpdatedParts(updatedParts =>
+                [   
+                    ...updatedParts,
+                    {
+                        id: part.id,
+                        item_number: part.item_number,
+                        number: part.number,
+                        name: part.name,
+                        brand_id: part.brand_id,
+                        brand: part.brand,
+                    }
+                ]
+            )
+        )
+    }
 
     const getPartBrands = async() => {
         try {
             const response = await getAll();
             setPartBrands(response);
-            console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -34,8 +54,30 @@ const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
         );
     }
 
-    const handleYes = () => {
+    const handleYes = async() => {
+        setErrors([]);
+        const newErrors = [];
+        updatedParts.forEach((part, index) => {
+            const emptyProps = Object.keys(part).filter(
+                key => part[key] === ""
+            );
+            emptyProps.length > 0 ? 
+                emptyProps.map(prop => newErrors.push({prop, index}) )
+            : 
+                errors
+        });
+        setErrors(newErrors);
 
+        if(newErrors.length === 0){
+            console.log(id);
+            try {
+                const response = await update(id, updatedParts);
+                console.log(response);
+                // setPartBrands(response);
+            } catch (error) {
+                console.log(error);
+            }
+        }
     }
 
     return (
@@ -56,9 +98,9 @@ const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
                             updatedParts.map((part, index) => (
                                 <div key={index} className='mt-3'>
                                     <div className='flex gap-x-3'>
-                                        <input type="text" name='item_number' className='border border-neutral-500 rounded p-1 text-center text-sm w-40' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.item_number}/>
-                                        <input type="text" name='number' className='border border-neutral-500 rounded p-1 text-center text-sm w-56' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.number}/>
-                                        <input type="text" name='name' className='border border-neutral-500 rounded p-1 text-sm flex-1' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.name}/>
+                                        <input type="text" name='item_number' className={`border border-neutral-500 rounded p-1 text-center text-sm w-40 ${errors.find((err) => err.prop == 'item_number' && err.index == index) ? 'border-red-500' : ''} `} onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.item_number}/>
+                                        <input type="text" name='number' className={`border border-neutral-500 rounded p-1 text-center text-sm w-56 ${errors.find((err) => err.prop == 'number' && err.index == index) ? 'border-red-500' : ''} `} onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.number}/>
+                                        <input type="text" name='name' className={`border border-neutral-500 rounded p-1 text-sm flex-1 ${errors.find((err) => err.prop == 'name' && err.index == index) ? 'border-red-500' : ''} `} onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.name}/>
                                         <select name="brand_id" className='border border-neutral-500 rounded p-1 text-center text-sm w-52' onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.brand_id}>
                                             {
                                                 partBrands.map((brand, index) => (

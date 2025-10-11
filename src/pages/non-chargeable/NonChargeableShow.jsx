@@ -248,7 +248,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
                 {
                     showUpdateParts &&
-                    <UpdateParts parts={parts} closeButton={() => setShowUpdateParts(false)} ></UpdateParts>
+                    <UpdateParts parts={parts} id={item.id} closeButton={() => setShowUpdateParts(false)} ></UpdateParts>
                 }
             </>
 

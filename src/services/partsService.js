@@ -30,3 +30,18 @@ export const getById = async(id) => {
         console.log(error);
     }
 };
+
+export const update = async(id, data) => {
+    console.log(id, data);
+    
+    try {
+        const response = await config.post(`${baseURL}/update/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
