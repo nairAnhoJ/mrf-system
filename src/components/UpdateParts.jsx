@@ -69,7 +69,6 @@ const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
         setErrors(newErrors);
 
         if(newErrors.length === 0){
-            console.log(id);
             try {
                 const response = await update(id, updatedParts);
                 console.log(response);

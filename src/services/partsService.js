@@ -35,7 +35,7 @@ export const update = async(id, data) => {
     console.log(id, data);
     
     try {
-        const response = await config.post(`${baseURL}/update/${id}`, data, {
+        const response = await config.put(`${baseURL}/update/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
