@@ -32,15 +32,13 @@ export const getById = async(id) => {
 };
 
 export const update = async(id, data) => {
-    console.log(id, data);
-    
     try {
         const response = await config.put(`${baseURL}/update/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return response.data;
+        return response;
     } catch (error) {
         console.log(error);
     }

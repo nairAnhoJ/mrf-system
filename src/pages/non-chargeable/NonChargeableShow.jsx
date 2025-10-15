@@ -114,8 +114,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
         try {
             const response = await getByFleetNumber(fleet_number);
-            console.log(response);
-            
             setHistory(response);
             setLoading(false);
         } catch (error) {
@@ -155,7 +153,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                 if(response.status === 201){
                     approveSuccess(response.data.message);
                 }
-                console.log(response);
             } catch (error) {
                 console.log(error);
             }
@@ -248,7 +245,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
                 {
                     showUpdateParts &&
-                    <UpdateParts parts={parts} id={item.id} closeButton={() => setShowUpdateParts(false)} ></UpdateParts>
+                    <UpdateParts parts={parts} id={item.id} msg={(msg) => approveSuccess(msg)} closeButton={() => setShowUpdateParts(false)} ></UpdateParts>
                 }
             </>
 

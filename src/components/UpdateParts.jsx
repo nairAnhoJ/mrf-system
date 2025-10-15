@@ -4,7 +4,7 @@ import { getAll } from '../services/partBrandService'
 import { update } from '../services/partsService'
 import { useNavigate } from 'react-router-dom'
 
-const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
+const UpdateParts = ({closeButton, msg, id, parts}) => {
 
     const user = JSON.parse(localStorage.getItem('user'));
     const [partBrands, setPartBrands] = useState([])
@@ -24,7 +24,8 @@ const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
                 [   
                     ...updatedParts,
                     {
-                        id: part.id,
+                        requested_part_id: part.id,
+                        id: part.part_id,
                         item_number: part.item_number,
                         number: part.number,
                         name: part.name,
@@ -72,8 +73,10 @@ const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
         if(newErrors.length === 0){
             try {
                 const response = await update(id, updatedParts);
-                console.log(response);
-                // setPartBrands(response);
+                if(response.status === 201){
+                    msg(response.data.message);
+                    // closeButton();
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -110,7 +113,7 @@ const UpdateParts = ({closeButton, approveSuccess, id, parts}) => {
                                                     ))
                                                 }
                                             </select>
-                                            <input type="number" name='price' className={`border border-neutral-500 rounded p-1 text-center text-sm w-40 ${errors.find((err) => err.prop == 'price' && err.index == index) ? 'border-red-500' : ''} `} onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.price}/>
+                                            <input type="number" name='price' className={`border border-neutral-500 rounded p-1 text-center text-sm w-40 pl-5 ${errors.find((err) => err.prop == 'price' && err.index == index) ? 'border-red-500' : ''} `} onChange={(e) => handleOnChange(part.id, e.target.name, e.target.value)} value={part.price}/>
                                         </div>
                                     </div>
                                 ))
