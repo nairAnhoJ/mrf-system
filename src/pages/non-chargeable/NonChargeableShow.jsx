@@ -575,6 +575,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                             ) &&
                             <>
                                 <Button color='orange' onClick={() => setShowUpdateParts(true)} >Update Parts</Button>
+                                <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Return to Requestor'); setConfirmationBody('Are you sure you want to return the request to requestor?') }} >Return</Button>
                                 <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Parts'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify Parts</Button>
                             </>
                         }

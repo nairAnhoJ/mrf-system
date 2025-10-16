@@ -188,6 +188,17 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                 }
                 closeButton();
             }
+        }else if(title === 'Return to Requestor'){
+            try {
+                const response = await verifyDetails(id, data);
+                if(response.status === 201){
+                    approveSuccess(response.data.message);
+                }
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+            closeButton();
         }
     }
 
@@ -339,10 +350,9 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                             </div>
                         }
 
-
                     </div>
                     <div className='w-full p-6 border-t border-neutral-300 flex gap-x-3'>
-                        <Button color='blue' onClick={handleYes} className={"w-1/2"}>{['MRI', 'DOCUMENT NUMBER'].includes(title) ? 'Submit' : 'Yes' }</Button>
+                        <Button color={`${title === 'Return to Requestor' ? 'red' : 'blue' }`} onClick={handleYes} className={"w-1/2"}>{['MRI', 'DOCUMENT NUMBER'].includes(title) ? 'Submit' : 'Yes' }</Button>
                         <Button color='gray' onClick={() => closeButton()} className={"w-1/2"}>Close</Button>
                     </div>
                 </aside>
