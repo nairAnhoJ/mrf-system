@@ -64,7 +64,6 @@ export const create = async(data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -80,7 +79,6 @@ export const update = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -96,7 +94,6 @@ export const validate = async(id) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -112,7 +109,6 @@ export const verify = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -128,7 +124,6 @@ export const approve = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -144,7 +139,6 @@ export const updateDetails = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -160,7 +154,6 @@ export const verifyDetails = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -176,7 +169,6 @@ export const mri = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -192,7 +184,6 @@ export const doc_number = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
         
         return response;
     } catch (error) {
@@ -209,7 +200,21 @@ export const dr_number = async(id, data) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error.response;
+    }
+};
+
+export const returnRequest = async(id, data) => {
+    try {
+        const response = await config.post(`${baseURL}/return-request/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         
         return response;
     } catch (error) {

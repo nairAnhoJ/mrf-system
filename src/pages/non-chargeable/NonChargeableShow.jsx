@@ -516,6 +516,15 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                 </div>
                                 {
+                                    item.is_returned === 1 &&
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-full'>
+                                            <h1 className='text-xs 2xl:text-sm text-red-500 font-semibold'>Return Remarks [Returned by: {item.returned_by}]</h1>
+                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.returned_remarks}</div>
+                                        </div>
+                                    </div>
+                                }
+                                {
                                     item.is_parts_approved === 1 &&
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
@@ -573,9 +582,9 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         {  (
                                 (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech')
                             ) &&
-                            <>
+                            <> 
                                 <Button color='orange' onClick={() => setShowUpdateParts(true)} >Update Parts</Button>
-                                <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Return to Requestor'); setConfirmationBody('Are you sure you want to return the request to requestor?') }} >Return</Button>
+                                <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Return to Requestor'); setConfirmationBody('Are you sure you want to return the request to requestor?') }} >Return to Requestor</Button>
                                 <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Parts'); setConfirmationBody('Are you sure you want to mark the parts as verified?') }}>Verify Parts</Button>
                             </>
                         }

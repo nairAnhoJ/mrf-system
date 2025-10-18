@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
-import { validate, verify, approve, verifyDetails, mri, doc_number, dr_number } from '../services/nonChargeableService'
+import { validate, verify, approve, verifyDetails, mri, doc_number, dr_number, returnRequest } from '../services/nonChargeableService'
 import { useNavigate } from 'react-router-dom'
 
 const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => {
@@ -190,7 +190,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
             }
         }else if(title === 'Return to Requestor'){
             try {
-                const response = await verifyDetails(id, data);
+                const response = await returnRequest(id, data);
                 if(response.status === 201){
                     approveSuccess(response.data.message);
                 }
