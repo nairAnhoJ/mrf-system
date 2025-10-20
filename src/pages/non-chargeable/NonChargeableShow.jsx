@@ -516,7 +516,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                 </div>
                                 {
-                                    item.is_returned === 1 &&
+                                    item.returned_remarks !== null &&
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
                                             <h1 className='text-xs 2xl:text-sm text-red-500 font-semibold'>Return Remarks [Returned by: {item.returned_by}]</h1>
@@ -590,10 +590,10 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         }
                         
                         {  (
-                                (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_head')
+                                (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'svc_head' || roles.find(role => role.area_id === item.area_id)?.role == 'svc_coor'))
                             ) &&
                                 <>
-                                    <Button color='red' >Return to Requestor</Button>
+                                    <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Return to Requestor'); setConfirmationBody('Are you sure you want to return the request to requestor?') }} >Return to Requestor</Button>
                                     <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Approve'); setConfirmationBody('Are you sure you want to approve this request?') }}>Approve</Button>
                                 </>
                             }
@@ -611,7 +611,10 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         {  (
                                 (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri')
                             ) && 
-                            <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('MRI'); setConfirmationBody('') }}>Encode MRI Number</Button>
+                            <>
+                                <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Return to Requestor'); setConfirmationBody('Are you sure you want to return the request to requestor?') }} >Return to Requestor</Button>
+                                <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('MRI'); setConfirmationBody('') }}>Encode MRI Number</Button>
+                            </>
                         }
 
                         
