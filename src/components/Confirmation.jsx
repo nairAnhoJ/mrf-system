@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
-import { validate, verify, approve, verifyDetails, mri, doc_number, dr_number, returnRequest } from '../services/nonChargeableService'
+import { validate, verify, approve, verifyDetails, mri, doc_number, dr_number, returnRequest, cancelRequest } from '../services/nonChargeableService'
 import { useNavigate } from 'react-router-dom'
 
 const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => {
@@ -199,6 +199,17 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                 console.log(error);
             }
             closeButton();
+        }else if(title === 'Cancel or Decline'){
+            try {
+                const response = await cancelRequest(id, data);
+                if(response.status === 201){
+                    approveSuccess(response.data.message);
+                }
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
+            closeButton();
         }
     }
 
@@ -352,7 +363,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
 
                     </div>
                     <div className='w-full p-6 border-t border-neutral-300 flex gap-x-3'>
-                        <Button color={`${title === 'Return to Requestor' ? 'red' : 'blue' }`} onClick={handleYes} className={"w-1/2"}>{['MRI', 'DOCUMENT NUMBER'].includes(title) ? 'Submit' : 'Yes' }</Button>
+                        <Button color={`${['Return to Requestor','Cancel or Decline'].includes(title) ? 'red' : 'blue' }`} onClick={handleYes} className={"w-1/2"}>{['MRI', 'DOCUMENT NUMBER'].includes(title) ? 'Submit' : 'Yes' }</Button>
                         <Button color='gray' onClick={() => closeButton()} className={"w-1/2"}>Close</Button>
                     </div>
                 </aside>

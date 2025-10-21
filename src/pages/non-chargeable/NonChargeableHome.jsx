@@ -181,11 +181,16 @@ const NonChargeableHome = () => {
                                                             columns.map((row, index) => (
                                                                 <td key={index} className={`${row.className} first:text-red-500`}>{item[row.key]}</td>
                                                             ))
+                                                        : 
+                                                            item.is_cancelled == 1 ?
+                                                                columns.map((row, index) => (
+                                                                    <td key={index} className={`${row.className}`}>{item[row.key]}</td>
+                                                                ))
                                                         :
                                                             (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv')) ||
                                                             (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech') ||
                                                             (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'svc_head' || roles.find(role => role.area_id === item.area_id)?.role == 'svc_coor')) ||
-                                                            // (item.is_service_head_approved == 1 && is_rental_approved == 0 && roles[0].role == 'rental') ||
+                                                            (item.is_service_head_approved == 1 && item.is_rental_approved == 0 && roles[0].role == 'rental') ||
                                                             (item.is_rental_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri') ||
                                                             ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded != 1 && roles[0].role == 'doc_enc') ||
                                                             (item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 && roles[0].role == 'dr_enc')

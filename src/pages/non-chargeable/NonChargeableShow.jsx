@@ -74,6 +74,12 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
             date_mri_number_encoded: prevItem.mri_number_encoded_at && new Date(prevItem.mri_number_encoded_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
             time_mri_number_encoded: prevItem.mri_number_encoded_at && new Date(prevItem.mri_number_encoded_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
 
+            date_returned: prevItem.returned_at && new Date(prevItem.returned_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_returned: prevItem.returned_at && new Date(prevItem.returned_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
+            date_cancelled: prevItem.cancelled_at && new Date(prevItem.cancelled_at).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
+            time_cancelled: prevItem.cancelled_at && new Date(prevItem.cancelled_at).toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: true,}),
+
             date_needed: new Date(prevItem.date_needed).toLocaleDateString("en-US", {year: "numeric", month: "short", day: "2-digit",}),
         }));
     };
@@ -304,7 +310,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 {/* Validated */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     {/* Arrow Down */}
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 0 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 0 && item.is_cancelled === 0 ? '⋎' : '' }</span>
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_validated == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
@@ -325,7 +331,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 {/* Parts Verified */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     {/* Arrow Down */}
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 1 && item.is_parts_approved == 0 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 1 && item.is_parts_approved && item.is_cancelled === 0 ? '⋎' : '' }</span>
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_parts_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
@@ -346,7 +352,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 {/* Service */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     {/* Arrow Down */}
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_parts_approved == 1 && item.is_service_head_approved == 0 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_parts_approved == 1 && item.is_service_head_approved == 0 && item.is_cancelled === 0 ? '⋎' : '' }</span>
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_service_head_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
@@ -367,7 +373,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 {/* Rental */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     {/* Arrow Down */}
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_service_head_approved == 1 && item.is_rental_approved == 0 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_service_head_approved == 1 && item.is_rental_approved == 0 && item.is_cancelled === 0 ? '⋎' : '' }</span>
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_rental_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
@@ -382,13 +388,13 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                     <span className="mt-9 text-sm font-medium text-gray-500">Rental</span>
                                     {/* Line */}
-                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_rental_approved == 1 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
+                                    <div className={`absolute top-[36px] left-[calc(50%+14px)] w-[calc(100%-28px)] h-1 ${item.is_rental_approved == 1 && item.is_cancelled === 0 ? 'bg-green-600' : 'bg-gray-400'}`}></div>
                                 </li>
                                 
                                 {/* MRI Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     {/* Arrow Down */}
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_rental_approved == 1 && item.is_mri_number_encoded == 0 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_rental_approved == 1 && item.is_mri_number_encoded == 0 && item.is_cancelled === 0 ? '⋎' : '' }</span>
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_mri_number_encoded == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
@@ -408,7 +414,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
                                 {/* Doc Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_mri_number_encoded == 1 && item.is_doc_number_encoded != 1 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_mri_number_encoded == 1 && item.is_doc_number_encoded != 1 && item.is_cancelled === 0 ? '⋎' : '' }</span>
                                     <div className={`flex items-center justify-center w-7 h-7 border-2 rounded font-bold ${item.is_doc_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_doc_number_encoded == 1 ? '✓' : '7' }
                                     </div>
@@ -419,7 +425,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
                                 {/* DR Number */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full">
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_doc_number_encoded == 1 && item.is_dr_number_encoded != 1 ? '⋎' && item.is_cancelled === 0 : '' }</span>
                                     <div className={`flex items-center justify-center w-7 h-7 border-2 rounded font-bold ${item.is_dr_number_encoded == 1 ? 'border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400' }`}>
                                         {item.is_dr_number_encoded == 1 ? '✓' : '8' }
                                     </div>
@@ -516,10 +522,19 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                 </div>
                                 {
+                                    item.is_cancelled === 1 &&
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-full'>
+                                            <h1 className='text-xs 2xl:text-sm text-red-500 font-base'>Cancel Remarks <span className='font-semibold'>[By: {item.cancelled_by}]</span> on <span className='font-semibold'>{item.date_cancelled} {item.time_cancelled}</span></h1>
+                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.cancelled_remarks}</div>
+                                        </div>
+                                    </div>
+                                }
+                                {
                                     item.returned_remarks !== null &&
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
-                                            <h1 className='text-xs 2xl:text-sm text-red-500 font-semibold'>Return Remarks [Returned by: {item.returned_by}]</h1>
+                                            <h1 className='text-xs 2xl:text-sm text-red-500 font-base'>Return Remarks <span className='font-semibold'>[By: {item.returned_by}]</span> on <span className='font-semibold'>{item.date_returned} {item.time_returned}</span></h1>
                                             <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.returned_remarks}</div>
                                         </div>
                                     </div>
@@ -574,13 +589,13 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                     {/* Footer */}
                     <div className='w-full bg-neutral-50 dark:bg-neutral-700 border-t border-neutral-200 rounded-b p-6 flex items-center gap-x-3'>
                         {   (
-                                (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv'))
+                                (item.is_validated == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'site_tl' || roles.find(role => role.area_id === item.area_id)?.role == 'site_supv')) && item.is_cancelled === 0
                             ) &&
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Validate'); setConfirmationBody('Are you sure you want to validate this request?') }}>VALIDATE</Button>
                         }
                         
                         {  (
-                                (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech')
+                                (item.is_validated == 1 && item.is_parts_approved == 0 && roles.find(role => role.area_id === item.area_id)?.role == 'svc_tech') && item.is_cancelled === 0
                             ) &&
                             <> 
                                 <Button color='orange' onClick={() => setShowUpdateParts(true)} >Update Parts</Button>
@@ -590,26 +605,28 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         }
                         
                         {  (
-                                (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'svc_head' || roles.find(role => role.area_id === item.area_id)?.role == 'svc_coor'))
+                                (item.is_parts_approved == 1 && item.is_service_head_approved == 0 && (roles.find(role => role.area_id === item.area_id)?.role == 'svc_head' || roles.find(role => role.area_id === item.area_id)?.role == 'svc_coor')) && item.is_cancelled === 0
                             ) &&
                                 <>
                                     <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Return to Requestor'); setConfirmationBody('Are you sure you want to return the request to requestor?') }} >Return to Requestor</Button>
+                                <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Cancel or Decline'); setConfirmationBody('Are you sure you want to cancel or decline this request?') }} >Cancel / Decline</Button>
                                     <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Approve'); setConfirmationBody('Are you sure you want to approve this request?') }}>Approve</Button>
                                 </>
                             }
 
                         
                         {  (
-                                (item.is_service_head_approved == 1 && item.is_rental_approved == 0 && roles[0].role == 'rental')
+                                (item.is_service_head_approved == 1 && item.is_rental_approved == 0 && roles[0].role == 'rental') && item.is_cancelled === 0
                             ) && 
                             <>
                                 <Button color='orange' onClick={handleShowUpdateDetails}>Update Details</Button>
+                                <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Cancel or Decline'); setConfirmationBody('Are you sure you want to cancel or decline this request?') }} >Cancel / Decline</Button>
                                 <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('Verify Details'); setConfirmationBody('Are you sure you want to verify the details of this request?') }}>Verify Details</Button>
                             </>
                         }
                         
                         {  (
-                                (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri')
+                                (item.is_service_head_approved == 1 && (item.mri_number == '' || item.mri_number == null) && roles[0].role == 'mri') && item.is_cancelled === 0
                             ) && 
                             <>
                                 <Button color='red' onClick={() => {setShowConfirmation(true); setConfirmationTitle('Return to Requestor'); setConfirmationBody('Are you sure you want to return the request to requestor?') }} >Return to Requestor</Button>
@@ -619,19 +636,19 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
 
                         
                         {  (
-                                ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded !== 1 && roles[0].role == 'doc_enc')
+                                ((item.mri_number != '' || item.mri_number != null) && item.is_doc_number_encoded !== 1 && roles[0].role == 'doc_enc') && item.is_cancelled === 0
                             ) && 
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DOCUMENT NUMBER'); setConfirmationBody('') }}>Encode Document Number</Button>
                         }
 
                         
                         {  (
-                                ((parts.filter((pid) => pid.doc_number !== null).length) > parts.filter(part => part.dr_number !== null).length && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc')
+                                ((parts.filter((pid) => pid.doc_number !== null).length) > parts.filter(part => part.dr_number !== null).length && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc') && item.is_cancelled === 0
                             ) && 
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DR NUMBER'); setConfirmationBody('') }}>Encode DR Number</Button>
                         }
 
-                        <Button color="white" onClick={closeButton}>CLOSE</Button>
+                        <Button color="white" onClick={closeButton}>Close</Button>
                     </div>
                 </div>
             </div>

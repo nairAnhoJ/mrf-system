@@ -222,3 +222,18 @@ export const returnRequest = async(id, data) => {
         return error.response;
     }
 };
+
+export const cancelRequest = async(id, data) => {
+    try {
+        const response = await config.post(`${baseURL}/cancel-request/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error.response;
+    }
+};
