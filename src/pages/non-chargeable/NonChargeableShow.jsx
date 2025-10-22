@@ -582,13 +582,22 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                                 <div className='w-80 flex items-start text-sm leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.mri_number}</div>
                                             </div>
                                         </div>
-                                    }
+                                    } 
                                     {
                                         item.is_mri_number_encoded === 1 &&
                                         <div className='flex w-full'>
                                             <div className='flex flex-col w-full'>
                                                 <h1 className='text-xs 2xl:text-sm'>MRI Number Remarks</h1>
                                                 <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.mri_number_remarks ? item.mri_number_remarks : 'N/A'}</div>
+                                            </div>
+                                        </div>
+                                    }
+                                    {
+                                        item.doc_number_remarks !== null &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm'>eDoc Number Remarks</h1>
+                                                <div dangerouslySetInnerHTML={{ __html: item.doc_number_remarks }} className='w-full text-sm h-32 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-line text-left'></div>
                                             </div>
                                         </div>
                                     }

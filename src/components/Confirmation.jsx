@@ -354,7 +354,7 @@ const Confirmation = ({closeButton, approveSuccess, id, parts, title, body}) => 
                             </div>
                         }
 
-                        { (title !== 'Validate' && title !== 'DOCUMENT NUMBER' && title !== 'DR NUMBER') && 
+                        { (title !== 'Validate') && 
                             <div className='flex flex-col mt-3 text-sm font-normal'>
                                 <label>Remarks</label>
                                 <textarea className='border rounded h-24 p-2 resize-none' onChange={(e) => setData({...data, remarks: e.target.value})}></textarea>
