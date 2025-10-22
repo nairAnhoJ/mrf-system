@@ -331,7 +331,7 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                 {/* Parts Verified */}
                                 <li className="relative flex flex-col items-center text-green-600 w-full h-20">
                                     {/* Arrow Down */}
-                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated == 1 && item.is_parts_approved && item.is_cancelled === 0 ? '⋎' : '' }</span>
+                                    <span className='h-6 w-3 text-gray-500 animate-bounce'>{ item.is_validated === 1 && item.is_parts_approved === 0 && item.is_cancelled === 0 ? '⋎' : '' }</span>
                                     {/* Box */}
                                     <div className={`absolute top-6 w-7 h-7 border-2 rounded-[6px] z-10 cursor-default transition-[width,height,top,border-radius] duration-500 ease-in-out group ${item.is_parts_approved == 1 ? 'hover:w-44 hover:h-20 hover:-top-0.5 border-green-600 bg-green-600 text-white' : 'border-gray-400 bg-white text-gray-400'}`}>
                                         {/* Check or Number */}
@@ -438,146 +438,166 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         <div className='w-full'>
                             <h1 className='text-xl font-bold tracking-wide leading-5'>Request Details</h1>
                             <div className='w-full flex flex-col gap-y-2 mt-2'>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-1/2 pr-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Date Requested</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.date_requested}</div>
-                                    </div>
-                                    <div className='flex flex-col w-1/2 pl-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Date Needed</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.date_needed}</div>
-                                    </div>
-                                </div>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-1/3 pr-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>For</h1>
-                                        <div className='relative flex'>
-                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900  relative'>{item.for}</div>
-                                            <button onClick={() => setShowPm(true)} className={`h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1 ${item.for !== 'PM' ? 'hidden' : ''}`}>
-                                                <IconRenderer name="visibility" className="w-5 h-5"/>
-                                            </button>
+                                {/* Upper Details */}
+                                <>
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-1/2 pr-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Date Requested</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.date_requested}</div>
+                                        </div>
+                                        <div className='flex flex-col w-1/2 pl-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Date Needed</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.date_needed}</div>
                                         </div>
                                     </div>
-                                    <div className='flex flex-col w-1/3 px-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Order Type</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.order_type}</div>
-                                    </div>
-                                    <div className='flex flex-col w-1/3 pl-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Delivery Type</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.delivery_type}</div>
-                                    </div>
-                                </div>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-2/3 pr-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Customer Name</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.customer_name}</div>
-                                    </div>
-                                    <div className='flex flex-col w-1/3 pl-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Area</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.area}</div>
-                                    </div>
-                                </div>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-full'>
-                                        <h1 className='text-xs 2xl:text-sm'>Customer Address</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.customer_address}</div>
-                                    </div>
-                                </div>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-1/5 pr-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>FSRR Number</h1>
-                                        <div className='flex relative'>
-                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fsrr_number}</div>
-                                            <button onClick={() => setShowFsrr(true)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
-                                                <IconRenderer name="visibility" className="w-5 h-5"/>
-                                            </button>
+
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-1/3 pr-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>For</h1>
+                                            <div className='relative flex'>
+                                                <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900  relative'>{item.for}</div>
+                                                <button onClick={() => setShowPm(true)} className={`h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1 ${item.for !== 'PM' ? 'hidden' : ''}`}>
+                                                    <IconRenderer name="visibility" className="w-5 h-5"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className='flex flex-col w-1/3 px-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Order Type</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.order_type}</div>
+                                        </div>
+                                        <div className='flex flex-col w-1/3 pl-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Delivery Type</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.delivery_type}</div>
                                         </div>
                                     </div>
-                                    <div className='flex flex-col w-1/5 pr-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Fleet Number</h1>
-                                        <div className='flex relative'>
-                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fleet_number}</div>
-                                            <button onClick={() => handleShowHistory(item.fleet_number)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
-                                                <IconRenderer name="history" className="w-5 h-5"/>
-                                            </button>
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-2/3 pr-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Customer Name</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.customer_name}</div>
+                                        </div>
+                                        <div className='flex flex-col w-1/3 pl-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Area</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.area}</div>
                                         </div>
                                     </div>
-                                    <div className='flex flex-col w-1/5 px-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Brand</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.brand}</div>
-                                    </div>
-                                    <div className='flex flex-col w-1/5 pl-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Model</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.model}</div>
-                                    </div>
-                                    <div className='flex flex-col w-1/5 pl-3'>
-                                        <h1 className='text-xs 2xl:text-sm'>Serial Number</h1>
-                                        <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.serial_number}</div>
-                                    </div>
-                                </div>
-                                <div className='flex w-full'>
-                                    <div className='flex flex-col w-full'>
-                                        <h1 className='text-xs 2xl:text-sm'>Request Remarks</h1>
-                                        <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.request_remarks}</div>
-                                    </div>
-                                </div>
-                                {
-                                    item.is_cancelled === 1 &&
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
-                                            <h1 className='text-xs 2xl:text-sm text-red-500 font-base'>Cancel Remarks <span className='font-semibold'>[By: {item.cancelled_by}]</span> on <span className='font-semibold'>{item.date_cancelled} {item.time_cancelled}</span></h1>
-                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.cancelled_remarks}</div>
+                                            <h1 className='text-xs 2xl:text-sm'>Customer Address</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.customer_address}</div>
                                         </div>
                                     </div>
-                                }
-                                {
-                                    item.returned_remarks !== null &&
+                                    <div className='flex w-full'>
+                                        <div className='flex flex-col w-1/5 pr-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>FSRR Number</h1>
+                                            <div className='flex relative'>
+                                                <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fsrr_number}</div>
+                                                <button onClick={() => setShowFsrr(true)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
+                                                    <IconRenderer name="visibility" className="w-5 h-5"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className='flex flex-col w-1/5 pr-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Fleet Number</h1>
+                                            <div className='flex relative'>
+                                                <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.fleet_number}</div>
+                                                <button onClick={() => handleShowHistory(item.fleet_number)} className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1'>
+                                                    <IconRenderer name="history" className="w-5 h-5"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className='flex flex-col w-1/5 px-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Brand</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.brand}</div>
+                                        </div>
+                                        <div className='flex flex-col w-1/5 pl-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Model</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.model}</div>
+                                        </div>
+                                        <div className='flex flex-col w-1/5 pl-3'>
+                                            <h1 className='text-xs 2xl:text-sm'>Serial Number</h1>
+                                            <div className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900'>{item.serial_number}</div>
+                                        </div>
+                                    </div>
+                                </>
+
+                                
+                                {/* Remarks */}
+                                <>
                                     <div className='flex w-full'>
                                         <div className='flex flex-col w-full'>
-                                            <h1 className='text-xs 2xl:text-sm text-red-500 font-base'>Return Remarks <span className='font-semibold'>[By: {item.returned_by}]</span> on <span className='font-semibold'>{item.date_returned} {item.time_returned}</span></h1>
-                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.returned_remarks}</div>
+                                            <h1 className='text-xs 2xl:text-sm'>Request Remarks</h1>
+                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.request_remarks ? item.request_remarks : 'N/A'}</div>
                                         </div>
                                     </div>
-                                }
-                                {
-                                    item.is_parts_approved === 1 &&
-                                    <div className='flex w-full'>
-                                        <div className='flex flex-col w-full'>
-                                            <h1 className='text-xs 2xl:text-sm'>Parts Remarks</h1>
-                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.parts_approved_remarks}</div>
+                                    {
+                                        item.is_cancelled === 1 &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm text-red-500 font-base'>Cancel Remarks <span className='font-semibold'>[By: {item.cancelled_by}]</span> on <span className='font-semibold'>{item.date_cancelled} {item.time_cancelled}</span></h1>
+                                                <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.cancelled_remarks ? item.cancelled_remarks : 'N/A'}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                                {
-                                    item.is_service_head_approved === 1 &&
-                                    <div className='flex w-full'>
-                                        <div className='flex flex-col w-full'>
-                                            <h1 className='text-xs 2xl:text-sm'>Service Remarks</h1>
-                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.service_head_approved_remarks}</div>
+                                    }
+                                    {
+                                        item.returned_remarks !== null &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm text-red-500 font-base'>Return Remarks <span className='font-semibold'>[By: {item.returned_by}]</span> on <span className='font-semibold'>{item.date_returned} {item.time_returned}</span></h1>
+                                                <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.returned_remarks ? item.returned_remarks : 'N/A'}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                                {
-                                    item.is_rental_approved === 1 &&
-                                    <div className='flex w-full'>
-                                        <div className='flex flex-col w-full'>
-                                            <h1 className='text-xs 2xl:text-sm'>Rental Remarks</h1>
-                                            <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.rental_approved_remarks}</div>
+                                    }
+                                    {
+                                        item.is_parts_approved === 1 &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm'>Parts Remarks</h1>
+                                                <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.parts_approved_remarks ? item.parts_approved_remarks : 'N/A'}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                                {
-                                    item.is_mri_number_encoded === 1 &&
-                                    <div className='flex w-full'>
-                                        <div className='flex flex-col w-full'>
-                                            <h1 className='text-xs 2xl:text-sm'>MRI Number</h1>
-                                            <div className='w-80 flex items-start text-sm leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.mri_number}</div>
+                                    }
+                                    {
+                                        item.is_service_head_approved === 1 &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm'>Service Remarks</h1>
+                                                <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.service_head_approved_remarks ? item.service_head_approved_remarks : 'N/A'}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                    {
+                                        item.is_rental_approved === 1 &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm'>Rental Remarks</h1>
+                                                <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.rental_approved_remarks ? item.rental_approved_remarks : 'N/A'}</div>
+                                            </div>
+                                        </div>
+                                    }
+                                    {
+                                        item.is_mri_number_encoded === 1 &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm'>MRI Number</h1>
+                                                <div className='w-80 flex items-start text-sm leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.mri_number}</div>
+                                            </div>
+                                        </div>
+                                    }
+                                    {
+                                        item.is_mri_number_encoded === 1 &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm'>MRI Number Remarks</h1>
+                                                <div className='w-full flex items-start text-sm h-18 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-wrap'>{item.mri_number_remarks ? item.mri_number_remarks : 'N/A'}</div>
+                                            </div>
+                                        </div>
+                                    }
+                                </>
+
 
                             </div>
 
+                            {/* Parts Requested */}
                             <h1 className='text-xl font-bold tracking-wide mt-6 leading-5 mb-3'>Part/s Requested</h1>
                             <div className='w-full'>
                                 <Table columns={parts_columns} collection={parts} loading={loading}></Table>
