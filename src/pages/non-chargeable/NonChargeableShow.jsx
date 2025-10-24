@@ -601,6 +601,15 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                             </div>
                                         </div>
                                     }
+                                    {
+                                        item.dr_number_remarks !== null &&
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col w-full'>
+                                                <h1 className='text-xs 2xl:text-sm'>eDoc Number Remarks</h1>
+                                                <div dangerouslySetInnerHTML={{ __html: item.dr_number_remarks }} className='w-full text-sm h-32 leading-4.5 2xl:text-base 2xl:leading-5 2xl:h-20 font-semibold rounded px-2 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900 overflow-auto whitespace-pre-line text-left'></div>
+                                            </div>
+                                        </div>
+                                    }
                                 </>
 
 
@@ -671,8 +680,8 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                         }
 
                         
-                        {  (
-                                ((parts.filter((pid) => pid.doc_number !== null).length) > parts.filter(part => part.dr_number !== null).length && item.is_dr_number_encoded == 0 && roles[0].role == 'dr_enc') && item.is_cancelled === 0
+                        {  (    
+                                ((parts.filter((pid) => pid.doc_number !== null).length) > parts.filter(part => part.dr_number !== null).length && item.is_dr_number_encoded !== 1 && roles[0].role == 'dr_enc') && item.is_cancelled === 0
                             ) && 
                             <Button color="blue" onClick={() => {setShowConfirmation(true); setConfirmationTitle('DR NUMBER'); setConfirmationBody('') }}>Encode DR Number</Button>
                         }
