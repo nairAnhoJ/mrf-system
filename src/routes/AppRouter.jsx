@@ -18,6 +18,7 @@ import NonChargeableEdit from "../pages/non-chargeable/NonChargeableEdit";
 // import AdminAuth from "./AdminAuth";
 import ChangePassword from "../pages/ChangePassword";
 import RequireAuthOnly from "./RequireAuthOnly";
+import NonChargableReport from "../pages/non-chargeable/NonChargableReport";
 
 
 function AppRouter() {
@@ -34,6 +35,8 @@ function AppRouter() {
                     <Route path="/non-chargeable" element={<NonChargeableHome />} />
                     <Route path="/non-chargeable/add" element={<NonChargeableAdd />} />
                     <Route path="/non-chargeable/edit/:id" element={<NonChargeableEdit />} />
+
+                    <Route path="/non-chargeable/print/:id" element={<NonChargableReport />} />
 
                     {/* <Route element={<AdminAuth />}> */}
                         {/* SETTING */}

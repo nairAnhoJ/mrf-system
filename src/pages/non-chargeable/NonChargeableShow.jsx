@@ -279,6 +279,14 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </button>
                                 </>
                             }
+                            {
+                                item.is_dr_number_encoded == 1 &&
+                                <>
+                                    <button onClick={() => window.open(`/non-chargeable/print/${item.id}`, '_blank')} type='button' className="cursor-pointer hover:text-neutral-600">
+                                        <IconRenderer name="print" className="w-5 h-5"/>
+                                    </button>
+                                </>
+                            }
                             <button type='button' onClick={(e) => {e.stopPropagation(); setShowLogs(true);}} className="cursor-pointer hover:text-neutral-600">
                                 <IconRenderer name="logs" className="w-5 h-5"/>
                             </button>
@@ -287,7 +295,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                             </button>
                         </div>
                     </div>
-
 
                     {/* Body */}
                     <div className='w-full h-full bg-neutral-50 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-200 shadow p-6 overflow-auto'>
@@ -520,7 +527,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                     </div>
                                 </>
 
-                                
                                 {/* Remarks */}
                                 <>
                                     <div className='flex w-full'>
@@ -611,8 +617,6 @@ const NonChargeableShow = ({id, closeButton, approveSuccess }) => {
                                         </div>
                                     }
                                 </>
-
-
                             </div>
 
                             {/* Parts Requested */}
