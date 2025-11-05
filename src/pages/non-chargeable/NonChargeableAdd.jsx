@@ -8,9 +8,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getAll as areaGetAll } from '../../services/areaService'
 import { getAll as partsGetAll } from '../../services/partsService'
 import { getByArea as customerGetByArea, create as customerCreate } from '../../services/customerService'
-import { create as requestCreate } from '../../services/nonChargeableService'
+import { getByFleetNumber, create as requestCreate } from '../../services/nonChargeableService'
 import { Notification } from '../../components/Notification'
 import SelectParts from '../../components/SelectParts'
+import FleetHistory from '../../components/FleetHistory';
 
 const NonChargeableAdd = () => {
     const [loading, setLoading] = useState(true);
@@ -49,11 +50,13 @@ const NonChargeableAdd = () => {
     const [showPm, setShowPm] = useState(false);
     const [parts, setParts] = useState([]);
     // const [selectedParts, setSelectedParts] = useState([]);
+    const [showHistory, setShowHistory] = useState(false);
     const [showPartsList, setShowPartsList] = useState(false);
     const [fsrrPreview, setFsrrPreview] = useState('');
     const [pmPreview, setPmPreview] = useState('');
     const [errors, setErrors] = useState([]);
     const [notif, setNotif] = useState([]);
+    const [history, setHistory] = useState([]);
     const customerDiv = useRef();
     const fsrrRef = useRef();
     const pmRef = useRef();
@@ -164,6 +167,21 @@ const NonChargeableAdd = () => {
         if (e.target.closest('img')) return;
         setShowFsrr(false);
         setShowPm(false);
+    }
+    
+    const handleShowHistory = async (fleet_number) => {
+        setLoading(true);
+
+        try {
+            const response = await getByFleetNumber(fleet_number);
+            setHistory(response);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+
+        setShowHistory(true);
+        setLoading(false);
     }
 
     const handleOpenPartsList = async () => {
@@ -336,6 +354,12 @@ const NonChargeableAdd = () => {
             {
                 showPm &&
                 <ImageViewer path={pmPreview}  closeButton={(e) => handleCloseImageViewer(e)} />
+            }
+
+            {/* HISTORY */}
+            {
+                showHistory &&
+                <FleetHistory fleetNumber={item.fleet_number} history={history} closeButton={() => setShowHistory(false)} />
             }
 
             
@@ -528,7 +552,7 @@ const NonChargeableAdd = () => {
                                     <h1 className='text-xs 2xl:text-sm'>Fleet Number</h1>
                                     <div className='flex relative'>
                                         <input onChange={(e) => setItem({...item, fleet_number: e.target.value})} value={item.fleet_number} maxLength="20" className='w-full flex items-center text-sm h-8 leading-3.5 2xl:text-base 2xl:leading-4 2xl:h-9 font-semibold rounded px-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 shadow-inner shadow-neutral-400 dark:shadow-neutral-900' />
-                                        <button disabled={item.fleet_number == ''} type='button' className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
+                                        <button onClick={() => handleShowHistory(item.fleet_number)} disabled={item.fleet_number == ''} type='button' className='h-[calc(100%-8px)] aspect-square bg-neutral-300 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 rounded shadow shadow-neutral-500 dark:shadow-neutral-900 absolute right-1 top-1 cursor-pointer p-0.5 2xl:p-1 disabled:pointer-events-none disabled:opacity-50'>
                                             <IconRenderer name="history" className="w-5 h-5"/>
                                         </button>
                                     </div>

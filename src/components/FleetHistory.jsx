@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 const FleetHistory = ({closeButton, fleetNumber, history}) => {
 
     // const [requestHistory, setRequestHistory] = useState(history);
-    const [selectedId, setSelectedId] = useState(history[0].id);
+    const [selectedId, setSelectedId] = useState(history[0]?.id);
     const [parts, setParts] = useState([]);
     const [loading, setLoading] = useState(false);
     
@@ -24,7 +24,7 @@ const FleetHistory = ({closeButton, fleetNumber, history}) => {
     }
 
     useEffect(() => {
-        getParts(history[0].id);
+        getParts(history[0]?.id);
     }, []);
 
     const handleHistoryClick = async (id) => {
@@ -41,7 +41,6 @@ const FleetHistory = ({closeButton, fleetNumber, history}) => {
         {'key': 'price', 'label': 'Price (₱)', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
         {'key': 'total_price', 'label': 'Total Price (₱)', 'className': 'py-1 px-2 text-center whitespace-nowrap'},
     ]
-
 
     return (
         <>
@@ -64,21 +63,24 @@ const FleetHistory = ({closeButton, fleetNumber, history}) => {
                                         Date
                                     </div>
                                 </div>
-                                {   history.map((request) => (
-                                        <div key={request.id} onClick={() => handleHistoryClick(request.id)} className={`grid grid-cols-[144px_80px_100px] cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 ${request.id === selectedId ? 'bg-neutral-200 dark:bg-neutral-700' : ''}`}>
-                                            <div className='text-center font-semibold py-1'>
-                                                {request.mrf_number}
+                                {   history.length > 0 ?
+                                        history.map((request) => (
+                                            <div key={request.id} onClick={() => handleHistoryClick(request.id)} className={`grid grid-cols-[144px_80px_100px] cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 ${request.id === selectedId ? 'bg-neutral-200 dark:bg-neutral-700' : ''}`}>
+                                                <div className='text-center font-semibold py-1'>
+                                                    {request.mrf_number}
+                                                </div>
+                                                <div className='text-center font-semibold py-1'>
+                                                    {request.for}
+                                                </div>
+                                                <div className='text-center font-semibold py-1'>
+                                                    {
+                                                        format(new Date(request.date_requested), "MM/dd/yyyy")
+                                                    }
+                                                </div>
                                             </div>
-                                            <div className='text-center font-semibold py-1'>
-                                                {request.for}
-                                            </div>
-                                            <div className='text-center font-semibold py-1'>
-                                                {
-                                                    format(new Date(request.date_requested), "MM/dd/yyyy")
-                                                }
-                                            </div>
-                                        </div>
-                                    ))
+                                        ))
+                                    :
+                                    <div className='col-span-3 text-center font-semibold py-1'>No Data.</div>
                                 }
 
                             </div>
