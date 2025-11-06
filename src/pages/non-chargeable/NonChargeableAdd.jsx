@@ -259,6 +259,7 @@ const NonChargeableAdd = () => {
             data.append(`parts[${index}][item_number]`, part.item_number);
             data.append(`parts[${index}][number]`, part.number);
             data.append(`parts[${index}][name]`, part.name);
+            data.append(`parts[${index}][brand_id]`, part.brand_id);
             data.append(`parts[${index}][brand]`, part.brand);
             data.append(`parts[${index}][price]`, part.price);
             data.append(`parts[${index}][quantity]`, part.quantity);
